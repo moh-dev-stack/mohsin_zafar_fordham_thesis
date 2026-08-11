@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum or plasma glucose value of -9999 mmol/L is physiologically impossible; negative glucose concentrations cannot exist in living organisms, and this appears to be a sentinel/missing data code rather than a valid measurement.", "confidence": 0.99}

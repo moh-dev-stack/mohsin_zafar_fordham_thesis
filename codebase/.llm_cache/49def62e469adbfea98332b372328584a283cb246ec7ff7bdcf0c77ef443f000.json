@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Mean Corpuscular Hemoglobin (MCH) cannot be negative; normal physiological values range from 27-33 pg, and a value of -1.0 pg is impossible.", "confidence": 0.99}

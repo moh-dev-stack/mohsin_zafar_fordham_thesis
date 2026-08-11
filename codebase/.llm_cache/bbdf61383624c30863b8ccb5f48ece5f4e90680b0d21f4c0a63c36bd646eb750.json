@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "AST (aspartate aminotransferase) enzyme activity cannot be negative; physiologically valid values are non-negative, typically 0-40 Units/L in healthy adults.", "confidence": 0.99}

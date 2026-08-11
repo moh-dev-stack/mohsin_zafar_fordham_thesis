@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Total bilirubin cannot be negative; physiologically valid values are \u22650 mg/dL, making -1.0 mg/dL implausible.", "confidence": 0.99}

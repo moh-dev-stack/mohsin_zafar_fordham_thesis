@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The period.start date (2128-09-08) occurs after the period.end date (2011-09-03), which is logically impossible for a completed encounter with status 'finished'.", "confidence": 0.99}

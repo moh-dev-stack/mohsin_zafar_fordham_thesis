@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 72514-3 (typically a clinical assessment score) with a value of 1,000,000,000 is physiologically implausible, as standardized clinical scores are bounded to reasonable ranges (usually 0-100 or similar finite scales).", "confidence": 0.95}

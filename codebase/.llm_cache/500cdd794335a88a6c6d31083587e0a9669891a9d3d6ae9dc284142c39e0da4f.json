@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "24-hour urine creatinine cannot be negative; a value of -9999.0 mg/24hr is physiologically impossible and appears to be an error code or missing data placeholder rather than a valid measurement.", "confidence": 0.99}

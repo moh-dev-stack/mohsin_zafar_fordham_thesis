@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 1,000,000,000% is physiologically implausible for any measurable quantity in clinical medicine; LOINC code 51249 represents oxygen saturation, which cannot exceed 100%.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 0.2% is physiologically implausible for oxygen saturation (LOINC 51146), as this would indicate severe hypoxemia incompatible with life; normal SpO2 ranges from 95-100% and critical values are typically below 80%.", "confidence": 0.98}

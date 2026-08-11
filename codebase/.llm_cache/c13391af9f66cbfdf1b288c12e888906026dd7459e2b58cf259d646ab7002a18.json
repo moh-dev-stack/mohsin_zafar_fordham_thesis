@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51094 represents 'Glucose [Moles/volume] in Blood' which requires a unit of measurement (typically mmol/L), but the valueQuantity.unit field is empty, making the recorded value of 5.0 uninterpretable and non-compliant with proper clinical documentation standards.", "confidence": 0.95}

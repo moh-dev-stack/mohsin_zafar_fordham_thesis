@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The observation code 51094 (Electrolyte panel) with a value of 9999.0 and missing unit is implausible; electrolyte concentrations cannot reach such extreme values and the absence of a unit makes the measurement uninterpretable.", "confidence": 0.95}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Mean Platelet Volume (MPV) cannot be negative; normal physiological range is 7.4-10.4 fL, and a value of -1.0 fL is physically impossible.", "confidence": 0.99}

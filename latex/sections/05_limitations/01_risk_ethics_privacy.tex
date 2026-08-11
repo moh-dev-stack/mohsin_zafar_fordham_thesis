@@ -1,0 +1,20 @@
+\subsection{Data provenance, ethics and disclosure}
+\label{sec:ethics}
+
+All three datasets are public and need no credentialed data use agreement. Synthea is synthetic,
+MIMIC-IV and eICU-CRD de-identified demonstration releases. All three are pinned locally by SHA-256,
+so no access request can fail mid-study. No IRB review was sought. The same controls on identifiable
+records would need IRB approval and a data use agreement before a single run. That setting is where
+the privacy claim would be tested, and this study never enters it.
+
+No re-identification was attempted. The model instrument receives only the projected slice
+\texttt{project()} builds from the manifest (Section~\ref{sec:designs}), so no field outside a
+manifest reaches it, and that dispatch is the control measured.
+
+Stand-in identifiers come from a seeded counter, never derived from the identifier they replace,
+as 45 C.F.R. \S 164.514(c)(1) requires of a re-identification code. Hashing the medical record
+number, which most would reach for, would not qualify. That covers one field. It does not cover
+the pipeline around it, and the result above is reduced exposure, not de-identification.
+
+AI tooling use is disclosed in \texttt{AI\_DISCLOSURE.md}, and the register of instrument defects,
+the items left open and the test-suite critique are in \texttt{codebase\_audit/}.

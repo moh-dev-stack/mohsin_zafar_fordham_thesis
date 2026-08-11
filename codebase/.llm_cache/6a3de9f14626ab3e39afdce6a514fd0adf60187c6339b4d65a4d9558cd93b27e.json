@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum glucose (LOINC 2571-8) cannot be negative; a value of -9999.0 mg/dL is physiologically impossible and likely represents a data entry error or missing value placeholder.", "confidence": 0.99}

@@ -1,0 +1,34 @@
+# Privilege ablation arm: the minimal plausibility manifest with the observation
+# code withheld.
+#
+# Withheld field:  $.code.coding[*].code   (consumed by dqa.ranges.CODE_PATH)
+#
+# This file is a copy of manifests/minimal/plausibility.yaml with exactly one
+# allowed_field removed. Everything else -- agent_id, dimension, the Patient
+# policy, note_access, rule_references -- is identical on purpose, so the only
+# difference between this arm and the control arm is the withheld field.
+# dqa.ablation checks that invariant on load and refuses to run if it is broken.
+#
+# Expected effect: the checker loses the analyte key, so every Observation
+# resolves to the "default" fallback envelope [0, 9000] in
+# manifests/rules/loinc_ranges.yaml instead of its own per-analyte bounds.
+agent_id: plausibility_agent_v1
+dimension: plausibility
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.valueQuantity.value
+      - jsonpath_expression: $.valueQuantity.unit
+      - jsonpath_expression: $.valueQuantity.code
+  - fhir_resource_type: Patient
+    allowed_fields:
+      - jsonpath_expression: $.gender
+      - jsonpath_expression: $.extension[?(@.url=='age-decade')].valueInteger
+      - jsonpath_expression: $.extension[?(@.url=='comorbidity-flag')].valueBoolean
+note_access:
+  enabled: false
+rule_references:
+  - source: MIMIC-IV reference ranges
+    rule_id: adult-lab-ranges
+  - source: published clinical normal ranges
+    rule_id: vital-sign-bounds

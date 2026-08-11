@@ -1,0 +1,56 @@
+# Full-width (monolithic-baseline) consistency manifest.
+agent_id: consistency_agent_v1_full
+dimension: consistency
+resource_types:
+  - fhir_resource_type: Encounter
+    allowed_fields:
+      - jsonpath_expression: $.id
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.class.code
+      - jsonpath_expression: $.type[*].coding[*].code
+      - jsonpath_expression: $.period.start
+      - jsonpath_expression: $.period.end
+      - jsonpath_expression: $.diagnosis[*].condition.reference
+      - jsonpath_expression: $.diagnosis[*].use.coding[*].code
+      - jsonpath_expression: $.hospitalization.dischargeDisposition.coding[*].code
+  - fhir_resource_type: Procedure
+    allowed_fields:
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.reasonReference[*].reference
+      - jsonpath_expression: $.reasonCode[*].coding[*].code
+      - jsonpath_expression: $.performedDateTime
+      - jsonpath_expression: $.performedPeriod.start
+      - jsonpath_expression: $.performedPeriod.end
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.outcome.coding[*].code
+  - fhir_resource_type: Condition
+    allowed_fields:
+      - jsonpath_expression: $.id
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.onsetDateTime
+      - jsonpath_expression: $.abatementDateTime
+      - jsonpath_expression: $.clinicalStatus.coding[*].code
+      - jsonpath_expression: $.verificationStatus.coding[*].code
+      - jsonpath_expression: $.category[*].coding[*].code
+  - fhir_resource_type: MedicationStatement
+    allowed_fields:
+      - jsonpath_expression: $.medicationCodeableConcept.coding[*].code
+      - jsonpath_expression: $.subject.reference
+      - jsonpath_expression: $.effectiveDateTime
+      - jsonpath_expression: $.effectivePeriod.start
+      - jsonpath_expression: $.effectivePeriod.end
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.dosage[*].text
+note_access:
+  enabled: true
+  sections: [medication_reconciliation, allergies, problem_list, discharge_summary]
+  max_sentences: 100
+rule_references:
+  - source: project rules
+    rule_id: encounter-period-order
+  - source: EHRCon
+    rule_id: note-structured-entity-match
+  - source: project rules
+    rule_id: medication-active-vs-discharge
+  - source: project rules
+    rule_id: full-width-consistency-baseline

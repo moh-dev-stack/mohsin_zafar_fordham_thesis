@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51094 represents prothrombin time (PT), which is typically measured in seconds and ranges from 11-13.5 seconds; a value of 9999.0 is physiologically implausible and the missing unit specification prevents proper interpretation.", "confidence": 0.95}

@@ -1,0 +1,29 @@
+% APA 7 (§2.14): see the note in Appendix A. No table here, so no table counter.
+\FloatBarrier
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Appendix E: The Ground-Truth Error and Cohort Composition}
+{\centering\normalfont\bfseries\large Appendix E\par}
+{\centering\normalfont\bfseries\large The Ground-Truth Error and Cohort Composition\par}
+\nopagebreak
+
+Section~\ref{sec:benchmark} states the ground-truth finding. This is the detail behind it.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{How it surfaced.} Tightening the two eICU bounds in the shared rule file
+        (Section~\ref{sec:fair}) made the four eICU cells score \emph{worse}. The corrected bound
+        flags the 99.8 degrees Celsius body temperature, and the scoring calls that a false
+        positive.
+  \item \textbf{The rest of the allowlist.} \texttt{known\_corrupt\_values} names the eICU records a
+        truthful bound is right to flag. Besides the temperature reading these are three FiO2
+        readings of 4000 and 10000 that no scored cell reaches, which is why the counterfactual of
+        Section~\ref{sec:benchmark} moves on the temperature row alone.
+  \item \textbf{The four false negatives}, where the analyte's legitimate ceiling sits above the
+        9999 the legacy injector writes. These are the eICU enzyme-activity aggregate (code 1,
+        Units/L), MIMIC 50878 for aspartate aminotransferase, and MIMIC 51108 and 51109 for urine
+        volume.
+\end{itemize}
+
+Section~\ref{sec:exposure} points here for the Encounter/Observation split. Of the 134 event
+resources in each cohort, Synthea contributes 23 Encounters and 111 Observations, eICU-CRD 7 and
+127.

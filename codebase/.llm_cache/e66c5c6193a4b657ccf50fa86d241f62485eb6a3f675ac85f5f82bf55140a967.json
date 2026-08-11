@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum potassium (LOINC 6298-4) cannot be negative; a value of -9999.0 mmol/L is physiologically impossible and appears to be a placeholder or error code rather than a valid measurement.", "confidence": 0.99}

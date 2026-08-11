@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 7 represents systolic blood pressure, and a value of 9999.0 mmHg is physiologically impossible and incompatible with human survival.", "confidence": 0.99}

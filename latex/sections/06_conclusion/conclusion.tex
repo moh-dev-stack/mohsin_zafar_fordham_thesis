@@ -1,0 +1,36 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Confining each checker to a field manifest cost nothing, but that zero is an identity the design
+forced rather than a measurement. The ablation is the measurement, and it splits in two. An
+unmodified manifest and a field released but never consumed stay at exactly zero under either
+injector. The analyte code does not: a 3.85 pp gain under the saturated legacy injector, a 100.00 pp
+loss under the hard one (Section~\ref{sec:ablationhard}).
+
+Narrowing manifests is the wrong lever for privacy, because the checks that read a patient reference
+receive it at every width, and exposure moved by at most 0.0400 across the width sweep. Moving
+identifier resolution into a department of its own cut exposure by 98.6 per cent with detection
+unmoved on all three rule-only dimensions. Deleting the patient reference reaches the same exposure
+and collapses completeness. That 98.6 is a summed-count ratio and the 0.0400 a per-resource mean,
+kept apart by Section~\ref{sec:repro} and never read against each other.
+
+\textbf{Implications.} A plausibility check of this kind needs a code, a value and a unit, none of
+them a Safe Harbor identifier. Where a checker appears to need the identifier, what it needs is that
+two records belong to one patient, and a stand-in stable within a run is enough for that. A cost
+claim about privilege is only as sound as the injector it was measured under, and a single injector
+will not support one. Other rules will differ, since stratifying by age or sex pulls the birth date
+back in. One design lesson comes from this study's own miss. Compare what each manifest releases
+against what the check consumes before fixing the widths. A sweep in which every width releases
+every consumed field cannot measure what confinement costs.
+
+\textbf{Further work.} Four gaps follow from Section~\ref{sec:limits}, none of them measured here:
+whether a stand-in stays stable across runs, which any deployment needs, and whether detection holds
+by subgroup. The others are what projection costs in latency, throughput and manifest-authoring
+effort, and whether two separately minimal manifests re-identify a patient in combination, which
+Section~\ref{sec:threat} names.
+
+Every cost figure above is one quality dimension of four, measured against ground truth that is
+wrong in both directions and left that way. Redefining it after seeing the scores manufactures a
+result (Section~\ref{sec:benchmark}).
+
+\label{page:refs}

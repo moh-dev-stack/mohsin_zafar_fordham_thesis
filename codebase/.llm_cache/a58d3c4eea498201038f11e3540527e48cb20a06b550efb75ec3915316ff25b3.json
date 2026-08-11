@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code '3' is not a valid LOINC code (valid codes are 4-5 digit numbers or contain hyphens), and a ratio value of -9999.0 is physiologically implausible as ratios of biological measurements cannot be negative.", "confidence": 0.95}

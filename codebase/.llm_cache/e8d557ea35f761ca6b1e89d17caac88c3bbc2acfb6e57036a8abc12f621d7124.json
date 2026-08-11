@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "MCH (Mean Corpuscular Hemoglobin) value of 1,000,000,000 pg is physiologically implausible; normal MCH ranges from 27-33 pg, and this value exceeds it by approximately 10 orders of magnitude.", "confidence": 0.99}

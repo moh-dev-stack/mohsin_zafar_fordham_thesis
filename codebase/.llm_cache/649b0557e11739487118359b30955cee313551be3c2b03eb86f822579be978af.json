@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 7 represents systolic blood pressure, which should be measured in mmHg, but the valueQuantity.unit field is empty, making the measurement uninterpretable and non-compliant with proper clinical documentation standards.", "confidence": 0.95}

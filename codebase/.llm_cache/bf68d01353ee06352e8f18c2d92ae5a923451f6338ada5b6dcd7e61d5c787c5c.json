@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum creatinine cannot be negative; physiologically plausible values are typically 0.6\u20131.2 mg/dL in adults, and a value of -1.0 mg/dL is biochemically impossible.", "confidence": 0.99}

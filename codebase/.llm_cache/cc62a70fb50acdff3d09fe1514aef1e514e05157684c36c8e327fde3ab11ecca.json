@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of 9.74 mg/dL is physiologically implausible; normal fasting glucose is 70-100 mg/dL, and values below ~40 mg/dL cause severe hypoglycemic symptoms incompatible with a recorded measurement.", "confidence": 0.98}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -1.0 for LOINC code 51094 (Trichomonas vaginalis DNA [Presence] in Urine by NAA with probe detection) is implausible, as this is a qualitative presence/absence test that should report positive/negative or detected/not detected, not a negative numerical quantity.", "confidence": 0.95}

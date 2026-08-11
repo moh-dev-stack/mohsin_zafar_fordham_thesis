@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A hemoglobin value of 9999 pg (picograms) is physiologically implausible; normal hemoglobin concentration ranges from approximately 12-17 g/dL, and even in extreme polycythemia would not exceed ~20 g/dL, making this value several orders of magnitude beyond survivable limits.", "confidence": 0.98}

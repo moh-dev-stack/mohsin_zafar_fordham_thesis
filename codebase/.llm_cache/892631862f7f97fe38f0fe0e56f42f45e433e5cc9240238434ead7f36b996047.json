@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 72514-3 (typically a clinical assessment score) cannot have a physiologically plausible value of -9999.0, as standardized clinical scores operate within defined positive ranges (e.g., 0-100 or 0-30 depending on the specific assessment).", "confidence": 0.95}

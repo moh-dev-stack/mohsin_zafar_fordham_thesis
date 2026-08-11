@@ -1,0 +1,46 @@
+# Full-width (monolithic-baseline) completeness manifest.
+#
+# Represents the unrestricted-baseline configuration against which the
+# minimal and intermediate widths are compared in the non-inferiority
+# evaluation (Ch 6 §Statistical analysis plan). The agent under this
+# manifest sees the full structural surface of the resource.
+agent_id: completeness_agent_v1_full
+dimension: completeness
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.code.coding[*].code
+      - jsonpath_expression: $.code.coding[*].system
+      - jsonpath_expression: $.code.coding[*].display
+      - jsonpath_expression: $.category[*].coding[*].code
+      - jsonpath_expression: $.subject.reference
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.effectiveDateTime
+      - jsonpath_expression: $.issued
+      - jsonpath_expression: $.performer[*].reference
+      - jsonpath_expression: $.valueQuantity.value
+      - jsonpath_expression: $.valueQuantity.unit
+      - jsonpath_expression: $.interpretation[*].coding[*].code
+      - jsonpath_expression: $.referenceRange[*].text
+  - fhir_resource_type: Encounter
+    allowed_fields:
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.class.code
+      - jsonpath_expression: $.type[*].coding[*].code
+      - jsonpath_expression: $.priority.coding[*].code
+      - jsonpath_expression: $.period.start
+      - jsonpath_expression: $.period.end
+      - jsonpath_expression: $.subject.reference
+      - jsonpath_expression: $.participant[*].individual.reference
+      - jsonpath_expression: $.serviceProvider.reference
+      - jsonpath_expression: $.location[*].location.reference
+note_access:
+  enabled: false
+rule_references:
+  - source: US Core IG
+    rule_id: must-support-observation
+  - source: MIMIC-IV FHIR docs
+    rule_id: required-encounter-fields
+  - source: project rules
+    rule_id: full-width-completeness-baseline

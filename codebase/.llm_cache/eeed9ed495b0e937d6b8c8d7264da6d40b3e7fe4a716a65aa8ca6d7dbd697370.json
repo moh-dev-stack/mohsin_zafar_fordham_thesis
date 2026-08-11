@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "AUDIT-C total score of 9999.0 is physiologically implausible; the valid range is 0-12 points, making this value impossible for this validated screening instrument.", "confidence": 0.99}

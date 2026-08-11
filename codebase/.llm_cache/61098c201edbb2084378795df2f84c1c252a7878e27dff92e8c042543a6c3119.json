@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 70274-6 (Functional Assessment of Cancer Therapy - General (FACT-G) score) should range from 0-108, making a value of -9999.0 physiologically implausible and indicative of a data entry error or sentinel value misuse.", "confidence": 0.95}

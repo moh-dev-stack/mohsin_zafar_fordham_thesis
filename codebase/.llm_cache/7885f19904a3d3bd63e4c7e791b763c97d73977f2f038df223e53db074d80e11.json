@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum potassium (LOINC 51097) cannot be negative; physiologically plausible values range from approximately 3.5-5.0 mEq/L, making -9999.0 mEq/L impossible and indicative of a data entry or system error.", "confidence": 0.99}

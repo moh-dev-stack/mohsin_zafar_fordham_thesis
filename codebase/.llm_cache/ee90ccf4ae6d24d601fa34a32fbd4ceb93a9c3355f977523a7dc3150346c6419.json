@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "TSH value of 9999 uIU/mL is physiologically implausible; normal TSH ranges 0.4-4.0 mIU/L, and even severe hypothyroidism rarely exceeds 100 mIU/L, making this value approximately 100-fold beyond any clinically documented extreme.", "confidence": 0.98}

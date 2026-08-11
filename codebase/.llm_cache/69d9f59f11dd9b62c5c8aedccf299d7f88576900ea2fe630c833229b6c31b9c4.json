@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "BMI cannot be negative; a value of -1.0 kg/m\u00b2 is physiologically impossible and indicates a data entry or transmission error.", "confidence": 0.99}

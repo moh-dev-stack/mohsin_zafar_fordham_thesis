@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A glucose value of 8.4 mg/dL is physiologically implausible and would indicate severe hypoglycemia incompatible with life, but this appears to be a data entry or unit error rather than a clinical plausibility issue with the recorded observation itself\u2014the value is internally consistent with the stated unit.", "confidence": 0.6}

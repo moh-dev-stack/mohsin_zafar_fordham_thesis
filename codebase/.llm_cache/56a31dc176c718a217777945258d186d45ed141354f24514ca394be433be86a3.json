@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Red blood cell count cannot be negative; a value of -9999.0 m/uL is physiologically impossible and indicates a data entry error or placeholder value.", "confidence": 0.99}

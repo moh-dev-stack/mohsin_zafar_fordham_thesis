@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "INR (International Normalized Ratio) cannot be negative; physiologically valid INR values range from approximately 0.8 to 1.1 for normal patients, and therapeutic ranges are typically 2.0-3.0 or higher depending on clinical indication.", "confidence": 0.99}

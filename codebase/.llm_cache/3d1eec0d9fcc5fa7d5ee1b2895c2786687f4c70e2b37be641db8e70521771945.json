@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A serum glucose value of 1.2 mg/dL is physiologically implausible and would be incompatible with life, but the LOINC code '1' is invalid/non-existent, making this a data quality issue rather than a clinical plausibility issue for the recorded observation itself.", "confidence": 0.65}

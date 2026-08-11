@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Mean corpuscular volume (MCV) cannot be negative; the value of -1.0 fL is physiologically impossible.", "confidence": 0.99}

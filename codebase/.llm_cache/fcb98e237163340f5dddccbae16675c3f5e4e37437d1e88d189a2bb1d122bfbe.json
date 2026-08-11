@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 1.0% is physiologically implausible for LOINC code 51200 (Albumin [Mass/volume] in Serum or Plasma), which typically ranges from 3.5-5.5 g/dL or 35-55 g/L; a 1% value would indicate severe hypoalbuminemia incompatible with survival.", "confidence": 0.95}

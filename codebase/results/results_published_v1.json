@@ -1,0 +1,171 @@
+{
+  "model_snapshot": "claude-haiku-4-5-20251001",
+  "limit": 200,
+  "cohorts": [
+    {
+      "dataset": "synthea",
+      "n_resources": 200,
+      "injection_rate": 0.1,
+      "seed": 42,
+      "systems": {
+        "baseline": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6666666666666666,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.625,
+            "macro_f1": 0.5729166666666666
+          },
+          "agentleak_structural": 1.0,
+          "note": "monolithic full-access baseline; no projection boundary"
+        },
+        "confined-minimal": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.1111111111111111,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.625,
+            "macro_f1": 0.4340277777777778
+          },
+          "agentleak_mean": 0.61,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f"
+        },
+        "confined-intermediate": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.10526315789473684,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.625,
+            "macro_f1": 0.4325657894736842
+          },
+          "agentleak_mean": 0.61,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126"
+        },
+        "confined-full": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.23529411764705882,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.625,
+            "macro_f1": 0.4650735294117647
+          },
+          "agentleak_mean": 0.6475,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a"
+        }
+      }
+    },
+    {
+      "dataset": "mimic-iv-demo",
+      "n_resources": 200,
+      "injection_rate": 0.1,
+      "seed": 42,
+      "systems": {
+        "baseline": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6666666666666666,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.07194244604316546,
+            "macro_f1": 0.434652278177458
+          },
+          "agentleak_structural": 1.0,
+          "note": "monolithic full-access baseline; no projection boundary"
+        },
+        "confined-minimal": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.08695652173913045,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.07194244604316546,
+            "macro_f1": 0.28972474194557396
+          },
+          "agentleak_mean": 0.6675,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f"
+        },
+        "confined-intermediate": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.10526315789473684,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.07194244604316546,
+            "macro_f1": 0.29430140098447555
+          },
+          "agentleak_mean": 0.67,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126"
+        },
+        "confined-full": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.21052631578947367,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 0.07194244604316546,
+            "macro_f1": 0.3206171904581598
+          },
+          "agentleak_mean": 0.67,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a"
+        }
+      }
+    },
+    {
+      "dataset": "eicu-demo",
+      "n_resources": 200,
+      "injection_rate": 0.1,
+      "seed": 42,
+      "systems": {
+        "baseline": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6666666666666666,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.6666666666666666
+          },
+          "agentleak_structural": 1.0,
+          "note": "monolithic full-access baseline; no projection boundary"
+        },
+        "confined-minimal": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.05479452054794521,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.5136986301369864
+          },
+          "agentleak_mean": 0.6675,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f"
+        },
+        "confined-intermediate": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.06153846153846154,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.5153846153846153
+          },
+          "agentleak_mean": 0.67,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126"
+        },
+        "confined-full": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.33333333333333337,
+            "f1_consistency": 0.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.5833333333333334
+          },
+          "agentleak_mean": 0.67,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a"
+        }
+      }
+    }
+  ]
+}

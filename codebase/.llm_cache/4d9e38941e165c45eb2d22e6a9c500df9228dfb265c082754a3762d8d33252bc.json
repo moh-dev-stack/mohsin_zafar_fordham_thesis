@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Body weight of -9999.0 kg is physiologically impossible; human body weight must be a positive value, and this negative value indicates a data entry error or system malfunction.", "confidence": 0.99}

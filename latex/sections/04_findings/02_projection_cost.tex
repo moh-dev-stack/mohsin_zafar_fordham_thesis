@@ -1,0 +1,42 @@
+\subsection{What projection actually costs}
+\label{sec:ablation}
+
+The five ablation arms of Section~\ref{sec:ablationdesign} price the boundary under the legacy
+injector, and the price runs from nothing to the whole check
+(Table~\ref{tab:ablation}).
+
+\begin{table}[htbp]
+\centering
+\setstretch{1.0}
+\caption{Privilege ablation, twelve cells per arm, stratified allocator at rate 0.30, \textbf{legacy}
+injector. Mean conf.\ is the mean Confined F1 over the twelve cells, not a mean gap. Gaps are
+unsigned: the analyte-code arm's 3.85 pp is a gain, the rest a loss.
+Source: \texttt{results/privilege\_ablation.json}.}
+\label{tab:ablation}
+\setlength{\tabcolsep}{4pt}\small
+\begin{tabular}{llccc}
+\toprule
+Arm & Field withheld & Consumed? & Mean conf. & Largest abs.\ gap \\
+\midrule
+\texttt{control\_minimal} & none & -- & 0.9851 & $0.0000$ pp \\
+\texttt{ucum\_code} & \texttt{\$.valueQuantity.code} & no & 0.9851 & $0.0000$ pp \\
+\texttt{observation\_code} & \texttt{\$.code.coding[*].code} & yes & 1.0000 & $3.85$ pp \\
+\texttt{observation\_unit} & \texttt{\$.valueQuantity.unit} & yes & 0.8993 & $28.04$ pp \\
+\texttt{observation\_value} & \texttt{\$.valueQuantity.value} & yes & 0.0000 & $\mathbf{100.00}$ pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The three consumed fields do not cost the same. Withholding the value destroys the check. The unit's
+twelve per-cell gaps average $8.57$ pp against a largest absolute gap of $28.04$ pp. Without the
+unit the unit-scoped rule key cannot be resolved, so a multi-unit code is judged against another
+analyte's bounds. Withholding the analyte code does the opposite. It is a \emph{gain}, an accident
+of the injector (Section~\ref{sec:ablationhard}).
+
+Withholding \texttt{\$.valueQuantity.code}, the UCUM unit symbol, costs exactly $0.0000$ pp. That
+negative control (Section~\ref{sec:ablationdesign}) is narrow, and the \texttt{ucum\_code} zero is a
+consistency check, not independent proof. Eight of twelve cells contain no such field, and in the
+remaining four every arm but the value arm already scores F1 $1.0000$.
+
+On these three cohorts, this endpoint and this injector, the measured gap was $0.0000$ pp where what
+is released is a superset of what is consumed. Where it is not, it was as large as 100 pp.

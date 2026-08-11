@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood glucose value of 56.69 mg/dL is severely hypoglycemic and incompatible with consciousness or survival without immediate intervention; LOINC code 2085-9 is glucose, and values below ~40 mg/dL cause seizures, coma, and death.", "confidence": 0.95}

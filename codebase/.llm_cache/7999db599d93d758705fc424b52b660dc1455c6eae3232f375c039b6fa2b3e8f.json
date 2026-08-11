@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51519 does not exist in the standard LOINC database; valid LOINC codes for yeast identification are in different ranges (e.g., 41852-5 for Candida species culture), making this coding implausible.", "confidence": 0.85}

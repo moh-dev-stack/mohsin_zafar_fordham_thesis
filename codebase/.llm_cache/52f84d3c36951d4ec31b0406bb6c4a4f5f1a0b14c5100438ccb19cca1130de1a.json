@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -9999.0 pg for what appears to be a blood component measurement (code 51248 is typically a hemoglobin or similar hematology test) is physiologically implausible, as laboratory measurements cannot be negative.", "confidence": 0.95}

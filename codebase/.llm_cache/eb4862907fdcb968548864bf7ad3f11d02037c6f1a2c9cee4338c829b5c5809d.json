@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative score value of -1.0 is implausible for the NIHSS (National Institutes of Health Stroke Scale, code 72514-3), which ranges from 0-42 with no negative values defined.", "confidence": 0.95}

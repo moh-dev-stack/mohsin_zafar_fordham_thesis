@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -1.0 for a LOINC code 3 (which represents Glucose [Mass/volume] in Serum or Plasma) is physiologically implausible, as glucose concentration cannot be negative.", "confidence": 0.95}

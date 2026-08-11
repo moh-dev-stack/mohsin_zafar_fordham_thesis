@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Alkaline phosphatase activity cannot be negative; enzyme concentrations are always non-negative values, making -1.0 IU/L physiologically implausible.", "confidence": 0.99}

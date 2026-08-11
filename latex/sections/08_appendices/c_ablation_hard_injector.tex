@@ -1,0 +1,68 @@
+% APA 7 (§2.14): see the note in Appendix A.
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Appendix C: The Hard Injector, Detector Ranking and Privilege Ablation}
+{\centering\normalfont\bfseries\large Appendix C\par}
+{\centering\normalfont\bfseries\large The Hard Injector: Detector Ranking and Privilege Ablation\par}
+\nopagebreak
+\setcounter{table}{0}
+\renewcommand{\thetable}{C\arabic{table}}
+
+Table~\ref{tab:detectors} ranks the three detectors on the 83 defects the hard injector places, and
+Table~\ref{tab:ablationhard} re-runs the ablation against that injector. Section~\ref{sec:hard}
+states the results.
+
+\begin{table}[!ht]
+\centering
+\setstretch{1.0}
+\caption{Detector performance under the hard injector. Counts from
+\texttt{tests/test\_inject\_hard.py}, seed 42, rate 0.30, three cohorts pooled.}
+\label{tab:detectors}
+\begin{tabular}{lcc}
+\toprule
+Detector & Caught & Rate \\
+\midrule
+Set-membership on the four legacy constants & 0 of 83 & 0\% \\
+Crude $[0, 9000]$ envelope & 5 of 83 & 6\% \\
+Per-analyte range check & 83 of 83 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\setstretch{1.0}
+\caption{The same ablation under the \textbf{hard} injector, twelve cells per arm. The analyte-code
+arm reverses from a 3.85 pp gain to a 100.00 pp loss. Columns read as in
+Table~\ref{tab:ablation}, and arm names carry a \texttt{withhold\_} prefix in the result file,
+except \texttt{control\_minimal}. Source:
+\texttt{results/privilege\_ablation\_hard.json}, \texttt{make ablation-hard}.}
+\label{tab:ablationhard}
+\setlength{\tabcolsep}{4pt}\small
+\begin{tabular}{llccc}
+\toprule
+Arm & Field withheld & Consumed? & Mean conf. & Largest abs.\ gap \\
+\midrule
+\texttt{control\_minimal}  & none                            & --  & 0.9944 & 0.0000 pp \\
+\texttt{ucum\_code}       & \texttt{\$.valueQuantity.code}  & no  & 0.9944 & 0.0000 pp \\
+\texttt{observation\_code}  & \texttt{\$.code.coding[*].code} & yes & 0.0987 & $\mathbf{100.00}$ pp \\
+\texttt{observation\_unit}  & \texttt{\$.valueQuantity.unit}  & yes & 0.8990 & 33.60 pp \\
+\texttt{observation\_value} & \texttt{\$.valueQuantity.value} & yes & 0.0000 & 100.00 pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three things change and one does not.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{The analyte code becomes essential.} The injected values are now clinically adjacent,
+        and a generic envelope cannot separate them from real readings.
+  \item \textbf{The unit becomes more valuable}, 33.60 pp against 28.04, for the same reason.
+  \item \textbf{The control rises} from 0.9851 to 0.9944, because the hard injector cannot write a
+        physiologically real value and call it a defect, so the false ground truth of
+        Section~\ref{sec:benchmark} largely disappears.
+  \item \textbf{Both zero rows stay at zero.}
+\end{itemize}
+
+% Keeps Tables C1 and C2 inside Appendix C.
+\FloatBarrier

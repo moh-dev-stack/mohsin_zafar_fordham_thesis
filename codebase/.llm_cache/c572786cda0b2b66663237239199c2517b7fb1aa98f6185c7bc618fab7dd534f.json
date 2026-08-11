@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum glucose (LOINC 50885) cannot have a negative value of -1.0 mg/dL, as glucose concentration must be a non-negative quantity in any physiologically viable state.", "confidence": 0.99}

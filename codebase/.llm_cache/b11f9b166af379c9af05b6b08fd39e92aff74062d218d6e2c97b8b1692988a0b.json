@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum bicarbonate cannot be negative; physiologically plausible values range from approximately 22-26 mmol/L in healthy individuals, and even in severe metabolic acidosis, bicarbonate remains positive (typically >5 mmol/L).", "confidence": 0.99}

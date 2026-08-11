@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood glucose value of 43 mg/dL is severely hypoglycemic and incompatible with consciousness or survival without immediate intervention; while technically possible in a medical emergency, the LOINC code '1' is invalid and does not correspond to any real glucose measurement code.", "confidence": 0.95}

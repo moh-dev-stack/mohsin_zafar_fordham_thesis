@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Urine creatinine concentration cannot be negative; a value of -9999.0 mg/dL is physiologically impossible and appears to be a data entry error or sentinel value.", "confidence": 0.99}

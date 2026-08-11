@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -1.0 pg for a laboratory measurement is physiologically implausible, as quantity measurements cannot be negative.", "confidence": 0.99}

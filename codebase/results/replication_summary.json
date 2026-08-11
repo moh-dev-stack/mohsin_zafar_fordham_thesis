@@ -1,0 +1,383 @@
+{
+  "description": "Confined-full minus Baseline per dimension and cohort, over four seeds. ci95 is Student's t (df = n-1); ci95_boot is the percentile bootstrap. holm_reject corrects across all cohort-by-dimension comparisons at alpha = 0.05. non_inferiority tests Baseline minus Confined against the pre-declared 0.03 margin.",
+  "caveats": {
+    "withdrawn_claim": "The f1_plausibility rows below show the confined system BEATING the full-access baseline. That claim is WITHDRAWN. It is an artefact of comparing a range-based agent against a baseline using one crude numeric envelope, so it measures a checker difference, not a privilege difference. Read only alongside results/controlled_comparison.json, which holds the checker constant.",
+    "bootstrap_n": "Every interval here resamples 4 points. On rows with zero variance the percentile interval has width exactly 0 and the non-inferiority p-value is a step function taking only 0 or 1. These are not evidential quantities on such rows.",
+    "what_the_seeds_resample": "Seeds vary the defect injector only, not patients, sites or time. No interval here is a population interval.",
+    "margin_is_post_hoc": "The 0.03 margin was fixed before the inter-run noise floor was measured from these same runs, so any comparison of the two is post hoc."
+  },
+  "seeds": [
+    42,
+    43,
+    44,
+    45
+  ],
+  "n_runs": 4,
+  "confined_system": "confined-full",
+  "baseline_system": "baseline",
+  "sources": {
+    "42": "results/results_stratified_model.json",
+    "43": "results/rep_seed43.json",
+    "44": "results/rep_seed44.json",
+    "45": "results/rep_seed45.json"
+  },
+  "contract": {
+    "model_snapshot": "claude-haiku-4-5-20251001",
+    "limit": 200,
+    "injection_rate": 0.3,
+    "allocation": "stratified",
+    "baseline": "envelope",
+    "now_anchor": "2026-08-05T00:00:00+00:00",
+    "resource_types": [
+      "Patient",
+      "Observation",
+      "Encounter"
+    ],
+    "excluded_file_prefixes": [
+      "hospital",
+      "practitioner"
+    ],
+    "cache_enabled": true,
+    "primary_endpoint": "f1_plausibility"
+  },
+  "f1_completeness": {
+    "synthea": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "mimic-iv-demo": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "eicu-demo": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "f1_plausibility": {
+    "synthea": {
+      "mean_pp": 25.38,
+      "sd_pp": 11.26,
+      "ci95_lo": 7.46,
+      "ci95_hi": 43.3,
+      "ci95_boot_lo": 16.33,
+      "ci95_boot_hi": 35.52,
+      "p_value": 0.0,
+      "holm_reject": true,
+      "non_inferiority": {
+        "difference": -0.2538,
+        "upper_bound": -0.1633,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        22.1,
+        40.0,
+        26.48,
+        12.95
+      ]
+    },
+    "mimic-iv-demo": {
+      "mean_pp": 17.55,
+      "sd_pp": 5.7,
+      "ci95_lo": 8.49,
+      "ci95_hi": 26.62,
+      "ci95_boot_lo": 12.99,
+      "ci95_boot_hi": 22.11,
+      "p_value": 0.0,
+      "holm_reject": true,
+      "non_inferiority": {
+        "difference": -0.1755,
+        "upper_bound": -0.1299,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        10.39,
+        22.7,
+        21.52,
+        15.6
+      ]
+    },
+    "eicu-demo": {
+      "mean_pp": 26.77,
+      "sd_pp": 6.28,
+      "ci95_lo": 16.79,
+      "ci95_hi": 36.76,
+      "ci95_boot_lo": 21.7,
+      "ci95_boot_hi": 31.84,
+      "p_value": 0.0,
+      "holm_reject": true,
+      "non_inferiority": {
+        "difference": -0.2677,
+        "upper_bound": -0.217,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        23.88,
+        30.16,
+        33.53,
+        19.51
+      ]
+    }
+  },
+  "f1_consistency": {
+    "synthea": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "mimic-iv-demo": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "eicu-demo": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "f1_timeliness": {
+    "synthea": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "mimic-iv-demo": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "eicu-demo": {
+      "mean_pp": 0.0,
+      "sd_pp": 0.0,
+      "ci95_lo": 0.0,
+      "ci95_hi": 0.0,
+      "ci95_boot_lo": 0.0,
+      "ci95_boot_hi": 0.0,
+      "p_value": 1.0,
+      "holm_reject": false,
+      "non_inferiority": {
+        "difference": 0.0,
+        "upper_bound": 0.0,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "macro_f1": {
+    "synthea": {
+      "mean_pp": 6.35,
+      "sd_pp": 2.81,
+      "ci95_lo": 1.87,
+      "ci95_hi": 10.82,
+      "ci95_boot_lo": 4.08,
+      "ci95_boot_hi": 8.88,
+      "p_value": 0.0,
+      "holm_reject": true,
+      "non_inferiority": {
+        "difference": -0.0635,
+        "upper_bound": -0.0408,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        5.52,
+        10.0,
+        6.62,
+        3.24
+      ]
+    },
+    "mimic-iv-demo": {
+      "mean_pp": 4.39,
+      "sd_pp": 1.42,
+      "ci95_lo": 2.12,
+      "ci95_hi": 6.65,
+      "ci95_boot_lo": 3.25,
+      "ci95_boot_hi": 5.53,
+      "p_value": 0.0,
+      "holm_reject": true,
+      "non_inferiority": {
+        "difference": -0.0439,
+        "upper_bound": -0.0325,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        2.6,
+        5.68,
+        5.38,
+        3.9
+      ]
+    },
+    "eicu-demo": {
+      "mean_pp": 6.69,
+      "sd_pp": 1.57,
+      "ci95_lo": 4.2,
+      "ci95_hi": 9.19,
+      "ci95_boot_lo": 5.42,
+      "ci95_boot_hi": 7.96,
+      "p_value": 0.0,
+      "holm_reject": true,
+      "non_inferiority": {
+        "difference": -0.0669,
+        "upper_bound": -0.0542,
+        "margin": 0.03,
+        "passed": true
+      },
+      "runs_pp": [
+        5.97,
+        7.54,
+        8.38,
+        4.88
+      ]
+    }
+  }
+}

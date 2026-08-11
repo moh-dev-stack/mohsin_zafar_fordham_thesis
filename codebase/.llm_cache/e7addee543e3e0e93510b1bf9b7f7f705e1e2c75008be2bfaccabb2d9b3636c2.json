@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative percentage value (-1.0%) is physiologically implausible for any valid measurement that should be expressed as a percentage, as percentages cannot be negative in clinical contexts like oxygen saturation, hemoglobin, or other standard measurements.", "confidence": 0.95}

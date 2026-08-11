@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Total CO2 in blood cannot be negative; physiologically plausible values range from approximately 23-29 mmol/L, and a value of -9999.0 mmol/L is impossible.", "confidence": 0.99}

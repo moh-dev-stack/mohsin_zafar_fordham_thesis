@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Urine volume cannot be negative; a value of -1.0 mL is physiologically implausible and indicates a data entry or measurement error.", "confidence": 0.99}

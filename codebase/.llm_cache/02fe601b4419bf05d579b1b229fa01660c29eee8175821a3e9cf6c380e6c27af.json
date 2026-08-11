@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A glucose value of 0.8 mg/dL is physiologically implausible and would be incompatible with life, but this appears to be a data entry or unit conversion error rather than a clinical plausibility issue with the recorded value itself\u2014the measurement code (38483-4) and units are correctly formatted.", "confidence": 0.45}

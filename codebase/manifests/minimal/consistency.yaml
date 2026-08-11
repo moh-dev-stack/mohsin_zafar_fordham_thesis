@@ -1,0 +1,29 @@
+agent_id: consistency_agent_v1
+dimension: consistency
+resource_types:
+  - fhir_resource_type: Encounter
+    allowed_fields:
+      - jsonpath_expression: $.period.start
+      - jsonpath_expression: $.period.end
+      - jsonpath_expression: $.id
+  - fhir_resource_type: Procedure
+    allowed_fields:
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.reasonReference[*].reference
+  - fhir_resource_type: Condition
+    allowed_fields:
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.id
+  - fhir_resource_type: MedicationStatement
+    allowed_fields:
+      - jsonpath_expression: $.medicationCodeableConcept.coding[*].code
+      - jsonpath_expression: $.subject.reference
+note_access:
+  enabled: true
+  sections: [medication_reconciliation, allergies]
+  max_sentences: 20
+rule_references:
+  - source: project rules
+    rule_id: encounter-period-order
+  - source: EHRCon
+    rule_id: note-structured-entity-match

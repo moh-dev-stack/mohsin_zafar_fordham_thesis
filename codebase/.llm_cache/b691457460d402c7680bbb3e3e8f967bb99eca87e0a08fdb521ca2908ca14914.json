@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit 'M/mcL' (millions per microliter) is not a standard LOINC unit; typical white blood cell counts use '10*3/uL' or '10*9/L', and the code '3' does not correspond to a valid LOINC observation code.", "confidence": 0.85}

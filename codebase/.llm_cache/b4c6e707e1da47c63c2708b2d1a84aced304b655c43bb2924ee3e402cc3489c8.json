@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum potassium value of -1.0 mmol/L is physiologically impossible; potassium concentration cannot be negative, and survivable serum potassium ranges from approximately 3.5-5.0 mmol/L.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of 10.34 mg/dL is physiologically implausible; normal fasting glucose is 70-100 mg/dL, and values below ~40 mg/dL cause severe hypoglycemic symptoms and brain damage, making 10.34 mg/dL incompatible with survival.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 1 billion with an empty unit is implausible for LOINC code 51094 (Leukocytes [#/volume] in Blood by Automated count), as this would represent an impossibly high white blood cell count (normal range ~4,500-11,000 cells/\u00b5L) incompatible with life.", "confidence": 0.95}

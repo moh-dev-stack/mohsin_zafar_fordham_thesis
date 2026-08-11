@@ -1,0 +1,152 @@
+{
+  "description": "Controlled comparison: identical range-based plausibility checker on both systems, differing only in field visibility.",
+  "seeds": [
+    42,
+    43,
+    44,
+    45
+  ],
+  "rate": 0.3,
+  "limit": 200,
+  "resource_types": [
+    "Patient",
+    "Observation",
+    "Encounter"
+  ],
+  "allocation": "stratified",
+  "injection_mode": "legacy",
+  "widths": [
+    "minimal",
+    "intermediate",
+    "full"
+  ],
+  "manifests_hash": {
+    "minimal": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f",
+    "intermediate": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126",
+    "full": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a"
+  },
+  "ranges_hash": "f807c70867a7c96b0f8d95b8e3bdb37d5506bd9061d96bbd387a5a9b4c2fb88e",
+  "primary_endpoint": "f1_plausibility",
+  "cells": [
+    {
+      "seed": 42,
+      "dataset": "synthea",
+      "n_plausibility": 27,
+      "baseline_ranges": 1.0,
+      "confined_minimal": 1.0,
+      "confined_intermediate": 1.0,
+      "confined_full": 1.0,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 42,
+      "dataset": "mimic-iv-demo",
+      "n_plausibility": 27,
+      "baseline_ranges": 1.0,
+      "confined_minimal": 1.0,
+      "confined_intermediate": 1.0,
+      "confined_full": 1.0,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 42,
+      "dataset": "eicu-demo",
+      "n_plausibility": 29,
+      "baseline_ranges": 0.9655,
+      "confined_minimal": 0.9655,
+      "confined_intermediate": 0.9655,
+      "confined_full": 0.9655,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 43,
+      "dataset": "synthea",
+      "n_plausibility": 27,
+      "baseline_ranges": 1.0,
+      "confined_minimal": 1.0,
+      "confined_intermediate": 1.0,
+      "confined_full": 1.0,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 43,
+      "dataset": "mimic-iv-demo",
+      "n_plausibility": 27,
+      "baseline_ranges": 0.9811,
+      "confined_minimal": 0.9811,
+      "confined_intermediate": 0.9811,
+      "confined_full": 0.9811,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 43,
+      "dataset": "eicu-demo",
+      "n_plausibility": 29,
+      "baseline_ranges": 0.9831,
+      "confined_minimal": 0.9831,
+      "confined_intermediate": 0.9831,
+      "confined_full": 0.9831,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 44,
+      "dataset": "synthea",
+      "n_plausibility": 27,
+      "baseline_ranges": 1.0,
+      "confined_minimal": 1.0,
+      "confined_intermediate": 1.0,
+      "confined_full": 1.0,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 44,
+      "dataset": "mimic-iv-demo",
+      "n_plausibility": 27,
+      "baseline_ranges": 0.9811,
+      "confined_minimal": 0.9811,
+      "confined_intermediate": 0.9811,
+      "confined_full": 0.9811,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 44,
+      "dataset": "eicu-demo",
+      "n_plausibility": 29,
+      "baseline_ranges": 0.9831,
+      "confined_minimal": 0.9831,
+      "confined_intermediate": 0.9831,
+      "confined_full": 0.9831,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 45,
+      "dataset": "synthea",
+      "n_plausibility": 27,
+      "baseline_ranges": 1.0,
+      "confined_minimal": 1.0,
+      "confined_intermediate": 1.0,
+      "confined_full": 1.0,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 45,
+      "dataset": "mimic-iv-demo",
+      "n_plausibility": 27,
+      "baseline_ranges": 0.9615,
+      "confined_minimal": 0.9615,
+      "confined_intermediate": 0.9615,
+      "confined_full": 0.9615,
+      "max_abs_gap_pp": 0.0
+    },
+    {
+      "seed": 45,
+      "dataset": "eicu-demo",
+      "n_plausibility": 29,
+      "baseline_ranges": 0.9655,
+      "confined_minimal": 0.9655,
+      "confined_intermediate": 0.9655,
+      "confined_full": 0.9655,
+      "max_abs_gap_pp": 0.0
+    }
+  ]
+}

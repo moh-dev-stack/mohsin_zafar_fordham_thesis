@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit 'K/mcL' (thousands per microliter) is non-standard for potassium measurement; potassium is measured in mEq/L or mmol/L, not as a cell count, indicating a unit system error rather than a physiological value.", "confidence": 0.95}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A white blood cell count of 4.46 M/mcL (million cells per microliter) is physiologically implausible; normal WBC ranges from 4.5-11.0 K/mcL (thousand cells per microliter), making this value off by a factor of 1000 and representing a unit error rather than a valid measurement.", "confidence": 0.95}

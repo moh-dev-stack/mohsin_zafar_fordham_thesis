@@ -1,0 +1,22 @@
+% Was its own subsection; sec:reprodetail now labels Section 3.4.
+\label{sec:reprodetail}
+
+\textbf{Not every run calls a model.} Completeness and timeliness are rule-only. Plausibility and
+consistency call a language-model agent, Claude Haiku 4.5 at temperature \texttt{0.0}. The controlled
+comparison, the privilege ablation and the tiered run call no model, scoring plausibility from the
+shared rule file of Section~\ref{sec:fair}.
+
+\textbf{Reproducibility note.} The model-backed results do not fully reproduce. 478 of 1{,}800
+payload lookups in a run lack
+a cache entry: only non-\texttt{uncertain} verdicts are cached, so uncached lookups replay as
+\texttt{uncertain}. Offline replay differs on \textbf{18 of 60}
+\emph{legacy-configuration} scores, maximum delta \textbf{0.2105}, and on \textbf{4 of 60} for
+\emph{this paper's own} stratified run, maximum delta \textbf{0.0179}, from 426 uncached lookups.
+What reproduces is the harness, not the model-backed measurement inside it. The controlled comparison
+and privilege ablation regenerate byte for byte, \texttt{make reproduce} reports every offline
+artefact byte-identical, and \texttt{make test} returns 355 passed, 1 skipped and 0 failed.
+
+\textbf{Tools.} The harness is 5{,}967 lines of Python 3.12 across twenty modules, with versions
+frozen in \texttt{requirements-lock.txt}. It uses no orchestration framework, since the measurement
+is of field projection and the orchestration layer had to be the one part that could not confound it.
+A LangGraph variant ships separately as a portability check. Everything else is pinned (Appendix~D).

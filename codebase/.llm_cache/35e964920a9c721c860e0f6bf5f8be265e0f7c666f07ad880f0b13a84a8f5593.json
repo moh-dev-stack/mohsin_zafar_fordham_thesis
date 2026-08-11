@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum glucose value of 9999 mmol/L is physiologically implausible; fatal hyperglycemia occurs well below 100 mmol/L, and this value exceeds survivable limits by two orders of magnitude.", "confidence": 0.99}

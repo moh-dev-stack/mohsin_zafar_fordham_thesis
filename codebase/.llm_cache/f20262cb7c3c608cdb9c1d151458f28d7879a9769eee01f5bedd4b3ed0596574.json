@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "PTT (partial thromboplastin time) cannot be negative; a value of -9999.0 seconds is physiologically impossible and indicates a data entry or system error.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The component value of 16133 is physiologically implausible for any standard vital sign or laboratory measurement code in this set (which includes blood pressure, heart rate, and various cardiac/metabolic parameters), as it far exceeds survivable ranges for all these parameters.", "confidence": 0.95}

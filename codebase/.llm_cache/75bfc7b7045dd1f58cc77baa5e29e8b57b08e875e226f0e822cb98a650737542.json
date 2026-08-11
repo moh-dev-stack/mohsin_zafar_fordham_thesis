@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 76504-0 (Glasgow Coma Scale total score) with a value of 9999.0 is physiologically implausible, as GCS scores range from 3 to 15.", "confidence": 0.99}

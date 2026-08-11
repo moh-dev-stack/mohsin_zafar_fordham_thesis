@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "PT-INR value of 1,000,000,000 is physiologically implausible; normal INR ranges from 0.8-1.1, and even severely anticoagulated patients rarely exceed INR of 15-20 before fatal hemorrhage occurs.", "confidence": 0.99}

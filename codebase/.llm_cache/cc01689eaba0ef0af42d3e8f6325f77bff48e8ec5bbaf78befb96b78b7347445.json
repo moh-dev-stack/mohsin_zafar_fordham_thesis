@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "RDW (Red Cell Distribution Width) value of 9999% is physiologically implausible; normal RDW ranges from 11-15%, and even severely abnormal values rarely exceed 30%.", "confidence": 0.99}

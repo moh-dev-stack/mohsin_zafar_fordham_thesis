@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "GAD-7 total scores range from 0-21, and a value of -9999.0 is physiologically and clinically implausible, representing an invalid sentinel or error value rather than a legitimate anxiety assessment score.", "confidence": 0.99}

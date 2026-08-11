@@ -1,0 +1,31 @@
+\subsection{Metrics, and what does not reproduce}
+\label{sec:repro}
+
+Detection is scored as F1 per dimension over resources, with \textbf{plausibility pre-declared as the
+single primary endpoint} able to move between systems.
+
+Inter-agent exposure counts Safe Harbor fields: $T_r$ is the count present in resource $r$ and $E_r$
+the count released across agent boundaries and slices, so a shared field counts once per agent.
+Resources with $T_r = 0$ are dropped. The measure is \emph{motivated by} AgentLeak (El Yagoubi et al.,
+2026), not taken from it.
+
+Two aggregations appear here. The manifest-width sweep of Section~\ref{sec:exposure} averages the
+ratio per resource, over the surviving set $\mathcal{R}$:
+
+\[
+  \frac{1}{|\mathcal{R}|} \sum_{r \in \mathcal{R}} \min\!\left(1, \frac{E_r}{T_r}\right).
+\]
+
+The tiered run of Section~\ref{sec:tiered} instead sums both counts across the resources of a cell
+and divides once,
+
+\[
+  \frac{\sum_{r} \min(E_r, T_r)}{\sum_{r} T_r},
+\]
+
+then averages those per-cell ratios. That weights a resource by how much it had to expose. Because
+figures computed the two ways are not comparable, each exposure table names its aggregation.
+
+The width sweep alone has a basis inconsistency. $E_r$ counts the injected copy of a resource and
+$T_r$ the clean one, so a deleted Safe Harbor field can vanish from the numerator while the
+denominator still counts it.

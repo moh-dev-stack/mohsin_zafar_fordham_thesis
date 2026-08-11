@@ -1,0 +1,76 @@
+{
+  "description": "Event-resource Safe Harbor exposure at linkage rungs L0 (reference) and L1 (surrogate). Mean over event resources with at least one Safe Harbor occurrence.",
+  "widths": [
+    "minimal",
+    "intermediate",
+    "full"
+  ],
+  "cohorts": {
+    "synthea": {
+      "reference": {
+        "minimal": 0.9142,
+        "intermediate": 0.9142,
+        "full": 0.9142
+      },
+      "reference_n": {
+        "minimal": 134,
+        "intermediate": 134,
+        "full": 134
+      },
+      "surrogate": {
+        "minimal": 0.0,
+        "intermediate": 0.0,
+        "full": 0.0
+      },
+      "surrogate_n": {
+        "minimal": 134,
+        "intermediate": 134,
+        "full": 134
+      }
+    },
+    "mimic-iv-demo": {
+      "reference": {
+        "minimal": 1.0,
+        "intermediate": 1.0,
+        "full": 1.0
+      },
+      "reference_n": {
+        "minimal": 134,
+        "intermediate": 134,
+        "full": 134
+      },
+      "surrogate": {
+        "minimal": 0.0,
+        "intermediate": 0.0,
+        "full": 0.0
+      },
+      "surrogate_n": {
+        "minimal": 134,
+        "intermediate": 134,
+        "full": 134
+      }
+    },
+    "eicu-demo": {
+      "reference": {
+        "minimal": 1.0,
+        "intermediate": 1.0,
+        "full": 1.0
+      },
+      "reference_n": {
+        "minimal": 134,
+        "intermediate": 134,
+        "full": 134
+      },
+      "surrogate": {
+        "minimal": 0.0,
+        "intermediate": 0.0,
+        "full": 0.0
+      },
+      "surrogate_n": {
+        "minimal": 134,
+        "intermediate": 134,
+        "full": 134
+      }
+    }
+  }
+}

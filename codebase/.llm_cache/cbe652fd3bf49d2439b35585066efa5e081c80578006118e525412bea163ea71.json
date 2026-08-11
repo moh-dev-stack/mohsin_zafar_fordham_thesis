@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 9999.0% is physiologically implausible for any measurable quantity in clinical medicine; LOINC code 51200 represents body weight percentage of ideal body weight, which cannot exceed approximately 300-400% in any survivable condition.", "confidence": 0.98}

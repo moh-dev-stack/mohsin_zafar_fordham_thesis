@@ -1,0 +1,91 @@
+\section{Limitations, risks and ethics}
+\label{sec:limits}
+
+\textbf{Validity.} Ground truth assumes every uninjected record is clean and it is not. Real
+corruption correctly flagged scores as a false positive, a physiologically real injection as a miss
+(Section~\ref{sec:benchmark}). Neither direction is measured. No F1 difference smaller than that
+unknown error is claimable, and that limit is the floor under every two-score cost claim in
+Section~\ref{sec:findings}. Only the controlled comparison escapes. Its zero is an identity the
+design forced (Section~\ref{sec:controlled}), so the one intact result says nothing about privilege.
+
+Missingness is only ever the injector's. Completeness scores detection of a required field the
+injector removed, so absence already in the three cohorts is labelled clean and a truthful fail
+against one is charged as a false positive. Nor can the harness separate a field the pipeline
+withheld from one never recorded. That is what the no-linkage floor of 0.1644 is
+(Section~\ref{sec:tiered}), deletion by policy scored as a data defect. The width sweep repeats it in
+the privacy metric, where a deleted Safe Harbor field leaves the numerator while the denominator
+still counts it (Section~\ref{sec:repro}). The handling strategies Wells et al.\ (2013) set out for
+EHR-derived data are neither applied nor evaluated here, so completeness reports injected absence and
+nothing about how missing this data already is.
+
+The legacy endpoint is saturated. A five-line set-membership test and the crude $[0, 9000]$ envelope
+score 1.0000 in all twelve cells, where the per-analyte rule file is perfect in only 5
+(Section~\ref{sec:hard}). Table~\ref{tab:ablation} was measured there, so the analyte-code arm re-run
+under the hard injector turns a 3.85 pp gain into a 100.00 pp cost (Table~\ref{tab:ablationhard},
+Section~\ref{sec:ablationhard}). Each arm is the minimal plausibility manifest minus exactly
+one JSONPath (Sections~\ref{sec:ablationdesign} and~\ref{sec:ablation}). An arm's cost is therefore a
+property of the injector and the overlap between released and consumed fields, not of privilege.
+
+At rate 0.10 the capability-first allocator realises nine plausibility defects per cohort, against
+27 to 29 at rate 0.30 (Section~\ref{sec:fair}). In the model-backed run at that lower rate, the
+Confined minus Baseline gap at full manifest width changes sign on two of three cohorts, so the
+winner turns on a handful of resources.
+
+The rule file has no changelog and no earlier copy. Of its corrected bounds, 27 trace to their own
+source notes and the twenty-eighth does not. That it was never fitted to these cohorts has no
+support outside the file itself.
+
+\textbf{Generalisability.} The results are offline batches over files on disk, no live EHR, no
+clinician reading output. Free means free only on the one withheld field, one agent, one dimension
+and one rule measured. Latency, throughput, token cost and manifest-authoring burden are
+unmeasured, so the 98.6 per cent reduction of Section~\ref{sec:tiered} may be unaffordable where
+every event resource routes through Records Linkage.
+
+Each cell scores 200 resources from three demonstration cohorts, one a 100-stay subsample
+(Section~\ref{sec:data}), all synthetic or de-identified. All figures are small-sample, and
+exposure was counted only over already de-identified fields, never free text. Stratifying by age
+or sex would pull the birth date, a Safe Harbor identifier, back into the checker.
+
+\textbf{Bias.} Population bias is unmeasured rather than small. The rule file sets its bounds outside
+the widest value compatible with a living patient, paediatric and critical-care extremes included,
+and whether the bounds achieve that is untested. No subgroup breakdown of detection performance is
+reported, so no number in Section~\ref{sec:findings} can be attributed to, or cleared for, any
+population.
+
+Synthea generates its whole platelet-distribution-width series at roughly twenty times the real
+scale. The bound for that analyte is left deliberately wide, and a truthful one would flag all 304
+records. The eICU aggregate codes inherit one widest bound across dozens of analytes (Appendix B).
+Both are instrument artefacts that inflate the score, so reading one cohort against another is
+unsafe.
+
+The four seeds resample the injector only. Replication measures injector variability, not sampling
+error, and reading it as a statement about hospitals overstates every number.
+
+\textbf{The privacy claim.} Substitution concentrates identifier access rather than removing it.
+Routing every identifier into Records Linkage or Registration manufactures a single high-value target
+that no adversary model here prices (Section~\ref{sec:threat}).
+
+Linkage remains possible, since the stand-in is stable within a run and no further
+(Section~\ref{sec:designs}). What fell is exposure and not re-identification risk. An assembled
+record stays re-identifiable, and recognising the same patient next week, which any deployment
+needs, is untested. The residual 0.0086 is \texttt{\$.birthDate} reaching Registration by design
+in the four Synthea cells at full width, the only Safe Harbor field the stand-in setting releases
+anywhere.
+
+The metric counts occurrences of Safe Harbor fields crossing agent boundaries over a denominator this
+harness defines (Section~\ref{sec:repro}). With no expert determination and no re-identification
+attempt, 0.0086 is this harness's internal ratio, not a demonstration of de-identification, and not
+comparable with the pooled figures of Section~\ref{sec:exposure}, which average the other way.
+
+\textbf{The AI instrument.} The model here is a measured component, not an authoring tool:
+\texttt{claude-haiku-4-5-20251001} at temperature \texttt{0.0}, chosen for cost rather than accuracy.
+Consistency, being model-backed, is excluded from the tiered pipeline, leaving three of four
+dimensions scored (Section~\ref{sec:designs}).
+
+Roughly a quarter of model lookups are unrecoverable (Section~\ref{sec:reprodetail}). Provider
+non-determinism is not the cause, since 40 payloads asked twice at temperature 0 returned 0
+disagreements. Consistency, the dimension that depends on those lookups, goes unscored in the
+three runs calling no model. Only non-\texttt{uncertain} verdicts are cached, so the non-reproduction
+is a gap in the cache and not a finding about model variance. One model at one temperature on one
+task supports no claim about models in general, and every model-backed number here is a property of
+this instrument.

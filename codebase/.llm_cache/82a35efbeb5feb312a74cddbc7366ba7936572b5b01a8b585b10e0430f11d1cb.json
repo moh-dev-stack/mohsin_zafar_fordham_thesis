@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 9999.0% is physiologically implausible for any measurable quantity in clinical medicine; code 51256 represents oxygen saturation, which cannot exceed 100%.", "confidence": 0.99}

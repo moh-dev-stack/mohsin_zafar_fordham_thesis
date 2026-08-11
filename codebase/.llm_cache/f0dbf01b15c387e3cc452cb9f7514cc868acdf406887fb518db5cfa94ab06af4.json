@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The observation code 51237 (Albumin [Mass/volume] in Serum or Plasma) with a value of 9999.0 and missing unit is physiologically implausible; normal serum albumin ranges from 3.5-5.5 g/dL, and 9999 in any standard unit would be incompatible with life.", "confidence": 0.95}

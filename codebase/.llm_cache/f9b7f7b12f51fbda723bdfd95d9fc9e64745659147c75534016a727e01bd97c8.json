@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Respiratory rate cannot be negative; a value of -1.0 breaths per minute is physiologically impossible and indicates a data entry or measurement error.", "confidence": 0.99}

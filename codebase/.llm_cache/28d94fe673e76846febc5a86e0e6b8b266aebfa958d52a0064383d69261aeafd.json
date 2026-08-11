@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51087 represents 'Leukocytes [#/volume] in Blood by Automated count' which requires a unit of measurement (typically 10*3/\u00b5L or /\u00b5L), but the valueQuantity.unit field is empty, making the recorded value of 24.0 uninterpretable and non-compliant with FHIR requirements.", "confidence": 0.95}

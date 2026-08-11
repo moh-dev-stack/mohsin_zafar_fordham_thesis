@@ -1,0 +1,490 @@
+{
+  "model_snapshot": "claude-haiku-4-5-20251001",
+  "limit": 200,
+  "injection_rate": 0.3,
+  "seed": 42,
+  "allocation": "stratified",
+  "baseline": "envelope",
+  "now_anchor": "2026-08-05T00:00:00+00:00",
+  "resource_types": [
+    "Patient",
+    "Observation",
+    "Encounter"
+  ],
+  "excluded_file_prefixes": [
+    "hospital",
+    "practitioner"
+  ],
+  "cache_enabled": true,
+  "primary_endpoint": "f1_plausibility",
+  "cohorts": [
+    {
+      "dataset": "synthea",
+      "n_resources": 200,
+      "injection_rate": 0.3,
+      "seed": 42,
+      "allocation": "stratified",
+      "baseline": "envelope",
+      "systems": {
+        "baseline": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.65,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.8,
+            "macro_f1": 0.8625
+          },
+          "agentleak_structural": 1.0,
+          "note": "monolithic full-access baseline; no projection boundary"
+        },
+        "confined-minimal": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.7105263157894737,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.8,
+            "macro_f1": 0.8776315789473684
+          },
+          "agentleak_mean": 0.61,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f",
+          "call_stats": {
+            "cache_hits": 80,
+            "cache_misses": 120,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 10
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 23,
+              "clamped_mean": 0.5,
+              "unclamped_mean": 0.5,
+              "union_mean": 0.5,
+              "at_ceiling": 0
+            },
+            "Observation": {
+              "n": 111,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 111
+            }
+          }
+        },
+        "confined-intermediate": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6923076923076924,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.8,
+            "macro_f1": 0.8730769230769231
+          },
+          "agentleak_mean": 0.6125,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126",
+          "call_stats": {
+            "cache_hits": 73,
+            "cache_misses": 127,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 3
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 23,
+              "clamped_mean": 0.5,
+              "unclamped_mean": 0.5,
+              "union_mean": 0.5,
+              "at_ceiling": 0
+            },
+            "Observation": {
+              "n": 111,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.5,
+              "union_mean": 1.0,
+              "at_ceiling": 111
+            }
+          }
+        },
+        "confined-full": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.870967741935484,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.8,
+            "macro_f1": 0.917741935483871
+          },
+          "agentleak_mean": 0.65,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a",
+          "call_stats": {
+            "cache_hits": 20,
+            "cache_misses": 180,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 0
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.1138,
+              "unclamped_mean": 0.1138,
+              "union_mean": 0.1138,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 23,
+              "clamped_mean": 0.5,
+              "unclamped_mean": 0.5,
+              "union_mean": 0.5,
+              "at_ceiling": 0
+            },
+            "Observation": {
+              "n": 111,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.5,
+              "union_mean": 1.0,
+              "at_ceiling": 111
+            }
+          }
+        }
+      },
+      "realised_defects": {
+        "consistency": 9,
+        "completeness": 12,
+        "plausibility": 27,
+        "timeliness": 12
+      }
+    },
+    {
+      "dataset": "mimic-iv-demo",
+      "n_resources": 200,
+      "injection_rate": 0.3,
+      "seed": 42,
+      "allocation": "stratified",
+      "baseline": "envelope",
+      "systems": {
+        "baseline": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.7142857142857143,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.1643835616438356,
+            "macro_f1": 0.7196673189823874
+          },
+          "agentleak_structural": 1.0,
+          "note": "monolithic full-access baseline; no projection boundary"
+        },
+        "confined-minimal": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6136363636363636,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.1643835616438356,
+            "macro_f1": 0.6945049813200498
+          },
+          "agentleak_mean": 0.6525,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f",
+          "call_stats": {
+            "cache_hits": 1,
+            "cache_misses": 199,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 5
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 27,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 27
+            },
+            "Observation": {
+              "n": 107,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 107
+            }
+          }
+        },
+        "confined-intermediate": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6666666666666666,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.1643835616438356,
+            "macro_f1": 0.7077625570776256
+          },
+          "agentleak_mean": 0.655,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126",
+          "call_stats": {
+            "cache_hits": 3,
+            "cache_misses": 197,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 7
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 27,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 27
+            },
+            "Observation": {
+              "n": 107,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.1869,
+              "union_mean": 1.0,
+              "at_ceiling": 107
+            }
+          }
+        },
+        "confined-full": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.8181818181818181,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 0.1643835616438356,
+            "macro_f1": 0.7456413449564134
+          },
+          "agentleak_mean": 0.655,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a",
+          "call_stats": {
+            "cache_hits": 30,
+            "cache_misses": 170,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 0
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 27,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 27
+            },
+            "Observation": {
+              "n": 107,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.1869,
+              "union_mean": 1.0,
+              "at_ceiling": 107
+            }
+          }
+        }
+      },
+      "realised_defects": {
+        "consistency": 9,
+        "completeness": 12,
+        "timeliness": 12,
+        "plausibility": 27
+      }
+    },
+    {
+      "dataset": "eicu-demo",
+      "n_resources": 200,
+      "injection_rate": 0.3,
+      "seed": 42,
+      "allocation": "stratified",
+      "baseline": "envelope",
+      "systems": {
+        "baseline": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.6818181818181819,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.9204545454545454
+          },
+          "agentleak_structural": 1.0,
+          "note": "monolithic full-access baseline; no projection boundary"
+        },
+        "confined-minimal": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.5178571428571429,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.8794642857142857
+          },
+          "agentleak_mean": 0.66,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "a56134aca0c05bf720febf27875855c0c91ec6ee3337978774ba9e9e4b8abe5f",
+          "call_stats": {
+            "cache_hits": 8,
+            "cache_misses": 192,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 6
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 7,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 7
+            },
+            "Observation": {
+              "n": 127,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 127
+            }
+          }
+        },
+        "confined-intermediate": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.5523809523809524,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.888095238095238
+          },
+          "agentleak_mean": 0.67,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "2b1b3860887e0d9922789a5e85c486d2f4270171a3c248a9a7512525bc108126",
+          "call_stats": {
+            "cache_hits": 13,
+            "cache_misses": 187,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 0
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 7,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 7
+            },
+            "Observation": {
+              "n": 127,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.5,
+              "union_mean": 1.0,
+              "at_ceiling": 127
+            }
+          }
+        },
+        "confined-full": {
+          "scores": {
+            "f1_completeness": 1.0,
+            "f1_plausibility": 0.9206349206349206,
+            "f1_consistency": 1.0,
+            "f1_timeliness": 1.0,
+            "macro_f1": 0.9801587301587301
+          },
+          "agentleak_mean": 0.67,
+          "agentleak_excluded_t0": 0,
+          "manifests_hash": "9f5d661ca6e67ca58e772e9b70cba878f989cae409ea74b255c640069f281b6a",
+          "call_stats": {
+            "cache_hits": 15,
+            "cache_misses": 185,
+            "model_errors": 0,
+            "offline_skips": 0,
+            "truncated_retries": 0,
+            "self_corrections": 0
+          },
+          "exposure_by_type": {
+            "Patient": {
+              "n": 66,
+              "clamped_mean": 0.0,
+              "unclamped_mean": 0.0,
+              "union_mean": 0.0,
+              "at_ceiling": 0
+            },
+            "Encounter": {
+              "n": 7,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.0,
+              "union_mean": 1.0,
+              "at_ceiling": 7
+            },
+            "Observation": {
+              "n": 127,
+              "clamped_mean": 1.0,
+              "unclamped_mean": 1.5,
+              "union_mean": 1.0,
+              "at_ceiling": 127
+            }
+          }
+        }
+      },
+      "realised_defects": {
+        "consistency": 7,
+        "completeness": 12,
+        "plausibility": 29,
+        "timeliness": 12
+      }
+    }
+  ]
+}

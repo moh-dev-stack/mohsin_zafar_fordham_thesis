@@ -1,0 +1,47 @@
+% APA 7 (§2.14): each appendix starts a new page, with the label on one line and
+% the descriptive title on the next, both centred and bold; and its tables are
+% numbered from 1 within the appendix letter (Table A1), not continuing 1-4.
+\FloatBarrier
+\newpage
+% Same reason as References: a centred box is not a \section, so the contents page
+% has to be told about it.
+\phantomsection
+\addcontentsline{toc}{section}{Appendix A: Exposure Decomposed by Resource Type}
+{\centering\normalfont\bfseries\large Appendix A\par}
+{\centering\normalfont\bfseries\large Exposure Decomposed by Resource Type\par}
+\nopagebreak
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+
+The pooled exposure figure in Section~\ref{sec:exposure} is weighted by cohort composition rather
+than by any manifest, and Table~\ref{tab:exposure} is that decomposition. One caveat: the pooled
+column takes its numerator on the injected copy of a resource and its denominator on the clean
+one, per the audit register shipped with the code. It is \emph{not} the n-weighted mean of the
+three columns beside it and should not be reconstructed from them.
+
+\begin{table}[!ht]
+\centering
+\caption{Inter-agent exposure by resource type and manifest width, from
+\texttt{results/results\_stratified\_model.json}. Figures are the per-resource mean of
+Section~\ref{sec:repro}, not the summed-count ratio of Table~\ref{tab:tiered}. One component cell
+moves with width. The pooled column also moves, for the basis reason above.}
+\label{tab:exposure}
+\begin{tabular}{llcccc}
+\toprule
+Cohort & Width & Patient & Encounter & Observation & Pooled \\
+\midrule
+Synthea       & minimal      & 0.0000 & 0.5000 & 1.0000 & 0.6100 \\
+Synthea       & intermediate & 0.0000 & 0.5000 & 1.0000 & 0.6125 \\
+Synthea       & full         & $\mathbf{0.1138}$ & 0.5000 & 1.0000 & 0.6500 \\
+MIMIC-IV      & minimal      & 0.0000 & 1.0000 & 1.0000 & 0.6525 \\
+MIMIC-IV      & intermediate & 0.0000 & 1.0000 & 1.0000 & 0.6550 \\
+MIMIC-IV      & full         & 0.0000 & 1.0000 & 1.0000 & 0.6550 \\
+eICU-CRD      & minimal      & 0.0000 & 1.0000 & 1.0000 & 0.6600 \\
+eICU-CRD      & intermediate & 0.0000 & 1.0000 & 1.0000 & 0.6700 \\
+eICU-CRD      & full         & 0.0000 & 1.0000 & 1.0000 & 0.6700 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Keeps Table A1 inside Appendix A instead of drifting into Appendix B's prose.
+\FloatBarrier

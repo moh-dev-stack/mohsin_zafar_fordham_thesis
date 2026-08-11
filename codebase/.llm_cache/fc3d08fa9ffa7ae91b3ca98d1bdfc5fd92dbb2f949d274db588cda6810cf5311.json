@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Alkaline phosphatase (LOINC 50878) cannot have a negative value; enzyme activity is measured in positive units (IU/L) and must be \u22650.", "confidence": 0.99}

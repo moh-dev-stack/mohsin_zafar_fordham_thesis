@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Total bilirubin cannot be negative; physiologically valid values range from approximately 0.1 to 1.2 mg/dL in healthy individuals, and pathologically up to 20+ mg/dL in severe cases, but never below zero.", "confidence": 0.99}

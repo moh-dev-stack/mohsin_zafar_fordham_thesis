@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "DAST-10 total scores range from 0-10, and a value of -9999.0 is physiologically and clinically implausible, representing an invalid/placeholder value rather than a legitimate assessment result.", "confidence": 0.99}

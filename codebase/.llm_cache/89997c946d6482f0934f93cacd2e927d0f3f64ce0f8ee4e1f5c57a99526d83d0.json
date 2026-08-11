@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of 1,000,000,000 mg/dL is physiologically impossible; normal fasting glucose is 70-100 mg/dL and even severe hyperglycemia rarely exceeds 1,000 mg/dL, making this value incompatible with human survival.", "confidence": 0.99}

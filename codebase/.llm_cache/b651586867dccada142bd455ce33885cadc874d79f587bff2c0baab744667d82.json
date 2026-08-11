@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A hematocrit value of 9999% is physiologically impossible; normal hematocrit ranges from approximately 36-46% in adults, and values above 60% are incompatible with life.", "confidence": 0.99}

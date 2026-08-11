@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of -1.0 mg/dL is physiologically impossible; blood glucose cannot be negative and any measurable glucose must be positive.", "confidence": 0.99}

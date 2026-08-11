@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood glucose level of 1.2 mg/dL is far below the minimum survivable range (normal fasting: 70-100 mg/dL; severe hypoglycemia threshold: ~40 mg/dL); this represents a critical data entry or measurement error.", "confidence": 0.95}

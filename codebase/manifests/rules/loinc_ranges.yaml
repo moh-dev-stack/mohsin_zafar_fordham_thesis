@@ -1,0 +1,2623 @@
+# Per-analyte physiological range rules.
+#
+# WHY THIS FILE EXISTS
+# --------------------
+# The Baseline judges plausibility with a single numeric envelope
+# of [-1000, 100000] applied to every analyte, while the multi-agent system
+# judges plausibility with no reference ranges at all (no cohort Observation
+# carries `referenceRange`). The two systems therefore differ in *checking
+# logic* as well as in *privilege*, which confounds the experiment. This file is
+# the shared clinical knowledge both systems can be given, so that the only
+# remaining difference between them is how much of the record they may see.
+#
+# WHAT A BOUND MEANS HERE
+# -----------------------
+# `physiological_min` / `physiological_max` are SURVIVABILITY / CREDIBILITY
+# limits, not normal reference intervals. A potassium of 6.5 mmol/L is grossly
+# abnormal but entirely survivable and MUST NOT be flagged; a potassium of 9999
+# mmol/L is not a measurement. Bounds are deliberately set outside the widest
+# value compatible with a living patient, including paediatric and critical-care
+# extremes, so that a `fail` verdict means "this cannot be a real measurement"
+# rather than "this patient is unwell".
+#
+# COMPARISON IS INCLUSIVE: a value fails only when
+#   value < physiological_min  or  value > physiological_max.
+# Every bound whose floor is 0.0 therefore admits a genuine zero (0% eosinophils,
+# a pain score of 0, a LogMAR of 0.0) while rejecting the injected -1.0.
+#
+# KEYING, AND WHY SOME ENTRIES SHARE A `loinc`
+# --------------------------------------------
+# Entries are keyed by the Observation code string exactly as it appears in the
+# data. Two of the three cohorts do not actually use LOINC:
+#   * MIMIC-IV emits d_labitems itemids (50971, 51221, ...);
+#   * eICU emits labtypeid integers (1, 2, 3, 4, 7) that aggregate dozens of
+#     unrelated analytes under one code.
+# Both nevertheless declare system=http://loinc.org. For the eICU aggregate
+# codes a single bound would have to span creatinine (0.6 mg/dL) and CPK
+# (1282 U/L), which would be useless, so those codes carry several entries
+# distinguished by `unit`. The loader registers each entry under "<code>|<unit>"
+# and additionally registers one entry per code under the bare "<code>" as the
+# fallback used when the Observation carries no unit.
+#
+# `unit_aliases` lists other spellings of the SAME quantity seen in the cohorts
+# (e.g. "pH" and "[pH]"); they resolve to the same rule and are accepted by
+# unit_verdict. A different quantity always gets its own entry.
+#
+# A BOUND IS NOT AN ALLOWLIST: THE TWO MECHANISMS IN THIS FILE
+# ------------------------------------------------------------
+# An earlier revision of this file widened bounds until zero real cohort values
+# failed the guard in tests/test_ranges.py. That is a fitting procedure, not a
+# test: it let a handful of corrupt real records rewrite the physiology, and it
+# constrained the DATA instead of the CODE. Two separate mechanisms now do the
+# two separate jobs:
+#
+#   1. `physiological_min` / `physiological_max` state what is SURVIVABLE. They
+#      are set from clinical or definitional reasoning and are never moved to
+#      accommodate a record. Where the reasoning is general clinical knowledge
+#      rather than a cited figure, the `source` field says so in those words.
+#
+#   2. `known_corrupt_values` (top level, below `ranges`) names each real cohort
+#      record that a truthful bound flags, with its cohort, code, unit, value,
+#      count and the reason it cannot be a measurement. The false-positive guard
+#      permits exactly these and nothing else, so a NEW real false positive
+#      fails the suite loudly instead of being silenced by widening a bound.
+#      `dqa.ranges` never reads this key; it is documentation plus test input.
+#
+# The two records that forced the original widening are now allowlisted rather
+# than legislated for: eICU FiO2 of 4000 and 10000 (a percentage cannot exceed
+# 100), and an eICU body temperature of 99.8 labelled degC (Fahrenheit).
+#
+# DECLARED EXCEPTIONS: BOUNDS WIDER THAN THE [0, 9000] FALLBACK
+# ------------------------------------------------------------
+# A per-analyte bound wider than the fallback envelope buys nothing against a
+# crude injected constant and costs detection, so each of the 23 that remain is
+# a deliberate claim that the analyte really does reach that far, not an
+# accommodation of any record. None of them was forced by cohort data: every one
+# sits far above its group's observed maximum, so each could be narrowed to the
+# fallback tomorrow without a single false positive, and is not, because that
+# would be a lie:
+#   * creatine kinase (2157-6, 50910) and the eICU enzyme-activity aggregate
+#     (code 1, Units/L, which pools CPK with the transaminases) -- CK in massive
+#     rhabdomyolysis is measured in the hundreds of thousands of U/L;
+#   * ALT and AST (1742-6, 50861, 1920-8, 50878) -- fulminant hepatic necrosis
+#     and ischaemic hepatitis produce transaminases above 10,000 U/L, so a value
+#     of 9999 U/L is a credible measurement and is correctly NOT flagged;
+#   * LDH (14804-9, 50954), amylase (50867) and lipase (50956) -- massive
+#     haemolysis, tumour lysis and severe pancreatitis all read out above
+#     10,000 U/L;
+#   * triglycerides (2571-8, 51000) -- familial chylomicronaemia above 10,000
+#     mg/dL is documented;
+#   * ferritin (2276-4) -- haemophagocytic lymphohistiocytosis exceeds 50,000;
+#   * alpha-fetoprotein (50864) and hs-troponin (89579-7) -- tumour and necrosis
+#     markers with no short-term physiological ceiling;
+#   * NT-proBNP (33762-6, 71425-3) -- the assay measuring range itself reaches
+#     35,000 pg/mL;
+#   * urine volume (51108, 51109) -- untreated diabetes insipidus produces 20 L
+#     in a day, so a 24-hour collection of 10 L is real;
+#   * albumin/creatinine ratio (14959-1) -- nephrotic-range ratios exceed
+#     10,000 mg/g;
+#   * annual family income (63586-2) -- a currency amount, not a measurement;
+#   * the eICU code 4 unit-less rows -- septic synovial fluid white cell counts.
+# Consequence, stated plainly because it is the file's main limitation: for
+# these analytes an injected 9999 is indistinguishable from a real measurement,
+# and no honest value-only bound can change that. Catching it needs either a
+# unit-aware check, disaggregated codes, or an injector that derives its values
+# from these bounds rather than from a fixed constant.
+#
+# A THIRD KIND OF ARTEFACT THIS FILE CANNOT REPAIR
+# ------------------------------------------------
+# Synthea emits platelet distribution width (32207-3) on a 150-520 fL scale.
+# Real PDW is roughly 8-25 fL, so the entire 304-value series is wrong by a
+# scale factor. That is neither a true bound nor a handful of corrupt records,
+# so neither mechanism above fits it: an allowlist of 304 entries would not be
+# an allowlist. The bound is left wide and the `source` field says plainly that
+# it encodes a generator artefact. Flagged here for a human to decide.
+#
+# Every bound in this file was checked against the observed extrema recorded in
+# results/loinc_survey.json. Observed extrema are used to check that a bound is
+# not accidentally too tight; they are never used to set one.
+
+version: 1
+
+ranges:
+
+  # ------------------------------------------------------------------
+  # Fallback for any code not enumerated below.
+  #
+  # Empirically grounded: across all 70,899 Observations in the three cohorts,
+  # the only top-level numeric values that are negative or exceed 9000 belong to
+  # codes explicitly enumerated in this file (base excess, DXA T-score, eICU
+  # FiO2). Anything else falling outside [0, 9000] in these unit conventions is
+  # not a measurement. Conservative in the sense that it is far wider than any
+  # single analyte's own bound; it is a backstop, not a substitute for a rule.
+  # ------------------------------------------------------------------
+  - loinc: "default"
+    display: "Fallback envelope for un-enumerated codes"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 9000.0
+    source: "survey-derived backstop (results/loinc_survey.json); no enumerated-code exception applies"
+
+  # ==================================================================
+  # VITAL SIGNS (Synthea, category=vital-signs)
+  # ==================================================================
+  - loinc: "8867-4"
+    display: "Heart rate"
+    unit: "/min"
+    physiological_min: 0.0
+    physiological_max: 350.0
+    source: "clinical reference: supraventricular tachycardia rarely exceeds 300/min; asystole is 0"
+
+  - loinc: "9279-1"
+    display: "Respiratory rate"
+    unit: "/min"
+    physiological_min: 0.0
+    physiological_max: 150.0
+    source: "clinical reference: neonatal tachypnoea peaks near 100/min; apnoea is 0"
+
+  - loinc: "8310-5"
+    display: "Body temperature"
+    unit: "Cel"
+    physiological_min: 10.0
+    physiological_max: 45.0
+    source: "clinical reference: survived accidental hypothermia to 13 degC; hyperthermia lethal above 44 degC"
+
+  - loinc: "8480-6"
+    display: "Systolic Blood Pressure"
+    unit: "mm[Hg]"
+    physiological_min: 20.0
+    physiological_max: 350.0
+    source: "clinical reference: hypertensive crisis rarely exceeds 300 mmHg systolic"
+
+  - loinc: "8462-4"
+    display: "Diastolic Blood Pressure"
+    unit: "mm[Hg]"
+    physiological_min: 0.0
+    physiological_max: 250.0
+    source: "clinical reference: diastolic 0 occurs in severe aortic regurgitation"
+
+  - loinc: "8478-0"
+    display: "Mean blood pressure"
+    unit: "mm[Hg]"
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: bounded by systolic pressure"
+
+  - loinc: "2708-6"
+    display: "Oxygen saturation in Arterial blood"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a saturation fraction cannot exceed 100%"
+
+  - loinc: "29463-7"
+    display: "Body Weight"
+    unit: "kg"
+    physiological_min: 0.2
+    physiological_max: 700.0
+    source: "clinical reference: smallest surviving neonate ~0.25 kg; heaviest recorded human ~635 kg"
+
+  - loinc: "8302-2"
+    display: "Body Height"
+    unit: "cm"
+    physiological_min: 15.0
+    physiological_max: 280.0
+    source: "clinical reference: tallest recorded human 272 cm; extreme preterm crown-heel ~20 cm"
+
+  - loinc: "39156-5"
+    display: "Body mass index (BMI) [Ratio]"
+    unit: "kg/m2"
+    physiological_min: 5.0
+    physiological_max: 200.0
+    source: "clinical reference: famine BMI floor ~8; heaviest recorded human BMI ~186"
+
+  - loinc: "59576-9"
+    display: "Body mass index (BMI) [Percentile] Per age and sex"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: percentile"
+
+  - loinc: "77606-2"
+    display: "Weight-for-length Per age and sex"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: percentile"
+
+  - loinc: "8289-1"
+    display: "Head Occipital-frontal circumference Percentile"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: percentile"
+
+  - loinc: "9843-4"
+    display: "Head Occipital-frontal circumference"
+    unit: "cm"
+    physiological_min: 10.0
+    physiological_max: 80.0
+    source: "clinical reference: extreme preterm ~20 cm; severe untreated hydrocephalus ~75 cm"
+
+  - loinc: "74006-8"
+    display: "Weight difference [Mass difference] --pre dialysis - post dialysis"
+    unit: "kg"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: single-session ultrafiltration volume"
+
+  - loinc: "79893-4"
+    display: "Left eye Intraocular pressure"
+    unit: "mm[Hg]"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: acute angle-closure glaucoma rarely exceeds 80 mmHg"
+
+  - loinc: "79892-6"
+    display: "Right eye Intraocular pressure"
+    unit: "mm[Hg]"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: acute angle-closure glaucoma rarely exceeds 80 mmHg"
+
+  - loinc: "413077008"
+    display: "LogMAR visual acuity left eye (observable entity)"
+    unit: "{logmar}"
+    physiological_min: -0.3
+    physiological_max: 4.0
+    source: "definitional: LogMAR -0.3 is 20/10 (best measurable); 4.0 is no light perception"
+
+  - loinc: "413078003"
+    display: "LogMAR visual acuity right eye (observable entity)"
+    unit: "{logmar}"
+    physiological_min: -0.3
+    physiological_max: 4.0
+    source: "definitional: LogMAR -0.3 is 20/10 (best measurable); 4.0 is no light perception"
+
+  # ==================================================================
+  # BASIC METABOLIC PANEL
+  # ==================================================================
+  - loinc: "2947-0"
+    display: "Sodium [Moles/volume] in Blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 80.0
+    physiological_max: 200.0
+    source: "clinical reference: survival reported from 90 to 190 mmol/L"
+
+  - loinc: "2951-2"
+    display: "Sodium [Moles/volume] in Serum or Plasma"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 80.0
+    physiological_max: 200.0
+    source: "clinical reference: survival reported from 90 to 190 mmol/L"
+
+  - loinc: "50983"
+    display: "Sodium (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 80.0
+    physiological_max: 200.0
+    source: "clinical reference: survival reported from 90 to 190 mmol/L"
+
+  - loinc: "50824"
+    display: "Sodium, Whole Blood (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 80.0
+    physiological_max: 200.0
+    source: "clinical reference: survival reported from 90 to 190 mmol/L"
+
+  - loinc: "51100"
+    display: "Sodium, Urine (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.0
+    physiological_max: 400.0
+    source: "clinical reference: urine sodium spans 0 to ~300 mEq/L"
+
+  - loinc: "6298-4"
+    display: "Potassium [Moles/volume] in Blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.5
+    physiological_max: 12.0
+    source: "clinical reference: survival reported from 1.0 to 11 mmol/L; 6.5 is abnormal but survivable"
+
+  - loinc: "2823-3"
+    display: "Potassium [Moles/volume] in Serum or Plasma"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.5
+    physiological_max: 12.0
+    source: "clinical reference: survival reported from 1.0 to 11 mmol/L; 6.5 is abnormal but survivable"
+
+  - loinc: "50971"
+    display: "Potassium (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.5
+    physiological_max: 12.0
+    source: "clinical reference: survival reported from 1.0 to 11 mmol/L"
+
+  - loinc: "50822"
+    display: "Potassium, Whole Blood (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.5
+    physiological_max: 12.0
+    source: "clinical reference: survival reported from 1.0 to 11 mmol/L"
+
+  - loinc: "51097"
+    display: "Potassium, Urine (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: urine potassium spans 0 to ~200 mEq/L"
+
+  - loinc: "2069-3"
+    display: "Chloride [Moles/volume] in Blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 50.0
+    physiological_max: 180.0
+    source: "clinical reference: bounded by survivable sodium and bicarbonate"
+
+  - loinc: "2075-0"
+    display: "Chloride [Moles/volume] in Serum or Plasma"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 50.0
+    physiological_max: 180.0
+    source: "clinical reference: bounded by survivable sodium and bicarbonate"
+
+  - loinc: "50902"
+    display: "Chloride (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 50.0
+    physiological_max: 180.0
+    source: "clinical reference: bounded by survivable sodium and bicarbonate"
+
+  - loinc: "50806"
+    display: "Chloride, Whole Blood (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 50.0
+    physiological_max: 180.0
+    source: "clinical reference: bounded by survivable sodium and bicarbonate"
+
+  - loinc: "51078"
+    display: "Chloride, Urine (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.0
+    physiological_max: 400.0
+    source: "clinical reference: urine chloride spans 0 to ~300 mEq/L"
+
+  - loinc: "20565-8"
+    display: "Carbon dioxide, total [Moles/volume] in Blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "2028-9"
+    display: "Carbon dioxide, total [Moles/volume] in Serum or Plasma"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "2027-1"
+    display: "Carbon dioxide, total [Moles/volume] in Venous blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "50804"
+    display: "Calculated Total CO2 (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "50882"
+    display: "Bicarbonate (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "1960-4"
+    display: "Bicarbonate [Moles/volume] in Arterial blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "14627-4"
+    display: "Bicarbonate [Moles/volume] in Venous blood"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: survivable bicarbonate spans ~2 to 50 mmol/L"
+
+  - loinc: "51076"
+    display: "Bicarbonate, Urine (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: urine bicarbonate spans 0 to ~150 mEq/L"
+
+  - loinc: "50868"
+    display: "Anion Gap (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: -20.0
+    physiological_max: 100.0
+    source: "clinical reference: a negative anion gap is documented in bromide toxicity and paraproteinaemia"
+
+  - loinc: "6299-2"
+    display: "Urea nitrogen [Mass/volume] in Blood"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: untreated end-stage renal failure rarely exceeds 300 mg/dL"
+
+  - loinc: "3094-0"
+    display: "Urea nitrogen [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: untreated end-stage renal failure rarely exceeds 300 mg/dL"
+
+  - loinc: "51006"
+    display: "Urea Nitrogen (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: untreated end-stage renal failure rarely exceeds 300 mg/dL"
+
+  - loinc: "51104"
+    display: "Urea Nitrogen, Urine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference: urine urea nitrogen is one to two orders above serum"
+
+  - loinc: "38483-4"
+    display: "Creatinine [Mass/volume] in Blood"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: highest reported serum creatinine in survivable uraemia ~50 mg/dL"
+
+  - loinc: "2160-0"
+    display: "Creatinine [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: highest reported serum creatinine in survivable uraemia ~50 mg/dL"
+
+  - loinc: "50912"
+    display: "Creatinine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: highest reported serum creatinine in survivable uraemia ~50 mg/dL"
+
+  - loinc: "51081"
+    display: "Creatinine, Serum (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: highest reported serum creatinine in survivable uraemia ~50 mg/dL"
+
+  - loinc: "51082"
+    display: "Creatinine, Urine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: spot urine creatinine spans ~10 to 400 mg/dL"
+
+  - loinc: "51106"
+    display: "Urine Creatinine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: spot urine creatinine spans ~10 to 400 mg/dL"
+
+  - loinc: "51067"
+    display: "24 hr Creatinine (MIMIC-IV itemid)"
+    unit: "mg/24hr"
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference (general clinical knowledge): 24-hour creatinine excretion is 500 to 2500 mg/day and scales with muscle mass; 5000 mg/24 h is twice the top of that band and covers the largest, most muscular adult. The previous 10000 was four times the cited band and admitted excretion rates no kidney produces"
+
+  - loinc: "51080"
+    display: "Creatinine Clearance (MIMIC-IV itemid)"
+    unit: "mL/min"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: hyperfiltration rarely exceeds 250 mL/min"
+
+  - loinc: "33914-3"
+    display: "Glomerular filtration rate [Volume Rate/Area] in Serum or Plasma by Creatinine-based formula (MDRD)/1.73 sq M"
+    unit: "mL/min/{1.73_m2}"
+    unit_aliases: ["mL/min"]
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: anuria is 0; hyperfiltration rarely exceeds 200 mL/min/1.73 m2"
+
+  - loinc: "2339-0"
+    display: "Glucose [Mass/volume] in Blood"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: highest reported survived hyperglycaemia ~2650 mg/dL"
+
+  - loinc: "2345-7"
+    display: "Glucose [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: highest reported survived hyperglycaemia ~2650 mg/dL"
+
+  - loinc: "50931"
+    display: "Glucose (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: highest reported survived hyperglycaemia ~2650 mg/dL"
+
+  - loinc: "50809"
+    display: "Glucose, Blood Gas (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: highest reported survived hyperglycaemia ~2650 mg/dL"
+
+  - loinc: "51613"
+    display: "eAG, estimated average glucose (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: derived from HbA1c, bounded by the survivable HbA1c range"
+
+  - loinc: "49765-1"
+    display: "Calcium [Mass/volume] in Blood"
+    unit: "mg/dL"
+    physiological_min: 2.0
+    physiological_max: 30.0
+    source: "clinical reference: survival reported from 3 to 25 mg/dL total calcium"
+
+  - loinc: "17861-6"
+    display: "Calcium [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 2.0
+    physiological_max: 30.0
+    source: "clinical reference: survival reported from 3 to 25 mg/dL total calcium"
+
+  - loinc: "50893"
+    display: "Calcium, Total (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 2.0
+    physiological_max: 30.0
+    source: "clinical reference: survival reported from 3 to 25 mg/dL total calcium"
+
+  - loinc: "50808"
+    display: "Free Calcium (MIMIC-IV itemid)"
+    unit: "mmol/L"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "clinical reference: ionised calcium is roughly half of total calcium in molar terms"
+
+  - loinc: "19123-9"
+    display: "Magnesium [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: survived magnesium intoxication reported to ~20 mg/dL"
+
+  - loinc: "21377-7"
+    display: "Magnesium [Mass/volume] in Blood"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: survived magnesium intoxication reported to ~20 mg/dL"
+
+  - loinc: "50960"
+    display: "Magnesium (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: survived magnesium intoxication reported to ~20 mg/dL"
+
+  - loinc: "2777-1"
+    display: "Phosphate [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 40.0
+    source: "clinical reference: tumour lysis and phosphate overdose reported to ~30 mg/dL"
+
+  - loinc: "50970"
+    display: "Phosphate (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 40.0
+    source: "clinical reference: tumour lysis and phosphate overdose reported to ~30 mg/dL"
+
+  - loinc: "51007"
+    display: "Uric Acid (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: tumour lysis syndrome reported to ~40 mg/dL"
+
+  - loinc: "50964"
+    display: "Osmolality, Measured (MIMIC-IV itemid)"
+    unit: "mOsm/kg"
+    physiological_min: 100.0
+    physiological_max: 500.0
+    source: "clinical reference: survival reported from ~200 to ~400 mOsm/kg serum"
+
+  - loinc: "51093"
+    display: "Osmolality, Urine (MIMIC-IV itemid)"
+    unit: "mOsm/kg"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: maximal urinary concentrating ability ~1200 mOsm/kg"
+
+  - loinc: "50813"
+    display: "Lactate (MIMIC-IV itemid)"
+    unit: "mmol/L"
+    physiological_min: 0.0
+    physiological_max: 40.0
+    source: "clinical reference: survived lactic acidosis reported to ~30 mmol/L"
+
+  - loinc: "32693-4"
+    display: "Lactate [Moles/volume] in Blood"
+    unit: "mmol/L"
+    physiological_min: 0.0
+    physiological_max: 40.0
+    source: "clinical reference: survived lactic acidosis reported to ~30 mmol/L"
+
+  # ==================================================================
+  # LIVER FUNCTION AND PROTEINS
+  # ==================================================================
+  - loinc: "1751-7"
+    display: "Albumin [Mass/volume] in Serum or Plasma"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "clinical reference: total protein ceiling constrains albumin"
+
+  - loinc: "50862"
+    display: "Albumin (MIMIC-IV itemid)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "clinical reference: total protein ceiling constrains albumin"
+
+  - loinc: "2885-2"
+    display: "Protein [Mass/volume] in Serum or Plasma"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 20.0
+    source: "clinical reference: paraproteinaemia reported to ~15 g/dL total protein"
+
+  - loinc: "50976"
+    display: "Protein, Total (MIMIC-IV itemid)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 20.0
+    source: "clinical reference: paraproteinaemia reported to ~15 g/dL total protein"
+
+  - loinc: "10834-0"
+    display: "Globulin [Mass/volume] in Serum by calculation"
+    unit: "g/L"
+    physiological_min: 0.0
+    physiological_max: 150.0
+    source: "clinical reference: bounded by the total protein ceiling expressed in g/L"
+
+  - loinc: "50930"
+    display: "Globulin (MIMIC-IV itemid)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 20.0
+    source: "clinical reference: bounded by the total protein ceiling"
+
+  - loinc: "1975-2"
+    display: "Bilirubin.total [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: highest reported survived hyperbilirubinaemia ~80 mg/dL"
+
+  - loinc: "50885"
+    display: "Bilirubin, Total (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: highest reported survived hyperbilirubinaemia ~80 mg/dL"
+
+  - loinc: "6768-6"
+    display: "Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma"
+    unit: "U/L"
+    unit_aliases: ["IU/L"]
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference: cholestatic and Paget disease peaks ~3000 U/L"
+
+  - loinc: "50863"
+    display: "Alkaline Phosphatase (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference: cholestatic and Paget disease peaks ~3000 U/L"
+
+  # NOTE: transaminase ceilings are deliberately above 9999. Ischaemic hepatitis
+  # and paracetamol overdose produce documented AST/ALT above 10,000 U/L, so
+  # 9999 U/L is a credible measurement for these analytes and is correctly NOT
+  # flagged. This is a genuine limit of value-only plausibility checking, not a
+  # defect in the rule.
+  - loinc: "1742-6"
+    display: "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+    unit: "U/L"
+    unit_aliases: ["IU/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference: fulminant hepatic necrosis produces ALT above 10,000 U/L"
+
+  - loinc: "50861"
+    display: "Alanine Aminotransferase (ALT) (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference: fulminant hepatic necrosis produces ALT above 10,000 U/L"
+
+  - loinc: "1920-8"
+    display: "Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+    unit: "U/L"
+    unit_aliases: ["IU/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference: ischaemic hepatitis produces AST above 10,000 U/L (observed max here 8035)"
+
+  - loinc: "50878"
+    display: "Asparate Aminotransferase (AST) (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): ischaemic hepatitis, paracetamol toxicity and heat stroke produce AST above 10,000 U/L. DECLARED EXCEPTION, not an accommodation: no real cohort value forced this bound (the observed maximum is 8035), and tightening it below 9999 would assert that a documented degree of hepatic necrosis cannot happen"
+
+  - loinc: "14804-9"
+    display: "Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction"
+    unit: "U/L"
+    unit_aliases: ["IU/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): massive haemolysis and tumour lysis produce LDH above 10,000 U/L; 20000 doubles that extreme. The previous 40000 was four times the cited figure"
+
+  - loinc: "50954"
+    display: "Lactate Dehydrogenase (LD) (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): massive haemolysis and tumour lysis produce LDH above 10,000 U/L; 20000 doubles that extreme. The previous 40000 was four times the cited figure"
+
+  - loinc: "2157-6"
+    display: "Creatine kinase [Enzymatic activity/volume] in Serum or Plasma"
+    unit: "U/L"
+    unit_aliases: ["IU/L"]
+    physiological_min: 0.0
+    physiological_max: 500000.0
+    source: "clinical reference: rhabdomyolysis routinely exceeds 100,000 U/L"
+
+  - loinc: "50910"
+    display: "Creatine Kinase (CK) (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 500000.0
+    source: "clinical reference: rhabdomyolysis routinely exceeds 100,000 U/L"
+
+  - loinc: "50911"
+    display: "Creatine Kinase, MB Isoenzyme (MIMIC-IV itemid)"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: CK-MB is a small fraction of total CK"
+
+  - loinc: "50908"
+    display: "CK-MB Index (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a fraction of total CK"
+
+  - loinc: "50867"
+    display: "Amylase (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): severe pancreatitis produces amylase above 10,000 U/L; 20000 doubles that extreme. The previous 30000 was three times the cited figure"
+
+  - loinc: "50956"
+    display: "Lipase (MIMIC-IV itemid)"
+    unit: "IU/L"
+    unit_aliases: ["U/L"]
+    physiological_min: 0.0
+    physiological_max: 30000.0
+    source: "clinical reference (general clinical knowledge): severe pancreatitis produces lipase above 20,000 U/L; 30000 leaves a 50% margin over that extreme. The previous 50000 was two and a half times the cited figure"
+
+  - loinc: "50935"
+    display: "Haptoglobin (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: acute-phase haptoglobin peaks near 500 mg/dL; 0 in brisk haemolysis"
+
+  - loinc: "50864"
+    display: "Alpha-Fetoprotein (MIMIC-IV itemid)"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 300000.0
+    source: "clinical reference (general clinical knowledge): hepatocellular carcinoma and hepatoblastoma produce AFP above 100,000 ng/mL; 300000 triples that extreme. The previous 1000000 was ten times the cited figure. Still wider than the 9000 fallback and declared as such in the header"
+
+  # ==================================================================
+  # LIPIDS AND GLYCAEMIC CONTROL
+  # ==================================================================
+  - loinc: "2093-3"
+    display: "Cholesterol [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: homozygous familial hypercholesterolaemia reaches ~1000 mg/dL"
+
+  - loinc: "50907"
+    display: "Cholesterol, Total (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: homozygous familial hypercholesterolaemia reaches ~1000 mg/dL"
+
+  - loinc: "2571-8"
+    display: "Triglyceride [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference: familial chylomicronaemia reported above 10,000 mg/dL"
+
+  - loinc: "51000"
+    display: "Triglycerides (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference: familial chylomicronaemia reported above 10,000 mg/dL"
+
+  - loinc: "18262-6"
+    display: "Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1500.0
+    source: "clinical reference: bounded by the total cholesterol ceiling"
+
+  - loinc: "50905"
+    display: "Cholesterol, LDL, Calculated (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1500.0
+    source: "clinical reference: bounded by the total cholesterol ceiling"
+
+  - loinc: "2085-9"
+    display: "Cholesterol in HDL [Mass/volume] in Serum or Plasma"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: CETP deficiency produces HDL to ~250 mg/dL"
+
+  - loinc: "50904"
+    display: "Cholesterol, HDL (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: CETP deficiency produces HDL to ~250 mg/dL"
+
+  - loinc: "50903"
+    display: "Cholesterol Ratio (Total/HDL) (MIMIC-IV itemid)"
+    unit: "Ratio"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: ratio of two bounded positive quantities"
+
+  - loinc: "4548-4"
+    display: "Hemoglobin A1c/Hemoglobin.total in Blood"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 25.0
+    source: "clinical reference: highest reported HbA1c ~20%; assay floor near 3%"
+
+  - loinc: "50852"
+    display: "% Hemoglobin A1c (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 25.0
+    source: "clinical reference: highest reported HbA1c ~20%; assay floor near 3%"
+
+  # ==================================================================
+  # CARDIAC, INFLAMMATORY AND IRON MARKERS
+  # ==================================================================
+  - loinc: "89579-7"
+    display: "Troponin I.cardiac [Mass/volume] in Serum or Plasma by High sensitivity method"
+    unit: "ng/L"
+    unit_aliases: ["pg/mL"]
+    physiological_min: 0.0
+    physiological_max: 200000.0
+    source: "clinical reference (general clinical knowledge): massive infarction produces hs-troponin above 100,000 ng/L; 200000 doubles that extreme. The previous 500000 was five times the cited figure. Still wider than the 9000 fallback and declared as such in the header"
+
+  - loinc: "51003"
+    display: "Troponin T (MIMIC-IV itemid)"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: conventional troponin T assays saturate well below 100 ng/mL"
+
+  - loinc: "33762-6"
+    display: "Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Serum or Plasma"
+    unit: "pg/mL"
+    unit_aliases: ["ng/L"]
+    physiological_min: 0.0
+    physiological_max: 35000.0
+    source: "clinical reference (general clinical knowledge): the routine NT-proBNP immunoassay measuring range tops out near 35,000 pg/mL, which is also where decompensated heart failure with renal failure reads out; a result above that is reported as a limit, not as a number. The previous 70000 doubled its own cited figure for no stated reason"
+
+  - loinc: "71425-3"
+    display: "Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Blood by Immunoassay"
+    unit: "pg/mL"
+    unit_aliases: ["ng/L"]
+    physiological_min: 0.0
+    physiological_max: 35000.0
+    source: "clinical reference (general clinical knowledge): the routine NT-proBNP immunoassay measuring range tops out near 35,000 pg/mL, which is also where decompensated heart failure with renal failure reads out; a result above that is reported as a limit, not as a number. The previous 70000 doubled its own cited figure for no stated reason"
+
+  - loinc: "1988-5"
+    display: "C reactive protein [Mass/volume] in Serum or Plasma"
+    unit: "mg/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: septic CRP peaks near 500 mg/L"
+
+  - loinc: "33959-8"
+    display: "Procalcitonin [Mass/volume] in Serum or Plasma"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: septic shock procalcitonin peaks near 500 ng/mL"
+
+  - loinc: "48065-7"
+    display: "Fibrin D-dimer FEU [Mass/volume] in Platelet poor plasma"
+    unit: "ug/mL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: disseminated intravascular coagulation D-dimer reaches ~100 ug/mL FEU"
+
+  - loinc: "2276-4"
+    display: "Ferritin [Mass/volume] in Serum or Plasma"
+    unit: "ug/L"
+    unit_aliases: ["ng/mL"]
+    physiological_min: 0.0
+    physiological_max: 100000.0
+    source: "clinical reference: haemophagocytic lymphohistiocytosis ferritin exceeds 50,000 ug/L"
+
+  - loinc: "2498-4"
+    display: "Iron [Mass/volume] in Serum or Plasma"
+    unit: "ug/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: acute iron poisoning serum iron reaches ~2000 ug/dL"
+
+  - loinc: "2500-7"
+    display: "Iron binding capacity [Mass/volume] in Serum or Plasma"
+    unit: "ug/dL"
+    physiological_min: 0.0
+    physiological_max: 1500.0
+    source: "clinical reference (general clinical knowledge): severe iron deficiency TIBC peaks near 700 ug/dL; 1500 doubles that extreme. The previous 3000 was four times the cited figure and was inherited from the serum iron rule, a different analyte"
+
+  - loinc: "2502-3"
+    display: "Iron saturation [Mass Fraction] in Serum or Plasma"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a saturation fraction cannot exceed 100%"
+
+  # ==================================================================
+  # ENDOCRINE, VITAMINS AND THERAPEUTIC DRUG MONITORING
+  # ==================================================================
+  - loinc: "50993"
+    display: "Thyroid Stimulating Hormone (MIMIC-IV itemid)"
+    unit: "uIU/mL"
+    unit_aliases: ["m[IU]/L", "mIU/L"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: profound untreated hypothyroidism TSH reaches ~500 uIU/mL"
+
+  - loinc: "3016-3"
+    display: "Thyrotropin [Units/volume] in Serum or Plasma"
+    unit: "m[IU]/L"
+    unit_aliases: ["uIU/mL", "mIU/L"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: profound untreated hypothyroidism TSH reaches ~500 mIU/L"
+
+  - loinc: "51001"
+    display: "Triiodothyronine (T3) (MIMIC-IV itemid)"
+    unit: "ng/dL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: thyroid storm total T3 reaches ~1000 ng/dL"
+
+  - loinc: "50995"
+    display: "Thyroxine (T4), Free (MIMIC-IV itemid)"
+    unit: "ng/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: thyroid storm free T4 reaches ~15 ng/dL"
+
+  - loinc: "3024-7"
+    display: "Thyroxine (T4) free [Mass/volume] in Serum or Plasma"
+    unit: "ng/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: thyroid storm free T4 reaches ~15 ng/dL"
+
+  - loinc: "50853"
+    display: "25-OH Vitamin D (MIMIC-IV itemid)"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: vitamin D intoxication reaches ~400 ng/mL"
+
+  - loinc: "50922"
+    display: "Ethanol (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: highest reported survived blood ethanol ~1500 mg/dL"
+
+  - loinc: "50967"
+    display: "Phenytoin (MIMIC-IV itemid)"
+    unit: "ug/mL"
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: survived phenytoin overdose reported to ~100 ug/mL"
+
+  - loinc: "51009"
+    display: "Vancomycin (MIMIC-IV itemid)"
+    unit: "ug/mL"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: vancomycin peaks are dosed to 20-40 ug/mL; overdose reported to ~200"
+
+  # ==================================================================
+  # HAEMATOLOGY: RED CELLS
+  # ==================================================================
+  - loinc: "718-7"
+    display: "Hemoglobin [Mass/volume] in Blood"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: survived anaemia to 1.4 g/dL; polycythaemia to ~25 g/dL"
+
+  - loinc: "51222"
+    display: "Hemoglobin (MIMIC-IV itemid)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: survived anaemia to 1.4 g/dL; polycythaemia to ~25 g/dL"
+
+  - loinc: "50811"
+    display: "Hemoglobin, Blood Gas (MIMIC-IV itemid)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: survived anaemia to 1.4 g/dL; polycythaemia to ~25 g/dL"
+
+  - loinc: "4544-3"
+    display: "Hematocrit [Volume Fraction] of Blood by Automated count"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 80.0
+    source: "definitional: a volume fraction of packed cells cannot approach 100%"
+
+  - loinc: "20570-8"
+    display: "Hematocrit [Volume Fraction] of Blood by calculation"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 80.0
+    source: "definitional: a volume fraction of packed cells cannot approach 100%"
+
+  - loinc: "51221"
+    display: "Hematocrit (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 80.0
+    source: "definitional: a volume fraction of packed cells cannot approach 100%"
+
+  - loinc: "50810"
+    display: "Hematocrit, Calculated (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 80.0
+    source: "definitional: a volume fraction of packed cells cannot approach 100%"
+
+  - loinc: "789-8"
+    display: "Erythrocytes [#/volume] in Blood by Automated count"
+    unit: "10*6/uL"
+    unit_aliases: ["m/uL", "M/mcL"]
+    physiological_min: 0.0
+    physiological_max: 15.0
+    source: "clinical reference: polycythaemia vera red cell count peaks near 9 x10^6/uL"
+
+  - loinc: "51279"
+    display: "Red Blood Cells (MIMIC-IV itemid)"
+    unit: "m/uL"
+    unit_aliases: ["10*6/uL", "M/mcL"]
+    physiological_min: 0.0
+    physiological_max: 15.0
+    source: "clinical reference: polycythaemia vera red cell count peaks near 9 x10^6/uL"
+
+  - loinc: "787-2"
+    display: "MCV [Entitic mean volume] in Red Blood Cells by Automated count"
+    unit: "fL"
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: severe megaloblastic anaemia MCV peaks near 150 fL"
+
+  - loinc: "51250"
+    display: "MCV (MIMIC-IV itemid)"
+    unit: "fL"
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: severe megaloblastic anaemia MCV peaks near 150 fL"
+
+  - loinc: "785-6"
+    display: "MCH [Entitic mass] by Automated count"
+    unit: "pg"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: MCH tracks MCV and rarely exceeds 50 pg"
+
+  - loinc: "51248"
+    display: "MCH (MIMIC-IV itemid)"
+    unit: "pg"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: MCH tracks MCV and rarely exceeds 50 pg"
+
+  - loinc: "786-4"
+    display: "MCHC [Entitic Mass/volume] in Red Blood Cells by Automated count"
+    unit: "g/dL"
+    unit_aliases: ["%"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: hereditary spherocytosis MCHC peaks near 40 g/dL"
+
+  - loinc: "51249"
+    display: "MCHC (MIMIC-IV itemid)"
+    unit: "%"
+    unit_aliases: ["g/dL"]
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: hereditary spherocytosis MCHC peaks near 40 g/dL"
+
+  - loinc: "788-0"
+    display: "Erythrocyte [DistWidth] in Blood by Automated count"
+    unit: "%"
+    unit_aliases: ["fL"]
+    physiological_min: 0.0
+    physiological_max: 150.0
+    source: "clinical reference: RDW-CV peaks near 40%, RDW-SD near 120 fL; both spellings occur here"
+
+  - loinc: "51277"
+    display: "RDW (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: RDW-CV peaks near 40%"
+
+  - loinc: "52172"
+    display: "RDW-SD (MIMIC-IV itemid)"
+    unit: "fL"
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: RDW-SD peaks near 120 fL"
+
+  - loinc: "51257"
+    display: "Nucleated Red Cells (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: nucleated RBCs are reported per 100 WBC and can exceed 100"
+
+  # ==================================================================
+  # HAEMATOLOGY: WHITE CELLS AND PLATELETS
+  # ==================================================================
+  - loinc: "6690-2"
+    display: "Leukocytes [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL", "K/mcL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: hyperleukocytosis in leukaemia exceeds 500 x10^3/uL"
+
+  - loinc: "51301"
+    display: "White Blood Cells (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL", "K/mcL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: hyperleukocytosis in leukaemia exceeds 500 x10^3/uL"
+
+  - loinc: "777-3"
+    display: "Platelets [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL", "K/mcL"]
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference: essential thrombocythaemia exceeds 2000 x10^3/uL"
+
+  - loinc: "51265"
+    display: "Platelet Count (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL", "K/mcL"]
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference: essential thrombocythaemia exceeds 2000 x10^3/uL"
+
+  - loinc: "32623-1"
+    display: "Platelet [Entitic mean volume] in Blood by Automated count"
+    unit: "fL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: MPV in macrothrombocytopenia reaches ~30 fL"
+
+  - loinc: "32207-3"
+    display: "Platelet distribution width [Entitic volume] in Blood by Automated count"
+    unit: "fL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "NOT A PHYSIOLOGICAL BOUND: real PDW is roughly 8-25 fL, but Synthea generates the whole 304-value series on a 150-520 fL scale, so a truthful bound would flag every one of them. That is a generator-wide scale artefact, not a handful of corrupt records, so it fits neither the bound mechanism nor known_corrupt_values; see the file header. The bound is left wide deliberately and a human should decide whether to rescale the cohort or drop the analyte"
+
+  - loinc: "770-8"
+    display: "Neutrophils/Leukocytes in Blood by Automated count"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "736-9"
+    display: "Lymphocytes/Leukocytes in Blood by Automated count"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "5905-5"
+    display: "Monocytes/Leukocytes in Blood by Automated count"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "713-8"
+    display: "Eosinophils/Leukocytes in Blood by Automated count"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "706-2"
+    display: "Basophils/Leukocytes in Blood by Automated count"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51256"
+    display: "Neutrophils (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51244"
+    display: "Lymphocytes (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51254"
+    display: "Monocytes (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51200"
+    display: "Eosinophils (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51146"
+    display: "Basophils (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "52135"
+    display: "Immature Granulocytes (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51143"
+    display: "Atypical Lymphocytes (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51255"
+    display: "Myelocytes (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51251"
+    display: "Metamyelocytes (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "51144"
+    display: "Bands (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: differential percentage"
+
+  - loinc: "751-8"
+    display: "Neutrophils [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "731-0"
+    display: "Lymphocytes [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "742-7"
+    display: "Monocytes [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "711-2"
+    display: "Eosinophils [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "704-7"
+    display: "Basophils [#/volume] in Blood by Automated count"
+    unit: "10*3/uL"
+    unit_aliases: ["K/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "52075"
+    display: "Absolute Neutrophil Count (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "51133"
+    display: "Absolute Lymphocyte Count (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "52074"
+    display: "Absolute Monocyte Count (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "52073"
+    display: "Absolute Eosinophil Count (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  - loinc: "52069"
+    display: "Absolute Basophil Count (MIMIC-IV itemid)"
+    unit: "K/uL"
+    unit_aliases: ["10*3/uL"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: bounded by the total leukocyte ceiling"
+
+  # ==================================================================
+  # COAGULATION
+  # ==================================================================
+  - loinc: "5902-2"
+    display: "Prothrombin time (PT)"
+    unit: "s"
+    unit_aliases: ["sec"]
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: PT assays report out above 120 s"
+
+  - loinc: "51274"
+    display: "PT (MIMIC-IV itemid)"
+    unit: "sec"
+    unit_aliases: ["s"]
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: PT assays report out above 120 s"
+
+  - loinc: "3173-2"
+    display: "aPTT in Blood by Coagulation assay"
+    unit: "s"
+    unit_aliases: ["sec"]
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: aPTT assays report out above 200 s"
+
+  - loinc: "51275"
+    display: "PTT (MIMIC-IV itemid)"
+    unit: "sec"
+    unit_aliases: ["s"]
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: aPTT assays report out above 200 s"
+
+  - loinc: "3184-9"
+    display: "Activated clotting time (ACT) of Blood by Coagulation assay"
+    unit: "s"
+    unit_aliases: ["sec"]
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: full cardiopulmonary bypass heparinisation gives ACT above 800 s"
+
+  - loinc: "6301-6"
+    display: "INR in Platelet poor plasma by Coagulation assay"
+    unit: "{INR}"
+    unit_aliases: ["ratio", "INR"]
+    physiological_min: 0.0
+    physiological_max: 50.0
+    source: "clinical reference: INR assays report out above 20"
+
+  - loinc: "51237"
+    display: "INR(PT) (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 50.0
+    source: "clinical reference: INR assays report out above 20; MIMIC-IV records this itemid without a unit"
+
+  - loinc: "51214"
+    display: "Fibrinogen, Functional (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: acute-phase fibrinogen peaks near 1000 mg/dL; 0 in fibrinolysis"
+
+  # ==================================================================
+  # BLOOD GASES
+  # ==================================================================
+  - loinc: "2744-1"
+    display: "pH of Arterial blood"
+    unit: "[pH]"
+    unit_aliases: ["pH", "units"]
+    physiological_min: 6.0
+    physiological_max: 8.5
+    source: "clinical reference: survival reported from pH 6.33 to 7.85"
+
+  - loinc: "2746-6"
+    display: "pH of Venous blood"
+    unit: "[pH]"
+    unit_aliases: ["pH", "units"]
+    physiological_min: 6.0
+    physiological_max: 8.5
+    source: "clinical reference: survival reported from pH 6.33 to 7.85"
+
+  - loinc: "50820"
+    display: "pH, Blood Gas (MIMIC-IV itemid)"
+    unit: "units"
+    unit_aliases: ["[pH]", "pH"]
+    physiological_min: 6.0
+    physiological_max: 8.5
+    source: "clinical reference: survival reported from pH 6.33 to 7.85"
+
+  - loinc: "50831"
+    display: "pH, Other Fluid (MIMIC-IV itemid)"
+    unit: "units"
+    unit_aliases: ["[pH]", "pH"]
+    physiological_min: 0.0
+    physiological_max: 14.0
+    source: "definitional: the pH scale"
+
+  - loinc: "2019-8"
+    display: "Carbon dioxide [Partial pressure] in Arterial blood"
+    unit: "mm[Hg]"
+    unit_aliases: ["mm Hg"]
+    physiological_min: 0.0
+    physiological_max: 250.0
+    source: "clinical reference: survived hypercapnia reported above 200 mmHg"
+
+  - loinc: "2021-4"
+    display: "Carbon dioxide [Partial pressure] in Venous blood"
+    unit: "mm[Hg]"
+    unit_aliases: ["mm Hg"]
+    physiological_min: 0.0
+    physiological_max: 250.0
+    source: "clinical reference: survived hypercapnia reported above 200 mmHg"
+
+  - loinc: "50818"
+    display: "pCO2 (MIMIC-IV itemid)"
+    unit: "mm Hg"
+    unit_aliases: ["mm[Hg]"]
+    physiological_min: 0.0
+    physiological_max: 250.0
+    source: "clinical reference: survived hypercapnia reported above 200 mmHg"
+
+  - loinc: "2703-7"
+    display: "Oxygen [Partial pressure] in Arterial blood"
+    unit: "mm[Hg]"
+    unit_aliases: ["mm Hg"]
+    physiological_min: 0.0
+    physiological_max: 800.0
+    source: "clinical reference: pO2 on 100% oxygen at 1 atm cannot exceed ~670 mmHg"
+
+  - loinc: "2705-2"
+    display: "Oxygen [Partial pressure] in Venous blood"
+    unit: "mm[Hg]"
+    unit_aliases: ["mm Hg"]
+    physiological_min: 0.0
+    physiological_max: 800.0
+    source: "clinical reference: bounded by arterial pO2"
+
+  - loinc: "50821"
+    display: "pO2 (MIMIC-IV itemid)"
+    unit: "mm Hg"
+    unit_aliases: ["mm[Hg]"]
+    physiological_min: 0.0
+    physiological_max: 800.0
+    source: "clinical reference: pO2 on 100% oxygen at 1 atm cannot exceed ~670 mmHg"
+
+  - loinc: "50802"
+    display: "Base Excess (MIMIC-IV itemid)"
+    unit: "mEq/L"
+    unit_aliases: ["mmol/L"]
+    physiological_min: -50.0
+    physiological_max: 50.0
+    source: "clinical reference: base excess is signed by construction; survival reported to -35 mEq/L. Note: -1.0 is a genuine value here and is correctly not flagged."
+
+  - loinc: "50817"
+    display: "Oxygen Saturation (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a saturation fraction cannot exceed 100%"
+
+  - loinc: "50816"
+    display: "Oxygen (FiO2) (MIMIC-IV itemid)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: an inspired fraction cannot exceed 100%"
+
+  - loinc: "50826"
+    display: "Tidal Volume (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference (general clinical knowledge): ventilator tidal volumes are 200-1000 mL and no adult vital capacity approaches 3 L of delivered tidal volume; MIMIC-IV records this itemid without a unit. The previous 5000 was five times the top of the cited band"
+
+  - loinc: "50819"
+    display: "PEEP (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: PEEP above 30 cmH2O is exceptional; MIMIC-IV records this itemid without a unit"
+
+  - loinc: "50825"
+    display: "Temperature (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 10.0
+    physiological_max: 45.0
+    source: "clinical reference: survivable core temperature in Celsius; MIMIC-IV records this itemid without a unit"
+
+  # ==================================================================
+  # URINALYSIS
+  # ==================================================================
+  - loinc: "5811-5"
+    display: "Specific gravity of Urine by Test strip"
+    unit: "{nominal}"
+    unit_aliases: ["{SG}"]
+    physiological_min: 0.9
+    physiological_max: 1.5
+    source: "definitional: urine specific gravity is a density ratio spanning ~1.000 to ~1.040"
+
+  - loinc: "51498"
+    display: "Specific Gravity (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 0.9
+    physiological_max: 1.5
+    source: "definitional: urine specific gravity is a density ratio; MIMIC-IV records this itemid without a unit"
+
+  - loinc: "5803-2"
+    display: "pH of Urine by Test strip"
+    unit: "pH"
+    unit_aliases: ["[pH]", "units"]
+    physiological_min: 3.0
+    physiological_max: 10.0
+    source: "clinical reference: renal urinary pH range is 4.5-8.0"
+
+  - loinc: "51491"
+    display: "pH, Urine (MIMIC-IV itemid)"
+    unit: "units"
+    unit_aliases: ["pH", "[pH]"]
+    physiological_min: 3.0
+    physiological_max: 10.0
+    source: "clinical reference: renal urinary pH range is 4.5-8.0"
+
+  - loinc: "51094"
+    display: "pH, Urine, no unit recorded (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 3.0
+    physiological_max: 10.0
+    source: "clinical reference: renal urinary pH range is 4.5-8.0; MIMIC-IV records this itemid without a unit"
+
+  - loinc: "2514-8"
+    display: "Ketones [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "5802-4"
+    display: "Nitrite [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "5794-3"
+    display: "Hemoglobin [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "5799-2"
+    display: "Leukocyte esterase [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "25428-4"
+    display: "Glucose [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "5770-3"
+    display: "Bilirubin.total [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "20454-5"
+    display: "Protein [Presence] in Urine by Test strip"
+    unit: "{presence}"
+    physiological_min: 0.0
+    physiological_max: 1.0
+    source: "definitional: presence flag encoded 0/1"
+
+  - loinc: "5792-7"
+    display: "Glucose [Mass/volume] in Urine by Test strip"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 6000.0
+    source: "clinical reference: urinary glucose concentration is bounded by the filtered load and the osmotic diuresis it causes; severe glycosuria reaches ~5 g/dL"
+
+  - loinc: "51478"
+    display: "Glucose, Urine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 6000.0
+    source: "clinical reference: urinary glucose concentration is bounded by the filtered load; severe glycosuria reaches ~5 g/dL"
+
+  - loinc: "5804-0"
+    display: "Protein [Mass/volume] in Urine by Test strip"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 8000.0
+    source: "clinical reference: urinary protein concentration cannot exceed plasma total protein (~8 g/dL), since the protein is filtered from plasma"
+
+  - loinc: "51492"
+    display: "Protein, Urine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 8000.0
+    source: "clinical reference: urinary protein concentration cannot exceed plasma total protein (~8 g/dL)"
+
+  - loinc: "51102"
+    display: "Total Protein, Urine (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 8000.0
+    source: "clinical reference: urinary protein concentration cannot exceed plasma total protein (~8 g/dL)"
+
+  - loinc: "5797-6"
+    display: "Ketones [Mass/volume] in Urine by Test strip"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: dipstick ketone scales top out at 160 mg/dL"
+
+  - loinc: "51484"
+    display: "Ketone (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: dipstick ketone scales top out at 160 mg/dL"
+
+  - loinc: "20505-4"
+    display: "Bilirubin.total [Mass/volume] in Urine by Test strip"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: dipstick bilirubin scales top out well below 10 mg/dL"
+
+  - loinc: "51514"
+    display: "Urobilinogen (MIMIC-IV itemid)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: dipstick urobilinogen scales top out at 12 mg/dL"
+
+  - loinc: "5821-4"
+    display: "Leukocytes [#/area] in Urine sediment by Microscopy high power field"
+    unit: "/[HPF]"
+    unit_aliases: ["#/hpf"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts are reported per high-power field and are read out above 100"
+
+  - loinc: "51516"
+    display: "WBC, Urine sediment (MIMIC-IV itemid)"
+    unit: "#/hpf"
+    unit_aliases: ["/[HPF]"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts per high-power field"
+
+  - loinc: "13945-1"
+    display: "Erythrocytes [#/area] in Urine sediment by Microscopy high power field"
+    unit: "/[HPF]"
+    unit_aliases: ["#/hpf"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts per high-power field"
+
+  - loinc: "51493"
+    display: "RBC, Urine sediment (MIMIC-IV itemid)"
+    unit: "#/hpf"
+    unit_aliases: ["/[HPF]"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts per high-power field"
+
+  - loinc: "5787-7"
+    display: "Epithelial cells [#/area] in Urine sediment by Microscopy high power field"
+    unit: "/[HPF]"
+    unit_aliases: ["#/hpf"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts per high-power field"
+
+  - loinc: "51476"
+    display: "Epithelial Cells (MIMIC-IV itemid)"
+    unit: "#/hpf"
+    unit_aliases: ["/[HPF]"]
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts per high-power field"
+
+  - loinc: "51482"
+    display: "Hyaline Casts (MIMIC-IV itemid)"
+    unit: "#/lpf"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: sediment counts per low-power field"
+
+  - loinc: "14959-1"
+    display: "Microalbumin/Creatinine [Mass Ratio] in Urine"
+    unit: "mg/g"
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): the ratio is bounded by its own parts, roughly 2000 mg/dL of urine albumin over the 10 mg/dL floor of a maximally dilute urine creatinine, giving about 20000 mg/g; nephrotic-range ratios exceed 10,000 mg/g. The previous 30000 had no stated derivation"
+
+  - loinc: "51099"
+    display: "Protein/Creatinine Ratio (MIMIC-IV itemid)"
+    unit: "Ratio"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: nephrotic-range protein/creatinine ratio reaches ~30"
+
+  - loinc: "51108"
+    display: "Urine Volume (MIMIC-IV itemid)"
+    unit: "mL"
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): maximal water diuresis is limited by free-water clearance to roughly 1 L/hour, and untreated diabetes insipidus produces 10 to 20 L per day, so 20000 mL is the ceiling for a 24-hour collection. The previous 30000 exceeded its own cited justification by half"
+
+  - loinc: "51109"
+    display: "Urine Volume, Total (MIMIC-IV itemid)"
+    unit: "mL"
+    physiological_min: 0.0
+    physiological_max: 20000.0
+    source: "clinical reference (general clinical knowledge): maximal water diuresis is limited by free-water clearance to roughly 1 L/hour, and untreated diabetes insipidus produces 10 to 20 L per day, so 20000 mL is the ceiling for a 24-hour collection. The previous 30000 exceeded its own cited justification by half"
+
+  - loinc: "51087"
+    display: "Length of Urine Collection (MIMIC-IV itemid)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "definitional: a collection interval in hours; MIMIC-IV records this itemid without a unit"
+
+  - loinc: "51101"
+    display: "Total Collection Time (MIMIC-IV itemid)"
+    unit: "hrs"
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "definitional: a collection interval in hours"
+
+  # ==================================================================
+  # UNIT-LESS MIMIC-IV DIFFERENTIAL / FLAG ITEMIDS
+  # These itemids carry a bare numeric with no unit in the demo extract.
+  # ==================================================================
+  - loinc: "50947"
+    display: "I (MIMIC-IV itemid, unit-less flag)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "survey-derived: unit-less MIMIC-IV flag itemid, observed 0-1"
+
+  - loinc: "51678"
+    display: "L (MIMIC-IV itemid, unit-less flag)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "survey-derived: unit-less MIMIC-IV flag itemid, observed 3-30"
+
+  - loinc: "50934"
+    display: "H (MIMIC-IV itemid, unit-less flag)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "survey-derived: unit-less MIMIC-IV flag itemid, observed 2-32"
+
+  # ==================================================================
+  # ALLERGEN-SPECIFIC IgE (Synthea)
+  # ==================================================================
+  - loinc: "6206-7"
+    display: "Peanut IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6273-7"
+    display: "Walnut IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6082-2"
+    display: "Codfish IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6246-3"
+    display: "Shrimp IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6276-0"
+    display: "Wheat IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6106-9"
+    display: "Egg white IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6248-9"
+    display: "Soybean IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "7258-7"
+    display: "Cow milk IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6189-5"
+    display: "White oak IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6085-5"
+    display: "Common Ragweed IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6833-8"
+    display: "Cat dander IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6095-4"
+    display: "American house dust mite IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6075-6"
+    display: "Cladosporium herbarum IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6844-5"
+    display: "Honey bee IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  - loinc: "6158-0"
+    display: "Latex IgE Ab [Units/volume] in Serum"
+    unit: "kU/L"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "clinical reference: allergen-specific IgE assays have an upper measuring limit of 100 kU/L, extendable roughly tenfold by dilution"
+
+  # ==================================================================
+  # SURVEY AND ASSESSMENT INSTRUMENTS (bounded by instrument definition)
+  # ==================================================================
+  - loinc: "72514-3"
+    display: "Pain severity - 0-10 verbal numeric rating [Score] - Reported"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "instrument definition: 0-10 verbal numeric rating scale"
+
+  - loinc: "38208-5"
+    display: "Pain severity - Reported"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "instrument definition: 0-10 pain scale"
+
+  - loinc: "75893-8"
+    display: "Pain severity in the past week - 0-10 numeric rating [Reported]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "instrument definition: 0-10 numeric rating scale"
+
+  - loinc: "91145-3"
+    display: "What number best describes how pain has interfered with your enjoyment of life during the past week"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "instrument definition: 0-10 interference scale"
+
+  - loinc: "91146-1"
+    display: "What number best describes how pain has interfered with your general activity during the past week"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "instrument definition: 0-10 interference scale"
+
+  - loinc: "55758-7"
+    display: "Patient Health Questionnaire 2 item (PHQ-2) total score [Reported]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 6.0
+    source: "instrument definition: PHQ-2 total score ranges 0-6"
+
+  - loinc: "44261-6"
+    display: "Patient Health Questionnaire 9 item (PHQ-9) total score [Reported]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 27.0
+    source: "instrument definition: PHQ-9 total score ranges 0-27"
+
+  - loinc: "89204-2"
+    display: "Patient Health Questionnaire-9: Modified for Teens total score [Reported.PHQ.Teen]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 27.0
+    source: "instrument definition: modified PHQ-9 total score ranges 0-27"
+
+  - loinc: "70274-6"
+    display: "Generalized anxiety disorder 7 item (GAD-7) total score [Reported.PHQ]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 21.0
+    source: "instrument definition: GAD-7 total score ranges 0-21"
+
+  - loinc: "75626-2"
+    display: "Total score [AUDIT-C]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 12.0
+    source: "instrument definition: AUDIT-C total score ranges 0-12"
+
+  - loinc: "82667-7"
+    display: "Total score [DAST-10]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "instrument definition: DAST-10 total score ranges 0-10"
+
+  - loinc: "76504-0"
+    display: "Total score [HARK]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 4.0
+    source: "instrument definition: HARK total score ranges 0-4"
+
+  - loinc: "72106-8"
+    display: "Total score [MMSE]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "instrument definition: MMSE total score ranges 0-30"
+
+  - loinc: "86924-8"
+    display: "Overall summary score [KCCQ-12]"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "instrument definition: KCCQ-12 summary score ranges 0-100"
+
+  - loinc: "59460-6"
+    display: "Fall risk total [Morse Fall Scale]"
+    unit: "{#}"
+    physiological_min: 0.0
+    physiological_max: 125.0
+    source: "instrument definition: Morse Fall Scale total ranges 0-125"
+
+  - loinc: "46240-8"
+    display: "History of Hospitalizations+Outpatient visits Narrative"
+    unit: "{count}"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "definitional: a non-negative encounter count"
+
+  - loinc: "75443-2"
+    display: "Mental health Outpatient Note"
+    unit: "{nominal}"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a nominal code, not a measurement"
+
+  - loinc: "X9999-2"
+    display: "Priority Level (Synthea local code)"
+    unit: "{score}"
+    physiological_min: 0.0
+    physiological_max: 10.0
+    source: "definitional: an ordinal priority level"
+
+  - loinc: "63512-8"
+    display: "How many people are living or staying at this address [#]"
+    unit: "{#}"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a non-negative household headcount"
+
+  - loinc: "63586-2"
+    display: "What was your best estimate of the total income of all family members from all sources, before taxes, in last year [PhenX]"
+    unit: "/a"
+    physiological_min: 0.0
+    physiological_max: 10000000.0
+    source: "definitional: annual family income in currency units, not a physiological quantity, so no survivability argument applies; 10,000,000 per year is an order-of-magnitude ceiling on a self-reported household figure. The previous 100,000,000 was ten times that and bounded nothing"
+
+  # ==================================================================
+  # IMAGING, PHYSIOLOGY AND OTHER MEASUREMENTS
+  # ==================================================================
+  - loinc: "19926-5"
+    display: "FEV1/FVC"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: FEV1 is a subset of FVC, so the ratio cannot exceed 100%"
+
+  - loinc: "10230-1"
+    display: "Left ventricular Ejection fraction"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: an ejection fraction cannot exceed 100%"
+
+  - loinc: "33756-8"
+    display: "Polyp size greatest dimension"
+    unit: "mm"
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: bounded by colonic luminal dimensions"
+
+  - loinc: "33728-7"
+    display: "Size.maximum dimension in Tumor"
+    unit: "cm"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: bounded by body cavity dimensions"
+
+  - loinc: "85352-3"
+    display: "Lymph nodes with isolated tumor cells [#] in Cancer specimen by Light microscopy"
+    unit: "{#}"
+    physiological_min: 0.0
+    physiological_max: 1000.0
+    source: "definitional: a non-negative node count"
+
+  - loinc: "38265-5"
+    display: "DXA Radius and Ulna [T-score] Bone density"
+    unit: "{T-score}"
+    physiological_min: -10.0
+    physiological_max: 10.0
+    source: "definitional: a signed standard-deviation score; osteoporotic T-scores below -4 are routine. Note: -1.0 is a genuine value here and is correctly not flagged."
+
+  - loinc: "57905-2"
+    display: "Hemoglobin.gastrointestinal.lower [Presence] in Stool by Immunoassay --1st specimen"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference (general clinical knowledge): faecal immunochemical assays have an upper measuring limit near 1000 ng/mL and report out above it; 2000 doubles that. The previous 5000 was five times the cited limit"
+
+  - loinc: "66519-0"
+    display: "Percentage area affected by eczema Head and Neck [PhenX]"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a body-surface-area percentage"
+
+  - loinc: "66529-9"
+    display: "Percentage area affected by eczema Trunk [PhenX]"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a body-surface-area percentage"
+
+  - loinc: "66524-0"
+    display: "Percentage area affected by eczema Upper extremity - bilateral [PhenX]"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a body-surface-area percentage"
+
+  - loinc: "66534-9"
+    display: "Percentage area affected by eczema Lower extremity - bilateral [PhenX]"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a body-surface-area percentage"
+
+  # ==================================================================
+  # eICU AGGREGATE CODES (labtypeid integers, NOT LOINC)
+  #
+  # One code covers dozens of analytes, so each code is split by unit. The
+  # bare-code entry (unit: null) covers the eICU rows that carry no unit at all.
+  # Bounds here are the widest survivable value across every analyte reported
+  # under that code and unit, which is looser than a per-analyte rule but still
+  # very much tighter than the [-1000, 100000] envelope it replaces.
+  # ==================================================================
+
+  # --- eICU code 1: general chemistry ---
+  - loinc: "1"
+    display: "eICU labtypeid 1, unit-less (anion gap)"
+    unit: null
+    physiological_min: -20.0
+    physiological_max: 100.0
+    source: "clinical reference (general clinical knowledge): the unit-less eICU chemistry rows are anion gap, which is a difference between bounded electrolytes; negative gaps are documented in bromide toxicity and paraproteinaemia, and 100 is the same ceiling the dedicated anion gap rule 50868 carries. The previous 200 was twice that with no stated reason"
+
+  - loinc: "1"
+    display: "eICU labtypeid 1, mass concentration (creatinine, BUN, glucose, calcium, bilirubin, phosphate, lipids)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: widest survivable value across the mg/dL analytes reported under this code (glucose)"
+
+  - loinc: "1"
+    display: "eICU labtypeid 1, molar concentration (sodium, potassium, chloride, bicarbonate, lactate)"
+    unit: "mmol/L"
+    unit_aliases: ["mEq/L"]
+    physiological_min: 0.0
+    physiological_max: 250.0
+    source: "clinical reference (general clinical knowledge): the widest member of this group is sodium, survivable to about 190 mmol/L; chloride reaches 180, bicarbonate 50, potassium 12, lactate 40. 250 covers the widest with a margin. The previous 500 was more than twice any member"
+
+  - loinc: "1"
+    display: "eICU labtypeid 1, enzyme activity (ALT, AST, alkaline phosphatase, CPK, lipase, amylase)"
+    unit: "Units/L"
+    unit_aliases: ["U/L", "IU/L"]
+    physiological_min: 0.0
+    physiological_max: 500000.0
+    source: "clinical reference (general clinical knowledge): CPK in massive rhabdomyolysis reaches the hundreds of thousands of U/L and is genuinely reported under this code and unit, so it sets the ceiling for the whole group. DECLARED EXCEPTION, not an accommodation: the bound is wide because one aggregate code pools analytes whose plausible ranges differ by three orders of magnitude, and no value-only rule keyed on (code, unit) can do better. Disaggregating the eICU labtypeid is the fix; widening or narrowing this number is not"
+
+  - loinc: "1"
+    display: "eICU labtypeid 1, protein concentration (albumin, total protein)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 30.0
+    source: "clinical reference: bounded by the total protein ceiling"
+
+  - loinc: "1"
+    display: "eICU labtypeid 1, immunoassay (troponin I, troponin T, CK-MB)"
+    unit: "ng/mL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: conventional troponin and CK-MB immunoassays report out below 1000 ng/mL"
+
+  - loinc: "1"
+    display: "eICU labtypeid 1, fraction (CK-MB index)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: a percentage of total CK"
+
+  # --- eICU code 2: toxicology and drug levels ---
+  - loinc: "2"
+    display: "eICU labtypeid 2, drug level (salicylate, ethanol)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: highest reported survived blood ethanol ~1500 mg/dL"
+
+  - loinc: "2"
+    display: "eICU labtypeid 2, drug level (acetaminophen, vancomycin)"
+    unit: "mcg/mL"
+    unit_aliases: ["ug/mL"]
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: survived paracetamol overdose levels reach ~1000 mcg/mL"
+
+  # --- eICU code 3: haematology ---
+  - loinc: "3"
+    display: "eICU labtypeid 3, fraction (RDW, differential percentages, haematocrit)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: all % analytes under this code are fractions of a whole"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, cell volume (MCV, MPV)"
+    unit: "fL"
+    physiological_min: 0.0
+    physiological_max: 250.0
+    source: "clinical reference (general clinical knowledge): the wider member of this group is MCV, which peaks near 150 fL in severe megaloblastic anaemia; MPV reaches about 30 fL. 250 covers both, matching the 200 fL bound on the dedicated MCV rules. The previous 500 was more than three times the widest member"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, cell count (platelets, WBC)"
+    unit: "K/mcL"
+    unit_aliases: ["10*3/uL", "K/uL"]
+    physiological_min: 0.0
+    physiological_max: 5000.0
+    source: "clinical reference: bounded by the essential thrombocythaemia platelet ceiling"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, mass concentration (haemoglobin, MCHC)"
+    unit: "g/dL"
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference: bounded by the MCHC ceiling"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, red cell count"
+    unit: "M/mcL"
+    unit_aliases: ["10*6/uL", "m/uL"]
+    physiological_min: 0.0
+    physiological_max: 15.0
+    source: "clinical reference: polycythaemia vera red cell count peaks near 9 x10^6/uL"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, entitic mass (MCH)"
+    unit: "pg"
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: MCH tracks MCV and rarely exceeds 50 pg"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, clotting time (PT, PTT)"
+    unit: "sec"
+    unit_aliases: ["s"]
+    physiological_min: 0.0
+    physiological_max: 500.0
+    source: "clinical reference: aPTT assays report out above 200 s"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, ratio (PT-INR)"
+    unit: "ratio"
+    unit_aliases: ["{INR}"]
+    physiological_min: 0.0
+    physiological_max: 50.0
+    source: "clinical reference: INR assays report out above 20"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, iron studies (Fe, TIBC)"
+    unit: "mcg/dL"
+    unit_aliases: ["ug/dL"]
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: acute iron poisoning serum iron reaches ~2000 mcg/dL"
+
+  - loinc: "3"
+    display: "eICU labtypeid 3, transferrin"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 1500.0
+    source: "clinical reference (general clinical knowledge): transferrin peaks near 600 mg/dL in iron deficiency; 1500 leaves a wide margin. The previous 3000 was five times the cited figure"
+
+  # --- eICU code 4: point-of-care and fluid studies ---
+  - loinc: "4"
+    display: "eICU labtypeid 4, unit-less (urinary specific gravity, synovial fluid cell count)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 250000.0
+    source: "clinical reference (general clinical knowledge): septic synovial fluid white cell counts exceed 100,000/uL and are recorded here without a unit; 250000 covers that extreme with a margin. The previous 500000 was five times the cited figure"
+
+  - loinc: "4"
+    display: "eICU labtypeid 4, mass concentration (bedside glucose, urinary creatinine)"
+    unit: "mg/dL"
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference: highest reported survived hyperglycaemia ~2650 mg/dL"
+
+  - loinc: "4"
+    display: "eICU labtypeid 4, osmolality"
+    unit: "mOsm/kg H2O"
+    unit_aliases: ["mOsm/kg"]
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference: bounded by maximal urinary concentrating ability"
+
+  - loinc: "4"
+    display: "eICU labtypeid 4, ammonia"
+    unit: "mcg/dL"
+    unit_aliases: ["ug/dL"]
+    physiological_min: 0.0
+    physiological_max: 2000.0
+    source: "clinical reference (general clinical knowledge): hyperammonaemic coma reaches about 1500 mcg/dL; 2000 covers it. The previous 3000 was twice the cited figure"
+
+  # --- eICU code 7: blood gases, oximetry and ventilator settings ---
+  - loinc: "7"
+    display: "eICU labtypeid 7, unit-less (pH, total CO2)"
+    unit: null
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference (general clinical knowledge): the two analytes recorded here without a unit are pH, survivable from 6.33 to 7.85 and definitionally within 0-14, and total CO2, survivable to about 50 mmol/L. 60 is the union of the two. The previous 100 bounded neither"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, fraction (FiO2, O2 saturation, oxy/carboxy/methaemoglobin)"
+    unit: "%"
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "definitional: every analyte reported under this code and unit (FiO2, O2 saturation, oxyhaemoglobin, carboxyhaemoglobin, methaemoglobin) is a fraction of a whole and cannot exceed 100%. The previous bound of 10000 was not a claim about physiology, it was the FiO2 artefact written into the rule; those three rows are now in known_corrupt_values"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, partial pressure (paO2, paCO2)"
+    unit: "mm Hg"
+    unit_aliases: ["mm[Hg]"]
+    physiological_min: 0.0
+    physiological_max: 800.0
+    source: "clinical reference (general clinical knowledge): breathing 100% oxygen at 1 atm, alveolar pO2 cannot exceed about 670 mmHg once water vapour and carbon dioxide are subtracted from 760; 800 is the same bound the dedicated pO2 rules carry. The previous 1000 exceeded the barometric limit"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, molar concentration (HCO3)"
+    unit: "mmol/L"
+    physiological_min: 0.0
+    physiological_max: 60.0
+    source: "clinical reference (general clinical knowledge): survivable bicarbonate spans about 2 to 50 mmol/L, so 60 is the same bound the dedicated bicarbonate rules carry. The previous 500 was ten times the cited ceiling"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, base excess / base deficit"
+    unit: "mEq/L"
+    physiological_min: -60.0
+    physiological_max: 60.0
+    source: "clinical reference: base excess is signed by construction; survival reported to -35 mEq/L"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, temperature"
+    unit: "&#176;C"
+    unit_aliases: ["Cel", "degC"]
+    physiological_min: 10.0
+    physiological_max: 45.0
+    source: "clinical reference (general clinical knowledge): survivable core temperature in Celsius, matching the bound on 8310-5; accidental hypothermia has been survived near 13 degC and hyperthermia is lethal above about 44 degC. The single 99.8 degC row is Fahrenheit mislabelled as Celsius and is in known_corrupt_values, not accommodated by the bound"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, airway pressure (PEEP, pressure support)"
+    unit: "cm H2O"
+    unit_aliases: ["cmH2O"]
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: ventilator circuit pressures do not exceed ~120 cmH2O"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, gas flow (LPM O2)"
+    unit: "L/min"
+    physiological_min: 0.0
+    physiological_max: 200.0
+    source: "clinical reference: high-flow nasal oxygen tops out near 60 L/min"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, rate (respiratory rate, ventilator rate)"
+    unit: "/min"
+    physiological_min: 0.0
+    physiological_max: 300.0
+    source: "clinical reference: high-frequency modes aside, set and spontaneous rates stay below 150/min"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, oxygen content"
+    unit: "mls/dL"
+    unit_aliases: ["mL/dL"]
+    physiological_min: 0.0
+    physiological_max: 100.0
+    source: "clinical reference: arterial oxygen content peaks near 25 mL/dL"
+
+  - loinc: "7"
+    display: "eICU labtypeid 7, tidal volume"
+    unit: "mls"
+    unit_aliases: ["mL"]
+    physiological_min: 0.0
+    physiological_max: 3000.0
+    source: "clinical reference (general clinical knowledge): ventilator tidal volumes are 200-1000 mL; 3000 is three times the top of that band. The previous 5000 had no stated derivation"
+
+# ======================================================================
+# KNOWN-CORRUPT REAL RECORDS
+#
+# The one place in this file where a real cohort value may be named. These are
+# records that a truthful bound above correctly flags, but that are present in
+# the shipped cohorts and would otherwise make the false-positive guard in
+# tests/test_ranges.py fail. Listing a record here is an admission that the
+# RECORD is wrong, not a concession that the BOUND is.
+#
+# Rules for this list, enforced by tests/test_ranges.py:
+#   * every entry must name cohort, code, unit, value, count and why;
+#   * every entry must actually occur in the cohort with exactly that count, so
+#     the list cannot rot or be padded with speculative exemptions;
+#   * every entry must actually be flagged by the bounds above, so an entry
+#     cannot outlive the bound that needed it;
+#   * nothing outside this list may be flagged; a new real false positive fails
+#     the suite rather than being silenced by widening a bound.
+#
+# `dqa.ranges.load_ranges` reads only the `ranges` key and ignores this one, so
+# the checker's behaviour is unaffected: it flags these records at run time,
+# which is the correct verdict. What the list changes is only whether the test
+# suite treats that verdict as a defect in the rule file.
+# ======================================================================
+
+known_corrupt_values:
+
+  - cohort: "eicu-demo"
+    code: "7"
+    unit: "%"
+    display: "FiO2"
+    value: 4000.0
+    count: 1
+    why: >-
+      FiO2 is the fraction of inspired oxygen, reported here as a percentage. It
+      cannot exceed 100 by definition, and 100% oxygen is the ceiling of any
+      delivery device at atmospheric pressure. 4000 is the same reading with a
+      misplaced scale factor. Flagging it is correct behaviour, not a false
+      positive; the rule for 7|% is definitional at 100 and stays there.
+
+  - cohort: "eicu-demo"
+    code: "7"
+    unit: "%"
+    display: "FiO2"
+    value: 10000.0
+    count: 2
+    why: >-
+      Same defect as the 4000 row and the reason the previous revision of this
+      file carried a bound of 10000 for the whole fraction group. Two records
+      set the ceiling for 41 observations of FiO2, oxygen saturation and the
+      haemoglobin fractions, and in doing so removed the group's ability to
+      reject anything at all below 10000. The bound is now 100 and these two
+      rows are named here instead.
+
+  - cohort: "eicu-demo"
+    code: "7"
+    unit: "&#176;C"
+    display: "Temperature"
+    value: 99.8
+    count: 1
+    why: >-
+      A body temperature of 99.8 recorded in degrees Celsius. 99.8 degF is
+      37.7 degC, an ordinary low-grade fever, so this is a Fahrenheit reading
+      carrying a Celsius unit rather than an impossible patient. The other two
+      temperature rows under this code (37.0 and 37.2) are Celsius and pass.
+      The range check is the wrong instrument for a unit defect, which is what
+      dqa.ranges.unit_verdict exists for; until that is wired in, the record is
+      named here rather than legislated for by a bound of 120 degC.

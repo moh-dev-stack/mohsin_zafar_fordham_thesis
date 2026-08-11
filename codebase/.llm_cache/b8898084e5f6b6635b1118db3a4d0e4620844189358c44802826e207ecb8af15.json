@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "AST value of 9999 IU/L is physiologically implausible; normal range is 10-40 IU/L and even severe hepatic necrosis rarely exceeds 3000-5000 IU/L, making this value inconsistent with survivable physiology.", "confidence": 0.95}

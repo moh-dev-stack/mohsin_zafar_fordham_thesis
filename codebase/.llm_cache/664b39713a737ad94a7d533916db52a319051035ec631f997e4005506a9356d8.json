@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum potassium cannot be negative; physiologically plausible values range from approximately 3.5-5.0 mmol/L, and a value of -9999.0 mmol/L is impossible.", "confidence": 0.99}

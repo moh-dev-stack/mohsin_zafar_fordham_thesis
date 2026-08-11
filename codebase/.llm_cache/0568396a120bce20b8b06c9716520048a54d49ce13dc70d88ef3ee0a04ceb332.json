@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative absolute lymphocyte count of -9999.0 K/mcL is physiologically impossible; cell counts cannot be negative and this value is orders of magnitude beyond any plausible range.", "confidence": 0.99}

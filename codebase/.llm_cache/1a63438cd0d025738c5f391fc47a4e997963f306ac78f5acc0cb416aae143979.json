@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A hemoglobin A1c value of 13.2% is physiologically implausible as it exceeds the maximum measurable range (typically 0-14% but values above ~13% indicate severe uncontrolled diabetes and are extremely rare in living patients; this specific value suggests a data entry or calibration error).", "confidence": 0.85}

@@ -1,0 +1,17 @@
+\subsection{What the agents actually leak, and how little narrowing moves it}
+\label{sec:exposure}
+
+Projection moves inter-agent exposure (Section~\ref{sec:repro}) very little on these three cohorts,
+averaged per resource. Baseline scores 1.0000 by construction. Pooled exposure runs 0.6100 to 0.6500
+on Synthea, 0.6525 to 0.6550 on MIMIC-IV and 0.6600 to 0.6700 on eICU-CRD. Narrowing full to minimal
+moves it at most 0.0400.
+
+Three things keep it high. Observations are at the 1.0000 ceiling in all nine cells, their only Safe
+Harbor content being subject and encounter references, released at every width to the checks that
+read them. The event fraction is fixed too, the \texttt{limit // 3} Patient quota leaving 134 event
+resources of 200. The mix inside it is not, since the Encounter/Observation split differs by cohort
+(Appendix E), with differing Safe Harbor content.
+
+Pooled exposure differs more between cohorts than between widths. Only the Patient row moves with
+width in Table~\ref{tab:exposure} (Appendix A), only on Synthea, where \texttt{\$.birthDate} becomes
+readable at full width.

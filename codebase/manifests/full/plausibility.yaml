@@ -1,0 +1,38 @@
+# Full-width (monolithic-baseline) plausibility manifest.
+agent_id: plausibility_agent_v1_full
+dimension: plausibility
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.code.coding[*].code
+      - jsonpath_expression: $.code.coding[*].system
+      - jsonpath_expression: $.code.coding[*].display
+      - jsonpath_expression: $.valueQuantity.value
+      - jsonpath_expression: $.valueQuantity.unit
+      - jsonpath_expression: $.valueQuantity.code
+      - jsonpath_expression: $.valueQuantity.system
+      - jsonpath_expression: $.referenceRange[*].low.value
+      - jsonpath_expression: $.referenceRange[*].high.value
+      - jsonpath_expression: $.referenceRange[*].text
+      - jsonpath_expression: $.interpretation[*].coding[*].code
+      - jsonpath_expression: $.component[*].valueQuantity.value
+      - jsonpath_expression: $.component[*].code.coding[*].code
+  - fhir_resource_type: Patient
+    allowed_fields:
+      - jsonpath_expression: $.gender
+      - jsonpath_expression: $.birthDate
+      - jsonpath_expression: $.extension[?(@.url=='age-decade')].valueInteger
+      - jsonpath_expression: $.extension[?(@.url=='comorbidity-flag')].valueBoolean
+      - jsonpath_expression: $.maritalStatus.coding[*].code
+      - jsonpath_expression: $.communication[*].language.coding[*].code
+note_access:
+  enabled: false
+rule_references:
+  - source: MIMIC-IV reference ranges
+    rule_id: adult-lab-ranges
+  - source: published clinical normal ranges
+    rule_id: vital-sign-bounds
+  - source: project rules
+    rule_id: paediatric-adjusted-ranges
+  - source: project rules
+    rule_id: full-width-plausibility-baseline

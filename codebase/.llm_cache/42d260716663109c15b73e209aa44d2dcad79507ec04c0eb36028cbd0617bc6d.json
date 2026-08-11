@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 9999.0 for LOINC code 76504-0 (Functional Limitation Assessment) is implausible as functional limitation scores are typically bounded scales (e.g., 0-100 or 0-10) and 9999 appears to be a placeholder or error code rather than a valid clinical measurement.", "confidence": 0.92}

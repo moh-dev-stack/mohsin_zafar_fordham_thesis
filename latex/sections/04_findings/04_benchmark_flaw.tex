@@ -1,0 +1,21 @@
+\subsection{The benchmark marks a correct answer wrong, which bounds the cost figures above}
+\label{sec:benchmark}
+
+No score in Sections~\ref{sec:controlled} to~\ref{sec:hard} is sounder than its ground truth, and on
+eICU it is wrong in both directions. It contains a body temperature of 99.8 degrees Celsius, a
+Fahrenheit value labelled with a Celsius unit: real corruption that nothing injected. A truthful
+bound flags it, and the scoring counts that correct detection as a false positive, since the ground
+truth assumes every uninjected record clean. It is the only \texttt{known\_corrupt\_values} record
+(Section~\ref{sec:fair}) inside the 200-resource evaluation slice.
+
+Relabelling that allowlist as genuine defects lifts the twelve-cell mean plausibility F1 from
+0.9851 to 0.9908, with 7 of 12 cells perfect. That relabelling has \textbf{not} been applied,
+because redefining ground truth after seeing the scores manufactures a result.
+
+The second direction has no allowlist and no counterfactual, and nothing measures what the four such
+cases cost. Where the legacy injector writes 9999 into an analyte whose ceiling is legitimately
+above 9999, the injected value is credible and a truthful bound passes it, scored as a miss.
+
+F1 therefore carries an unknown ground-truth error in both directions. The bound falls on the cost
+half alone: the privacy half is counted in released fields and never scored against injected ground
+truth. Appendix E documents how the error surfaced, the rest of the allowlist, and the four cases.

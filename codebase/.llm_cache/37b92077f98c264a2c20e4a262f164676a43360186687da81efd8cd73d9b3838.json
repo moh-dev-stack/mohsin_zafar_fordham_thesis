@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Code 51221 represents oxygen saturation (SpO2), and a value of 38.8% is physiologically implausible as it falls far below the minimum survivable range (typically >60% is critical; normal is 95-100%), indicating a measurement error or data entry mistake.", "confidence": 0.85}

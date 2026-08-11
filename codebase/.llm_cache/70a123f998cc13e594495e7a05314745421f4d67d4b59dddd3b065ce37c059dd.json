@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A pain severity score of -9999 is physiologically implausible; the 0-10 numeric rating scale only permits values from 0 to 10, and negative values are not clinically meaningful for pain assessment.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A 24-hour urine collection length cannot be measured as a simple quantity of 24.0 with no unit specified; the missing unit makes the value non-interpretable and clinically implausible.", "confidence": 0.95}

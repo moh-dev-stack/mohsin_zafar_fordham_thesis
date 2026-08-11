@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A code value of '7' is not a valid LOINC or standard clinical observation code, the missing unit makes the value 9999.0 uninterpretable, and 9999.0 is a common placeholder/error sentinel value rather than a genuine physiological measurement.", "confidence": 0.92}

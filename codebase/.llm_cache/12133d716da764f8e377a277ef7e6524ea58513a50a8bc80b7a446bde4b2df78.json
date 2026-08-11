@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -9999 seconds for a time measurement (LOINC code 3) is physiologically implausible, as time duration cannot be negative in clinical measurements.", "confidence": 0.95}

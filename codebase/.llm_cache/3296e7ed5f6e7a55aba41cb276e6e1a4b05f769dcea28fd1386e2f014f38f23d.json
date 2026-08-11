@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Hemoglobin value of 9999.0 g/dL is physiologically impossible; normal range is 12-17.5 g/dL and survival is incompatible with values above ~20 g/dL.", "confidence": 0.99}

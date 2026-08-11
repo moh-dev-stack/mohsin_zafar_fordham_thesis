@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 0.1% is physiologically implausible for any common clinical measurement (oxygen saturation, hemoglobin, ejection fraction, etc.) as it falls below survivable ranges for all standard percentage-based vital signs and laboratory values.", "confidence": 0.95}

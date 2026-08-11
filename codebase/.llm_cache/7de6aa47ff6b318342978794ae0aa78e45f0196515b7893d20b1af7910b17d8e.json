@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A percentage value of -9999.0% is physiologically implausible; percentages representing physiological measurements (e.g., oxygen saturation, ejection fraction) cannot be negative or exceed 100%.", "confidence": 0.99}

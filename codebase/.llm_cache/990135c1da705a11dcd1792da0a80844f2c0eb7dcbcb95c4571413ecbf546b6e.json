@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51237 represents 'Protein [Mass/volume] in Serum or Plasma' which should be measured in g/dL or similar units, but the unit field is empty, making the value 1.1 uninterpretable and non-compliant with clinical standards.", "confidence": 0.95}

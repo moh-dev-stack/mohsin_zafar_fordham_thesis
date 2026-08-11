@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A serum potassium level of 20.0 mEq/L is extremely elevated and would be fatal, but the LOINC code 50882 refers to potassium in urine (24-hour), where values of 20 mEq/L are physiologically plausible and represent normal to low-normal urinary potassium excretion.", "confidence": 0.92}

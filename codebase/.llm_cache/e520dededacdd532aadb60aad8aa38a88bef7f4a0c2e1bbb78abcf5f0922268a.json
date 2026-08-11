@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The period.start (2018-10-13T06:07:21+01:00) occurs after period.end (2018-10-12T13:07:21+01:00), which is a logical inconsistency.", "confidence": 0.99}

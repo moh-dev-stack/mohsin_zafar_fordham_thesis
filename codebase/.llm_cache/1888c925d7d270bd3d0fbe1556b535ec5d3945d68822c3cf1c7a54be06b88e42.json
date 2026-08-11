@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum calcium cannot be negative; physiologically plausible values range from approximately 8.5-10.5 mg/dL, making a value of -1.0 mg/dL impossible.", "confidence": 0.99}

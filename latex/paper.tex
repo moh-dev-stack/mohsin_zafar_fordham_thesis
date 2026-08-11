@@ -1,0 +1,150 @@
+% HINF 6497 course paper, revised edition.
+% Author: Mohsin Zafar
+% Build: latexmk -pdf paper.tex
+% Plain English, but written in a normal academic register: connected sentences,
+% no staccato fragments, no paragraph indentation.
+% Companion code ships alongside. See REPRODUCE.md.
+% Every number, table, and figure comes from results/ in this bundle and from
+% the tests that pin them. Nothing is illustrative.
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+% mathptmx, not times: \usepackage{times} remaps only the text fonts, so digits
+% and symbols inside $...$ stayed in Computer Modern and clashed with the Times
+% text around them mid-sentence (e.g. $0.6079$, $98.6$). mathptmx remaps both.
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{titlesec}
+\usepackage{enumitem}
+% Lists cost about 20pt of glue each before a bullet is set. Tighten it so the
+% bulleted passages do not buy readability at the price of a page.
+\setlist[itemize]{topsep=0.3em, partopsep=0pt}
+
+% Default float separation is 20pt above and below a table, which under double
+% spacing leaves a visibly large hole after every one. Tighten it, and tighten
+% the caption skips with it.
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{2pt}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, backgrounds, calc}
+
+% APA 7 (§2.18): page number flush right in the header, on every page including
+% the title page (APA numbers from page 1).
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{14.5pt}
+
+% APA 7 (§7.8, §7.22): the number ("Table 1") is bold on its own line, and the
+% title sits beneath it in italic, flush left, no centring of one-line captions.
+\usepackage[labelfont=bf, textfont=it, labelsep=newline, singlelinecheck=false]{caption}
+
+% Keeps each appendix's table under its own appendix heading instead of drifting
+% into the next appendix's prose. Used as \FloatBarrier in sections/08_appendices/.
+\usepackage{placeins}
+
+% Long code identifiers such as \texttt{observation\_value} and
+% \texttt{data/COHORT\_MANIFEST.json} are single unbreakable words to TeX, so
+% they overrun the right margin. Allow breaks inside typewriter text, and give
+% the paragraph builder a little slack, rather than rewriting the identifiers.
+\usepackage[htt]{hyphenat}
+\setlength{\emergencystretch}{3em}
+
+% Break long URLs in the reference list at any character rather than overrunning.
+\usepackage{xurl}
+
+% Build stamp, so two copies of paper.pdf can be told apart. \DTMnow re-evaluates
+% on every compile; nothing has to be updated by hand.
+\usepackage[useregional=false]{datetime2}
+\DTMsetstyle{iso}
+
+\titleformat{\section}{\normalfont\bfseries\large}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\bfseries\normalsize}{\thesubsection}{1em}{}
+% APA 7 (§2.27): headings take no blank line above or below. Keep a hair of space
+% so the heading does not collide with the text, but nothing like the old 1.2em.
+\titlespacing*{\section}{0pt}{0.5em}{0.2em}
+\titlespacing*{\subsection}{0pt}{0.4em}{0.2em}
+
+% APA 7 (§2.24): first line indented 0.5in, no extra space between paragraphs.
+% The previous block style (no indent, 0.6em between paragraphs) cost about
+% two thirds of a page in paragraph gaps alone.
+\setlength{\parindent}{0in}
+\setlength{\parskip}{0.25em}
+
+% Stop a table being promoted to its own near-empty float page.
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\floatpagefraction}{0.90}
+\doublespacing
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black}
+
+% The build stamp runs on every compile and is written to the PDF's Subject
+% field, so two copies of paper.pdf can be told apart by `pdfinfo paper.pdf`
+% (or File > Properties in any viewer). It also still prints under the due date
+% on the title page. TO TAKE IT OFF THE PRINTED PAGE, where APA 7 (§2.3) admits
+% only the seven title-page elements, delete the line
+%     {\small Build \DTMnow}
+% from sections/00_front_matter/front_matter.tex. The Subject field is
+% unaffected either way.
+\hypersetup{pdfsubject={Build \DTMnow}}
+
+% Title-page elements live in sections/00_front_matter/front_matter.tex, set one
+% per line as APA 7 (§2.3) requires; \maketitle cannot produce that layout.
+\newcommand{\papertitle}{The Cost of Least Privilege:\\
+A Field-Level Privilege Ablation for Multi-Agent EHR Data Quality Assurance}
+\hypersetup{pdftitle={The Cost of Least Privilege: A Field-Level Privilege Ablation
+for Multi-Agent EHR Data Quality Assurance}, pdfauthor={Mohsin Zafar}}
+
+\begin{document}
+
+% The paper is split one file per section and subsection, under sections/.
+% Edit those; this file only orders them. Rebuild with: latexmk -pdf paper.tex
+\input{sections/00_front_matter/front_matter}
+\input{sections/01_introduction/introduction}
+\input{sections/02_background/00_opening}
+\input{sections/02_background/01_quality_dimensions}
+\input{sections/02_background/02_least_privilege}
+\input{sections/02_background/03_related_work}
+\input{sections/02_background/04_threat_model}
+\input{sections/03_method/00_opening}
+\input{sections/03_method/01_three_designs}
+\input{sections/03_method/02_fair_comparison}
+\input{sections/03_method/06_ablation}
+\input{sections/03_method/03_defect_injection}
+\input{sections/03_method/04_cohorts}
+\input{sections/03_method/05_metrics_reproducibility}
+\input{sections/03_method/07_reproducibility}
+\input{sections/04_findings/00_opening}
+\input{sections/04_findings/01_controlled_comparison}
+\input{sections/04_findings/02_projection_cost}
+\input{sections/04_findings/03_harder_task}
+\input{sections/04_findings/04_benchmark_flaw}
+\input{sections/04_findings/05_inter_agent_exposure}
+\input{sections/04_findings/06_tiered_design}
+\input{sections/05_limitations/00_limitations}
+\input{sections/05_limitations/01_risk_ethics_privacy}
+\input{sections/06_conclusion/conclusion}
+\input{sections/07_references/references}
+\input{sections/08_appendices/a_exposure_by_resource_type}
+\input{sections/08_appendices/b_hard_injector_cells}
+\input{sections/08_appendices/c_ablation_hard_injector}
+\input{sections/08_appendices/d_rule_file_and_pinning}
+\input{sections/08_appendices/e_benchmark_and_cohort_detail}
+
+\end{document}

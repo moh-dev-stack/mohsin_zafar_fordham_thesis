@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "The period start (2015-08-08T06:07:21+01:00) occurs before the period end (2015-08-08T07:07:21+01:00), and all other fields are internally consistent with a completed emergency encounter.", "confidence": 0.99}

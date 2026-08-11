@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Heart rate cannot be negative; a value of -9999.0 beats per minute is physiologically impossible and indicates a data entry error or placeholder value.", "confidence": 0.99}

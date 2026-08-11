@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51237 represents 'Fetal Heart Rate' which should be measured in beats per minute (bpm), but the unit field is empty, making it impossible to verify if the value of 1.3 is physiologically plausible.", "confidence": 0.95}

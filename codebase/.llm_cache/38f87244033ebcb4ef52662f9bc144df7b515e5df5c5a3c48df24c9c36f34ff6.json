@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code '1' is not a valid code for bicarbonate measurement; valid bicarbonate LOINC codes are typically 1963-8 (serum bicarbonate) or similar multi-digit codes, indicating a data integrity defect.", "confidence": 0.95}

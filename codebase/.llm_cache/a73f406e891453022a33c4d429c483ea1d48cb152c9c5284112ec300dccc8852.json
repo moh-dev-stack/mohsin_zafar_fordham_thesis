@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit 'm/uL' (meters per microliter) is not a valid unit for LOINC code 51279 (Leukocytes [#/volume] in Blood by Automated count), which requires cells/volume units like 10*3/uL or 10*9/L; the reported value of 3.27 m/uL is dimensionally incorrect.", "confidence": 0.95}

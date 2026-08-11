@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "MCHC (Mean Corpuscular Hemoglobin Concentration) value of 9999 g/dL is physiologically implausible; normal range is 32-36 g/dL and values above ~37 g/dL are incompatible with life.", "confidence": 0.99}

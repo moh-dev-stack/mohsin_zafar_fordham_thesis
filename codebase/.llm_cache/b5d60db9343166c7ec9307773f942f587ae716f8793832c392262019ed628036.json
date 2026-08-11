@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "The period start (2015-09-26T06:07:21+01:00) occurs before the period end (2015-09-26T06:44:55+01:00), the status 'finished' is consistent with a completed encounter, and all other fields are internally consistent.", "confidence": 0.98}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "GAD-7 total scores range from 0-21, and a negative value of -1.0 is physiologically and clinically implausible for this validated anxiety assessment instrument.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of 10.01 mg/dL is physiologically implausible; severe hypoglycemia becomes life-threatening below ~40 mg/dL, and values this low would cause loss of consciousness and death within minutes.", "confidence": 0.99}

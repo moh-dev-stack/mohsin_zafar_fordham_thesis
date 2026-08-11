@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Pain severity on a 0-10 numeric rating scale cannot be negative; the value of -1.0 is outside the defined physiological and measurement range of 0-10.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum creatinine value of 9999 mg/dL is physiologically implausible; normal range is 0.7-1.3 mg/dL and even severe renal failure rarely exceeds 15-20 mg/dL.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Glucose concentration cannot be negative; a value of -1.0 mg/dL is physiologically impossible and indicates a data entry or measurement error.", "confidence": 0.99}

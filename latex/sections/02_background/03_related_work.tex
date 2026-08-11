@@ -1,0 +1,60 @@
+\subsection{What the literatures leave open, and what this study assumes}
+\label{sec:threat}
+
+Three themes bear on this study, and each stops one step short of the same measurement.
+
+\textbf{Why exposure of a field matters.} Identification does not need a name. Sweeney (2000) shows
+that ZIP code, birth date and sex in combination identify most of the US population uniquely. El
+Emam et al.\ (2011), reviewing
+published re-identification attacks on health data, find that attacks succeed far less often against
+data de-identified to a recognised standard than against data that was not. Between them these
+establish that quasi-identifiers moving between components are a documented risk, which is why a
+count of Safe Harbor fields crossing an agent boundary is worth taking. Neither supplies the
+inverse: no mapping in either turns such a count into a probability of
+re-identification, so a reduction in exposure remains a reduction in exposure.
+
+\textbf{Where a control can be placed.} The unit each control chooses sets the floor on what can be
+withheld. Progent (Shi et al., 2025) puts policy at the tool-call boundary, governing what an agent
+may \emph{do}, not what it may see. Jacob et al.\ (2025) come closest, separating privilege by data type so an injected instruction
+cannot travel with a value, but the unit is type, not field. Neupane et al.\ (2025) score
+sanitisation and policy against a HIPAA least-privilege requirement without measuring inter-agent
+handoffs. Together they establish that run-time confinement is buildable and auditable against a
+regulatory standard. All three stop above the field, and none reports what the confinement it
+imposes costs the task.
+
+\textbf{What escapes when nothing is enforced.} This theme measures leakage without controlling it,
+and its two members agree on where it concentrates. AgentLeak (El Yagoubi et al., 2026) reports 27.2 per
+cent leakage in final outputs against 68.8 per cent in inter-agent messages, so output-only audits
+miss most of it. MAGPIE (Juneja et al., 2025) finds up to 50.7 per cent leakage across two
+hundred collaborative tasks, under explicit instruction not to disclose. Instruction alone is
+therefore not a sufficient control, and enforcement belongs at a boundary. What it yields is a
+channel and a rate. Both count what escapes without asking what the task loses when it is held
+back.
+
+The three give a risk worth measuring, a boundary to enforce at and a channel to measure on. Among
+the sources reviewed we found none that does both: confine field by field on a clinical
+data-quality task, then report the cost.
+
+This study's threat model concerns \emph{mistakes}, not attackers: an agent holding patient data it
+never needed through a bug or misconfiguration. Projection (Section~\ref{sec:intro}) rules out one
+such failure, since an absent field cannot be read. Four survive.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Over-granting.} A manifest may release more than the check needs, and projection
+        faithfully delivers it. Enforcement is only as good as the declaration, and the ablation
+        (Section~\ref{sec:ablation}) caught one such field.
+  \item \textbf{Contents of a granted field.} A named field's contents may exceed the need, free text
+        the plain case, since field granularity is not content granularity.
+  \item \textbf{Onward leakage.} An agent may leak what it was legitimately given, to a log or a
+        later tool call, which projection can only shrink.
+  \item \textbf{Composition.} Two manifests, each minimal, may have projections that jointly
+        re-identify a patient, a composition this study neither models nor bounds.
+\end{itemize}
+
+Every surviving failure is a \emph{consumer} failure, not a producer one. The producer side is the
+larger omission: \texttt{project()} reads the whole record before building the reduced copy. The
+tiered design gathers identifiers into two departments of its own, concentrating identifier access
+into a single high-value target no adversary model here prices (Section~\ref{sec:limits}). Prompt
+injection and side channels against the projection layer are out of scope. Projection bounds what an
+injected instruction reaches, not whether it executes. A mistake that never crosses that bound falls
+outside the metric.

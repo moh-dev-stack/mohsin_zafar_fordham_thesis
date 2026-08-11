@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit and code '10*3/uL' is malformed and not a valid UCUM code; proper notation would be '10*3/\u00b5L' or '10^3/\u00b5L', making the recorded value uninterpretable.", "confidence": 0.95}

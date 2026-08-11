@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A percentage value of -9999.0% is physiologically implausible; percentages for cell differentials or any biological measurement cannot be negative and this extreme value suggests a data entry error or placeholder rather than a valid clinical measurement.", "confidence": 0.98}

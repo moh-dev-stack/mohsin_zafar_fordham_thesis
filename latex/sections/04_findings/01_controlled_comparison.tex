@@ -1,0 +1,24 @@
+\subsection{The controlled comparison returns exactly zero, and the design forced that zero}
+\label{sec:controlled}
+\label{sec:identity}
+
+Baseline and all three Confined widths (Section~\ref{sec:designs}) score identically in all twelve
+seed-by-cohort cells of Section~\ref{sec:data}. The largest absolute gap is $0.0000$ pp at every
+width, cell by cell in Table~\ref{tab:controlled} (Appendix B). Nothing was withheld. Both systems
+consume the same three JSONPaths, \texttt{\$.code.coding[*].\allowbreak code},
+\texttt{\$.valueQuantity.\allowbreak value} and \texttt{\$.valueQuantity.\allowbreak unit}, and
+every width releases all three.
+
+Two tests in \texttt{tests/test\_controlled.py} fix this. Over 600 clean resources they assert
+identical inputs, identical verdicts, and the same 277 silent cases with no numeric value to judge.
+Over 2{,}400 injected resources they assert inputs only, so verdict equality there is an entailment
+from equal inputs into the same function, not a measurement.
+
+The $0.0000$ pp gap is an identity, invariant to seed and cohort for fixed manifests, and the
+four-seed replication adds no information about privilege.
+
+The design should have caught this before the runs. The three widths were drawn from what a checker
+might plausibly be granted, not from what this checker consumes, and the two sets were never
+compared. That comparison is one pass over the manifests. Had it been made, at least one width would
+have withheld a consumed field and the primary comparison would have measured something. The
+ablation of Section~\ref{sec:ablationdesign} repairs the omission after the fact.

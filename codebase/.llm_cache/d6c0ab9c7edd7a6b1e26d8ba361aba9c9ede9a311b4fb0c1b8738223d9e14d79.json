@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Birth date of June 7, 2025 is in the future, making this patient not yet born, which is physiologically implausible for a clinical record.", "confidence": 0.99}

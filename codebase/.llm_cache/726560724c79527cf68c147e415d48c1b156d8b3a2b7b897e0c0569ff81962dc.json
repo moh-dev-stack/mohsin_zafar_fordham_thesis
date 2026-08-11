@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The period.start (2198-04-17T19:38:00+00:00) occurs after period.end (2198-04-16T16:38:00+00:00), which is logically impossible for a valid time period.", "confidence": 0.99}

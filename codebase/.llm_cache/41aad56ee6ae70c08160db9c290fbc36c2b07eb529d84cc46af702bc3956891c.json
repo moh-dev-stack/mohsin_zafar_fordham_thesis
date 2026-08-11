@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Blood glucose cannot be negative; physiologically plausible glucose values are non-negative, typically ranging from 40-400 mg/dL in clinical practice.", "confidence": 0.99}

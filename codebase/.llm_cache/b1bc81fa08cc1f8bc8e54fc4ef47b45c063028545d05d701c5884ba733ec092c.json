@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative time value of -9999 seconds is physiologically implausible; time measurements cannot be negative in clinical contexts.", "confidence": 0.99}

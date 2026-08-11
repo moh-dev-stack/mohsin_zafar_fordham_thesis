@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 9999% is physiologically implausible for any LOINC code measurement; typical percentage-based clinical measurements (e.g., oxygen saturation, ejection fraction) range from 0-100%.", "confidence": 0.95}

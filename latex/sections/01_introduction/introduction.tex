@@ -1,0 +1,45 @@
+\section{Introduction}
+\label{sec:intro}
+
+EHR data is uneven: vitals go missing, values are physically impossible, records disagree across
+joins, and observations go stale. Secondary use therefore begins with a data-quality-assurance pass
+(Kahn et al., 2016), run by rule-checkers whose access is normally the entire record, and the habit
+persists when the work is split across agents.
+
+Least privilege is a design principle (Saltzer \& Schroeder, 1975). For covered entities it is a
+duty under the HIPAA minimum necessary standard at 45 C.F.R. \S 164.514(d) (Privacy of Individually
+Identifiable Health Information, 2013). That standard limits each class of worker to the protected
+health information (PHI) its function requires. Here that means the eighteen Safe Harbor identifier
+categories (U.S. Department of Health and Human Services, Office for Civil Rights, 2012).
+
+The argument turns on four terms.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Manifest.} The list of fields one agent may read.
+  \item \textbf{Projection.} What enforces it, building a reduced copy of the record from only those
+        fields, so a field left out never reaches the agent.
+  \item \textbf{Width.} How much a manifest releases, swept here from minimal to full.
+  \item \textbf{Consumed.} A field a check reads, as against one merely released to it.
+\end{itemize}
+
+Least privilege's enforcement mechanisms stop above the field (Section~\ref{sec:background}): a SMART
+on FHIR scope (Mandel et al., 2016; HL7 International, 2024) reaches a resource type, never the
+fields within one. No such scope can say that a plausibility check may see an observation's value but
+not its subject reference. In the sources reviewed we found no pricing of field-level confinement on
+a clinical task.
+
+\textbf{Research question.} What does it cost to show each checker less of the record, and which
+part of the system needs the patient's identity at all? \textbf{Aim.} To put a number on that cost,
+on one data-quality task. \textbf{Significance.}
+Least privilege below the resource type is at present asserted without a measured price, so a team
+choosing between whole-record access and a manifest has no figure to weigh. This study supplies one,
+on a single plausibility-centred task, three demonstration cohorts, one language model and three of
+the four quality dimensions scored. It settles nothing outside that setting, and what it prices is
+exposure, not re-identification risk.
+
+Three contributions answer them. A field-granular privilege ablation prices what withholding one
+consumed field costs, with a released-but-unconsumed field as its negative control: confining each
+agent to a manifest costs nothing. But that zero is an identity rather than a measurement, since the
+confined and unconfined systems read the same three fields. A tiered design cuts inter-agent exposure
+by 98.6 per cent at no measured cost on the three dimensions scored. And the benchmark scores a
+correct detection as a false positive, which bounds what the cost comparisons run on it can claim.

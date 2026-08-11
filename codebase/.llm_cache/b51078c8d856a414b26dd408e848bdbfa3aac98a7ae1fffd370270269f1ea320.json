@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 9999.0% is physiologically implausible for any percentage-based measurement; percentages cannot exceed 100% by definition, and this represents a data entry or transmission error.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Alpha-Fetoprotein (AFP) concentration cannot be negative; a value of -9999.0 ng/mL is physiologically impossible and indicates a data entry or system error.", "confidence": 0.99}

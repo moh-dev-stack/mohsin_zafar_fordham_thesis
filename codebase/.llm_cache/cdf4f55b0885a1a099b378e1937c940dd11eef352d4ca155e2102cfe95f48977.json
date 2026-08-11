@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51237 represents platelet count, which cannot be negative; a value of -1.0 platelets is physiologically impossible.", "confidence": 0.99}

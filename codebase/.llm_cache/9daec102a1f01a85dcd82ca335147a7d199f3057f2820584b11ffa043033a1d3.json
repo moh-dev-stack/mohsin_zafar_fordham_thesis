@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A monocyte percentage value of -9999.0% is physiologically implausible; monocyte percentages must be non-negative and typically range from 2-8% of white blood cells.", "confidence": 0.99}

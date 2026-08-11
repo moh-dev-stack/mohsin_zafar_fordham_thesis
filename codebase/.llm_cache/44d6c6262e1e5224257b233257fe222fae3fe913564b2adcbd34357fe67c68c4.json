@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 82667-7 (typically a clinical assessment score) cannot have a physiologically plausible value of -9999.0, which is an implausibly extreme negative number far outside any valid clinical scoring range.", "confidence": 0.95}

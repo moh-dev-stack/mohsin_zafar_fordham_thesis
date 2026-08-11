@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A score value of 1 is physiologically plausible for a LOINC code 75626-2 (which represents a scoring assessment), with appropriate unit and value representation in FHIR format.", "confidence": 0.85}

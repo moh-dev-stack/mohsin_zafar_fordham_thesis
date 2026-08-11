@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood glucose value of 1,000,000,000 mg/dL is physiologically impossible; fatal hyperglycemia occurs well below 1,000 mg/dL, making this value implausible by many orders of magnitude.", "confidence": 0.99}

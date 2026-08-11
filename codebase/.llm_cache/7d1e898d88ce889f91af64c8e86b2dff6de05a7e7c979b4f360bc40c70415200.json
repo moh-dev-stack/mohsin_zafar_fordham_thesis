@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Triglyceride concentration cannot be negative; a value of -1.0 mg/dL is physiologically impossible.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Urine output (LOINC 51108) cannot be negative; a value of -1.0 mL is physiologically implausible.", "confidence": 0.99}

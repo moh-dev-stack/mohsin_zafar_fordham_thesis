@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A pain severity score of 1,000,000,000 is physiologically implausible for a 0-10 verbal numeric rating scale, which by definition has a maximum value of 10.", "confidence": 0.99}

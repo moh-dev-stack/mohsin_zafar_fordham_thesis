@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum folate level of 9999 pg is physiologically implausible; normal ranges are typically 2.7-17 ng/mL (approximately 6-38 pmol/L or 2.7-17 pg/mL when converted), making this value roughly 500-1000 times higher than the maximum survivable concentration.", "confidence": 0.95}

@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A dimensionless count value of 5 (represented by '{#}' in UCUM) is physiologically plausible for numerous clinical measurements such as white blood cell count in thousands, number of lesions, or other discrete countable observations.", "confidence": 0.95}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Mean corpuscular volume (LOINC 3) cannot be negative; physiologically valid values range from approximately 80-100 fL in adults.", "confidence": 0.99}

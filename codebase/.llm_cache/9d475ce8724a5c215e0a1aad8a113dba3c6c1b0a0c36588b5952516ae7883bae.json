@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Lymphocyte percentage cannot be negative; valid physiological range is 0-100%.", "confidence": 0.99}

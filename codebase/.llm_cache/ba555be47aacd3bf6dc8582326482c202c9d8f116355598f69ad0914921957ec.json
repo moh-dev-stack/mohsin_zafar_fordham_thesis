@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "AST (Aspartate Aminotransferase) cannot have a negative value of -9999.0 IU/L; enzyme activity is always non-negative and this extreme negative value is physiologically impossible.", "confidence": 0.99}

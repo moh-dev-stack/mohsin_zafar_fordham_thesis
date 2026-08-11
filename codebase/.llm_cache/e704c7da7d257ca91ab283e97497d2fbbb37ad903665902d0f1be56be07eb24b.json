@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Body height cannot be negative; a value of -1.0 cm is physiologically impossible and indicates a data entry or system error.", "confidence": 0.99}

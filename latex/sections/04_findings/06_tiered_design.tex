@@ -1,0 +1,33 @@
+\subsection{The tiered design: 98.6 per cent less exposure, at no measured cost on the three
+dimensions scored}
+\label{sec:tiered}
+
+The tiered design of Section~\ref{sec:designs} changes who may hold an identifier, scored over 36
+cells per setting. Exposure here is the summed-count ratio of Section~\ref{sec:repro}, not the
+per-resource mean of Section~\ref{sec:exposure}, and not comparable with the pooled figures above.
+
+\begin{table}[htbp]
+\centering
+\setstretch{1.0}\small
+\caption{Linkage settings (Section~\ref{sec:designs}), 36 cells each. Exposure is the summed-count
+ratio of Section~\ref{sec:repro}, not the per-resource mean of Table~\ref{tab:exposure}. Consistency
+is model-backed and excluded for determinism.
+Source: \texttt{results/tiered\_departments.json}, \texttt{make tiered}.}
+\label{tab:tiered}
+\begin{tabular}{llcccc}
+\toprule
+Linkage setting & Design & Exposure & Completeness & Plausibility & Timeliness \\
+\midrule
+Direct reference & flat & 0.6079 & 1.0000 & 0.9851 & 0.6620 \\
+Stand-in & tiered & $\mathbf{0.0086}$ & 1.0000 & 0.9851 & 0.6620 \\
+No linkage & floor & 0.0086 & 0.1644 & 0.9851 & 0.6620 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Exposure falls by 98.6 per cent}, from $0.6079$ to $0.0086$. The mean understates it:
+exposure is exactly $0.0000$ in 32 of the 36 cells, the residual being \texttt{\$.birthDate}
+reaching Registration in the four Synthea cells at full width. Detection is unchanged to four
+decimal places on all three rule-only checks. The stand-in is doing the work, since deleting linkage
+reaches the same exposure but collapses completeness from $1.0000$ to $0.1644$, with no records left
+to join.

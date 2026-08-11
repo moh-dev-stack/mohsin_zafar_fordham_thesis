@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "An 8% value for LOINC code 3 (which represents Glucose [Mass/volume] in Blood) is physiologically implausible and incompatible with life, as normal blood glucose ranges from 70-100 mg/dL fasting and severe hypoglycemia becomes critical below 40 mg/dL.", "confidence": 0.95}

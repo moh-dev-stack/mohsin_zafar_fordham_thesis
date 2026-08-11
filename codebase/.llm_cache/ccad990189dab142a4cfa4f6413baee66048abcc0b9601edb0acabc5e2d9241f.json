@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit 'K/mcL' (thousands per microliter) is not a standard unit for any common laboratory measurement; potassium is measured in mEq/L or mmol/L, and cell counts use K/uL or 10^3/uL, but 'K/mcL' is non-standard and suggests a unit coding error.", "confidence": 0.85}

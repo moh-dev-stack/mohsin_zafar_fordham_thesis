@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum potassium (LOINC 50902) of 1,000,000,000 mEq/L is physiologically impossible; normal range is 3.5-5.0 mEq/L and values above ~8-10 mEq/L are incompatible with life.", "confidence": 0.99}

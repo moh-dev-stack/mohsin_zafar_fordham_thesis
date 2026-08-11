@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A count of 5 (dimensionless units, represented as {#}) is physiologically plausible for LOINC code 59460-6 (Fetal heart rate), which typically ranges from 110-160 bpm in normal pregnancies, though this value appears to represent a count rather than a rate and would require clinical context to fully validate.", "confidence": 0.75}

@@ -1,0 +1,85 @@
+\subsection{The three designs}
+\label{sec:designs}
+
+\begin{figure}[htbp]
+\centering
+\caption{Where the patient identifier reaches in each design. Only Tiered stops it, at Records
+Linkage.}
+\label{fig:architecture}
+\begin{tikzpicture}[
+  font=\small,
+  box/.style   ={draw, rounded corners=2pt, minimum height=6mm, inner xsep=3pt, align=center},
+  rec/.style   ={box, minimum width=22mm, fill=black!8, font=\scriptsize},
+  tier/.style  ={box, minimum width=20mm, fill=black!6, font=\scriptsize},
+  >={Stealth[length=1.8mm]},
+  lbl/.style   ={font=\scriptsize\itshape},
+  hd/.style    ={font=\small\bfseries}
+]
+
+% ============ 1. Baseline ============
+\node[hd] (h1) {1. Baseline};
+\node[rec, below=3mm of h1] (r1) {whole record};
+\node[box, minimum width=26mm, minimum height=13mm, below=6mm of r1, fill=black!4, font=\scriptsize]
+  (mono) {all four checks\\one process};
+\draw[->, thick] (r1) -- node[lbl, right=1pt] {everything} (mono);
+\node[lbl, below=2mm of mono, text width=28mm, align=center] {no boundary,\\sees the identifier};
+
+% ============ 2. Confined ============
+\node[hd, right=26mm of h1] (h2) {2. Confined};
+\node[rec, below=3mm of h2] (r2) {whole record};
+\node[box, minimum width=24mm, below=5mm of r2, fill=black!8, font=\scriptsize] (proj)
+  {\texttt{project()}};
+\draw[->, thick] (r2) -- node[lbl, right=1pt] {manifest} (proj);
+\node[box, minimum width=26mm, minimum height=13mm, below=6mm of proj, fill=black!4, font=\scriptsize]
+  (four) {four agents\\one check each};
+\draw[->, thick] (proj) -- (four);
+\node[lbl, below=2mm of four, text width=30mm, align=center]
+  {only its own fields,\\the identifier still travels};
+
+% ============ 3. Tiered ============
+% Triage forks by resource type, so all four departments appear: Patient records
+% to Registration, event resources to Records Linkage and on to Clinical Checks.
+\node[hd, right=28mm of h2] (h3) {3. Tiered};
+\node[rec, below=3mm of h3] (r3) {whole record};
+\node[tier, below=4mm of r3] (t0) {Triage};
+\node[tier] (t1) at ([shift={(-13mm,-14mm)}]t0) {Registration};
+\node[tier] (t2) at ([shift={(13mm,-14mm)}]t0) {Records Linkage};
+\node[tier, below=9mm of t2] (t3) {Clinical Checks};
+\coordinate (fork) at ([yshift=-5mm]t0.south);
+\draw[->, thick] (r3) -- (t0);
+\draw[thick] (t0.south) -- (fork);
+\draw[->] (fork) -| node[lbl, pos=0.3, above] {Patient} (t1.north);
+\draw[->] (fork) -| node[lbl, pos=0.3, above] {events} (t2.north);
+\draw[->] (t2) -- node[lbl, right=1pt] {stand-in} (t3);
+\begin{scope}[on background layer]
+  \node[draw, dashed, rounded corners=2pt, inner sep=1.5mm, fit=(t1)(t2)] (idtier) {};
+\end{scope}
+\node[lbl, below=3.5mm of t1, text width=24mm, align=center] {both hold the identifier};
+\node[lbl, below=1.5mm of t3, text width=32mm, align=center] {never holds a patient identifier};
+
+\end{tikzpicture}
+\end{figure}
+
+The three designs differ only in what each part may read (Figure~\ref{fig:architecture}).
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Baseline.} One program with full sight, each check receiving the whole resource,
+        patient reference included.
+  \item \textbf{Confined.} The same checks split into four agents, one per dimension, each with its
+        own JSONPath manifest (Section~\ref{sec:intro}). \texttt{project()} applies them as the
+        single enforcement point across three widths, minimal, intermediate and full. Every event
+        resource includes a patient reference, and no width withholds it from the checks that read
+        it, so exposure barely moves (Section~\ref{sec:exposure}).
+  \item \textbf{Tiered.} Asks the privacy question no manifest width reaches: who may hold an
+        identifier at all. Four departments split the work. Triage routes each resource by its type
+        and holds nothing. Registration takes the Patient records, holding identifiers.
+        \textbf{Records Linkage} takes the event resources, resolving the patient reference
+        \emph{once} and replacing it with a \textbf{stand-in}. \textbf{Clinical Checks} runs the
+        checks on that stand-in and never holds a patient identifier.
+\end{itemize}
+
+The stand-in is the next value of a seeded counter, not derived from what it replaces and stable
+within a run. Consistency is model-backed and excluded from this pipeline, leaving three of four
+dimensions scored. Section~\ref{sec:tiered} prices three linkage settings: \textbf{Direct reference},
+the raw reference passed through; \textbf{Stand-in}, the tiered arrangement; and \textbf{No linkage},
+a floor that deletes the field.

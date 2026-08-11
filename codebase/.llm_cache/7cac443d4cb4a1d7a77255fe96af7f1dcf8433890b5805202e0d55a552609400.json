@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "pH value of -1.0 is physiologically implausible; normal blood pH ranges from 7.35-7.45, and even extreme acidosis (pH ~6.8) or alkalosis (pH ~7.8) are incompatible with survival, making negative pH values impossible.", "confidence": 0.99}

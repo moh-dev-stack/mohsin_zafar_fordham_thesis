@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood glucose value of 38 mg/dL is critically low and incompatible with survival; severe hypoglycemia typically causes loss of consciousness below 40 mg/dL and death below 20 mg/dL, making this value physiologically implausible unless the patient is in active medical crisis requiring immediate intervention.", "confidence": 0.95}

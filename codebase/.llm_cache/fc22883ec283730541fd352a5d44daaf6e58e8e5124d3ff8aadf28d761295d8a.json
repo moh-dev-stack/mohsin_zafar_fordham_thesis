@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The observation code '7' is not a valid LOINC code, and the missing unit for a numeric value of 23.0 makes it impossible to assess physiological plausibility.", "confidence": 0.95}

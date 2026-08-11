@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 9999 Units/L is physiologically implausible for any standard laboratory measurement; typical reference ranges for enzyme or protein assays are measured in single to low triple digits, and values this extreme would be incompatible with life.", "confidence": 0.95}

@@ -1,0 +1,12 @@
+{
+  "extraction": "last-parseable-object-carrying-a-verdict",
+  "key_version": "v2",
+  "max_tokens": 512,
+  "max_tokens_retry": 1024,
+  "model": "claude-haiku-4-5-20251001",
+  "prompt_sha256": {
+    "consistency": "089beb34936f034d431c08f74116eef0b4748a0ff1801cf916fb4ebe0b4d1dbd",
+    "plausibility": "b57daf936f6d3b3c88ad74bfff64d72f7f738e43154c298e53473c9bf7d33a4a"
+  },
+  "temperature": 0.0
+}

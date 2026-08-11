@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A percentage value of 9999% is physiologically implausible for any clinical measurement; percentages should range from 0-100% for standard physiological parameters.", "confidence": 0.99}

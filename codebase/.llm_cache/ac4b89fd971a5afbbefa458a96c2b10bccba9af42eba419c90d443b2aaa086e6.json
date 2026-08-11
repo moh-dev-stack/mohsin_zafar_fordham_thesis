@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood glucose value of 0.88 mg/dL is physiologically implausible and incompatible with life; normal fasting glucose is 70-100 mg/dL and values below ~20 mg/dL cause severe hypoglycemic brain damage or death.", "confidence": 0.99}

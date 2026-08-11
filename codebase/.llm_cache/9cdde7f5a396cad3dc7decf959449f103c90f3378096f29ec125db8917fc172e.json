@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A respiratory rate measurement coded as LOINC 3 (typically representing vital signs) with a value of 9999 seconds is physiologically implausible; this would represent an impossibly long duration for any standard vital sign measurement.", "confidence": 0.95}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -9999.0 m/uL for a laboratory measurement (LOINC 51279 = Leukocytes [#/volume] in Blood) is physiologically implausible, as cell counts cannot be negative.", "confidence": 0.99}

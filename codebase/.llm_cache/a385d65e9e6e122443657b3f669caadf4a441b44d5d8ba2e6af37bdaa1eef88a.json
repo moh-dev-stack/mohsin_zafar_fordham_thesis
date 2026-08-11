@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "MCHC (Mean Corpuscular Hemoglobin Concentration) cannot be negative; normal physiological range is approximately 32-36 g/dL or 32-36%, making a value of -1.0% biologically implausible.", "confidence": 0.99}

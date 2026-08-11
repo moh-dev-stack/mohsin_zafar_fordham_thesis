@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 72514-3 (Alcohol Use Disorder Identification Test - AUDIT) score of 9999 is physiologically implausible, as the AUDIT scale ranges from 0-40 with established clinical cutoffs.", "confidence": 0.95}

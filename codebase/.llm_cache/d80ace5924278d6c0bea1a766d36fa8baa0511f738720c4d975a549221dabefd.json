@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Cholesterol (LOINC 2339-0) cannot have a negative value of -1.0 mg/dL, as cholesterol concentration is a non-negative physical quantity.", "confidence": 0.99}

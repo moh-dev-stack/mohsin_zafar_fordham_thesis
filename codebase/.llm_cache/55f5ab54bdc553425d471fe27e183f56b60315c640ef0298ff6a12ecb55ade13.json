@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The encounter period has a start date (2131-08-15) that is after the end date (1974-08-31), which is logically impossible.", "confidence": 0.99}

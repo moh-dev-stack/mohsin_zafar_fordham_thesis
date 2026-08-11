@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 55758-7 (Morse Fall Risk Assessment Score) has a maximum possible value of 125, making a recorded value of 9999.0 physiologically and clinically implausible.", "confidence": 0.95}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum creatinine (LOINC 2069-3) cannot be negative; physiologically plausible values are non-negative, typically 0.6-1.2 mg/dL or 53-106 \u03bcmol/L in adults.", "confidence": 0.99}

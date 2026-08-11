@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Body height (LOINC 8302-2) cannot be negative; a value of -1.0 cm is physiologically impossible.", "confidence": 0.99}

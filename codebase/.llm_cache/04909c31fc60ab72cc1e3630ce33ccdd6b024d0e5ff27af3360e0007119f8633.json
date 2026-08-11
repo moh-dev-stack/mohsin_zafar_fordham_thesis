@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LDL cholesterol value of 9999 mg/dL is physiologically implausible; normal range is 0-200 mg/dL and even severe familial hypercholesterolemia rarely exceeds 500 mg/dL.", "confidence": 0.99}

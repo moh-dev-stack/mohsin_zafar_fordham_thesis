@@ -1,0 +1,43 @@
+% Merged: sec:ablationdesign and sec:injection were separate subsections, labels moved here.
+\subsection{Controls, defects and the privilege ablation}
+\label{sec:fair}
+\label{sec:ablationdesign}
+\label{sec:injection}
+
+The \textbf{controlled comparison} sets Baseline against Confined. The two compare only if data,
+defects and checking rule are identical. A \textbf{defect} is a deliberate corruption of one field in
+one resource, one kind per dimension (Section~\ref{sec:background}).
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Completeness.} The field is removed.
+  \item \textbf{Plausibility.} The value is overwritten.
+  \item \textbf{Consistency.} An encounter is given an end before its start.
+  \item \textbf{Timeliness.} The timestamp is pushed far into the future.
+\end{itemize}
+
+Defects come from a seeded generator and are
+paired across the two systems so both see byte-identical records. The injector records every
+corrupted location as ground truth. Two controls keep the comparison fair.
+
+\textbf{First, there must be enough defects to find.} The \textbf{kind-first} allocator chooses the
+\emph{kind} of defect before asking whether the cohort can supply it, so at rate 0.10 it leaves
+\textbf{2} plausibility defects in a cohort of 200 and no consistency defects. That dimension is
+never tested. The \textbf{capability-first} allocator, called \emph{stratified} in the tables and the
+result files, checks what the cohort can supply first. At rate 0.30 it leaves each cohort 27 to 29
+plausibility defects and 7 to 9 consistency ones.
+
+\textbf{Second, both systems must run the same check.} Both read one rule file,
+\texttt{manifests/\allowbreak rules/\allowbreak loinc\_ranges.yaml}, whose bounds mark survivability,
+not reference intervals, so abnormal but survivable values pass. The file was itself corrected where
+it had been fitted to these cohorts. Appendix~D gives its composition, the corrected bounds and the
+allowlist replacing them.
+
+The injector runs in two modes. \texttt{legacy} substitutes one of four constants, $-9999$, $9999$,
+$10^9$ or $-1$. \texttt{hard} reads the analyte's bound and places the value \textbf{2 to 15 per cent
+outside it}, every emitted value verified outside its bound before return.
+
+No legacy constant collides with the evaluated selection, though three MIMIC-IV readings in the wider
+corpus match one (Appendix~D). That cleanliness is the weakness: against \texttt{legacy} a five-line
+set-membership test scores $F1 = 1.0000$, a \textbf{saturated} endpoint that cannot rank detectors.
+\texttt{hard} removes the shortcut at source, its output reading like a value for that analyte, a
+heart rate of 389 per minute.

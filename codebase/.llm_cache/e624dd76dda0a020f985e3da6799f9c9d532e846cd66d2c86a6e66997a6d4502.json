@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A heart rate of 9999 beats per minute is physiologically impossible; the maximum survivable heart rate in humans is approximately 300 bpm, and this value exceeds that by over 30-fold.", "confidence": 0.99}

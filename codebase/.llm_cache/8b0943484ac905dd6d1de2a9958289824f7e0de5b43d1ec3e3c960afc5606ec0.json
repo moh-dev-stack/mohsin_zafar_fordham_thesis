@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A 24-hour urine collection cannot have a negative mass value of -9999 mg; physiologically implausible and likely a data entry error or missing value placeholder.", "confidence": 0.99}

@@ -1,0 +1,35 @@
+# Intermediate-width completeness manifest.
+#
+# Adds context fields that would, in a clinical deployment, let the
+# completeness agent flag richer required-field combinations (e.g.,
+# observation category, encounter class). The agent itself still reads
+# only field presence, never value content.
+agent_id: completeness_agent_v1_intermediate
+dimension: completeness
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.code.coding[*].code
+      - jsonpath_expression: $.category[*].coding[*].code
+      - jsonpath_expression: $.subject.reference
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.effectiveDateTime
+      - jsonpath_expression: $.issued
+  - fhir_resource_type: Encounter
+    allowed_fields:
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.class.code
+      - jsonpath_expression: $.period.start
+      - jsonpath_expression: $.period.end
+      - jsonpath_expression: $.subject.reference
+      - jsonpath_expression: $.serviceProvider.reference
+note_access:
+  enabled: false
+rule_references:
+  - source: US Core IG
+    rule_id: must-support-observation
+  - source: MIMIC-IV FHIR docs
+    rule_id: required-encounter-fields
+  - source: project rules
+    rule_id: intermediate-context-completeness

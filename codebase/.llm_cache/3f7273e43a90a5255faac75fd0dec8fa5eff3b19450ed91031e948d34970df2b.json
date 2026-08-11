@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "PHQ-2 total score has a maximum possible value of 6 (2 items \u00d7 3 points each), making a recorded value of 1,000,000,000 physiologically and clinically implausible.", "confidence": 0.99}

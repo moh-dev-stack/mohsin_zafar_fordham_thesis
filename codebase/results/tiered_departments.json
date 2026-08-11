@@ -1,0 +1,1799 @@
+{
+  "description": "The department-tiered system run end to end across the L0/L1/L2 linkage ladder. D2 resolves each reference once and issues a run-scoped surrogate; D3 judges event content against the surrogate only. Rule-only checkers, so no model, no network, no clock.",
+  "seeds": [
+    42,
+    43,
+    44,
+    45
+  ],
+  "rate": 0.3,
+  "limit": 200,
+  "widths": [
+    "minimal",
+    "intermediate",
+    "full"
+  ],
+  "linkage_levels": [
+    "reference",
+    "surrogate",
+    "none"
+  ],
+  "departments": [
+    {
+      "id": "D0",
+      "name": "Triage",
+      "holds_identifiers": false
+    },
+    {
+      "id": "D1",
+      "name": "Registration",
+      "holds_identifiers": true
+    },
+    {
+      "id": "D2",
+      "name": "Records Linkage",
+      "holds_identifiers": true
+    },
+    {
+      "id": "D3",
+      "name": "Clinical Checks",
+      "holds_identifiers": false
+    }
+  ],
+  "summary": [
+    {
+      "linkage": "reference",
+      "n_cells": 36,
+      "mean_exposure": 0.6079,
+      "mean_f1_completeness": 1.0,
+      "mean_f1_plausibility": 0.9851,
+      "mean_f1_timeliness": 0.662
+    },
+    {
+      "linkage": "surrogate",
+      "n_cells": 36,
+      "mean_exposure": 0.0086,
+      "mean_f1_completeness": 1.0,
+      "mean_f1_plausibility": 0.9851,
+      "mean_f1_timeliness": 0.662
+    },
+    {
+      "linkage": "none",
+      "n_cells": 36,
+      "mean_exposure": 0.0086,
+      "mean_f1_completeness": 0.1644,
+      "mean_f1_plausibility": 0.9851,
+      "mean_f1_timeliness": 0.662
+    }
+  ],
+  "cells": [
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2847,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7203,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7957,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2822,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7191,
+      "scored_records": 196,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7957,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2839,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7191,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7944,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2822,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7179,
+      "scored_records": 195,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7963,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2847,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7203,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7957,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2822,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7191,
+      "scored_records": 196,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7957,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2839,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7191,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7944,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.2822,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7179,
+      "scored_records": 195,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7963,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.3617,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7203,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7957,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.3595,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7191,
+      "scored_records": 196,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7957,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.361,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7191,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7944,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.3595,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7179,
+      "scored_records": 195,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "reference",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.7963,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 196,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 195,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 196,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 195,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.077,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0773,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 196,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0771,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0773,
+      "scored_records": 200,
+      "surrogates_issued": 7,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 195,
+      "surrogates_issued": 8,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "surrogate",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 14,
+      "f1_completeness": 1.0,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 196,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 195,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "minimal",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 196,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 195,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "intermediate",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.077,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 42,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0773,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8571,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 196,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 43,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0771,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 197,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9811,
+      "f1_timeliness": 0.1655,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 44,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9831,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0773,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 1.0,
+      "f1_timeliness": 0.8276,
+      "dataset": "synthea"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 195,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9615,
+      "f1_timeliness": 0.1644,
+      "dataset": "mimic-iv-demo"
+    },
+    {
+      "seed": 45,
+      "width": "full",
+      "linkage": "none",
+      "routed": {
+        "D1": 66,
+        "D2": 134
+      },
+      "exposure": 0.0,
+      "scored_records": 200,
+      "surrogates_issued": 0,
+      "f1_completeness": 0.1644,
+      "f1_plausibility": 0.9655,
+      "f1_timeliness": 1.0,
+      "dataset": "eicu-demo"
+    }
+  ]
+}

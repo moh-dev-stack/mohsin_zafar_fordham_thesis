@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative percentage value (-1.0%) is physiologically implausible for oxygen saturation (LOINC 51221), which must range from 0-100%.", "confidence": 0.99}

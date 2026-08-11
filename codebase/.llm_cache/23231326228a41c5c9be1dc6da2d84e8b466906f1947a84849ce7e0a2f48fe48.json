@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Hemoglobin concentration (LOINC 51222) cannot be negative; a value of -9999.0 g/dL is physiologically impossible and indicates a data entry or transmission error.", "confidence": 0.99}

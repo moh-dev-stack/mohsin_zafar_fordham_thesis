@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51237 represents serum or plasma sodium concentration, which should range 135-145 mEq/L in humans; a value of 9999.0 is physiologically impossible and indicates a data entry or unit conversion error.", "confidence": 0.95}

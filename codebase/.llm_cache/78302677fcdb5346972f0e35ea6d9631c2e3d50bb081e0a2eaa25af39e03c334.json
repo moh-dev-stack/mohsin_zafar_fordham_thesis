@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code '1' is not a valid LOINC code; valid LOINC codes are 5-7 character alphanumeric strings, and '1' does not conform to LOINC coding standards.", "confidence": 0.95}

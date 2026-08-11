@@ -1,0 +1,11 @@
+version: 1
+roles:
+  - role: dqa_operator
+    allowed_resource_types: [Patient, Observation, Encounter]
+    allowed_dimensions: [completeness, plausibility, consistency, timeliness]
+  - role: registration_clerk
+    allowed_resource_types: [Patient]
+    allowed_dimensions: [completeness, plausibility, consistency, timeliness]
+  - role: lab_tech
+    allowed_resource_types: [Observation]
+    allowed_dimensions: [completeness, plausibility, consistency, timeliness]

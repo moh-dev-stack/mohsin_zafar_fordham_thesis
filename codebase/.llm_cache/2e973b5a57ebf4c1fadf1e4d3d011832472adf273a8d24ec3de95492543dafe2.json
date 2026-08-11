@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum magnesium concentration cannot be negative; normal physiological range is 1.7-2.2 mg/dL, and a value of -1.0 mg/dL is physically impossible.", "confidence": 0.99}

@@ -1,0 +1,38 @@
+# Privilege ablation arm: the minimal plausibility manifest with the coded
+# (UCUM) unit withheld. This is the negative control of the ablation.
+#
+# Withheld field:  $.valueQuantity.code   (NOT consumed by dqa.ranges)
+#
+# This file is a copy of manifests/minimal/plausibility.yaml with exactly one
+# allowed_field removed. Everything else -- agent_id, dimension, the Patient
+# policy, note_access, rule_references -- is identical on purpose, so the only
+# difference between this arm and the control arm is the withheld field.
+# dqa.ablation checks that invariant on load and refuses to run if it is broken.
+#
+# Expected effect: none. $.valueQuantity.code is released by all three shipped
+# widths but read by neither arm of the controlled comparison: the range checker
+# takes its unit from $.valueQuantity.unit. Withholding it must therefore cost
+# 0.0000 pp, which is the same zero the shipped manifests produce and for the
+# same reason. Keeping this arm makes the point that the headline zero is a
+# statement about the intersection of released and consumed fields, not about
+# privilege being free.
+agent_id: plausibility_agent_v1
+dimension: plausibility
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.code.coding[*].code
+      - jsonpath_expression: $.valueQuantity.value
+      - jsonpath_expression: $.valueQuantity.unit
+  - fhir_resource_type: Patient
+    allowed_fields:
+      - jsonpath_expression: $.gender
+      - jsonpath_expression: $.extension[?(@.url=='age-decade')].valueInteger
+      - jsonpath_expression: $.extension[?(@.url=='comorbidity-flag')].valueBoolean
+note_access:
+  enabled: false
+rule_references:
+  - source: MIMIC-IV reference ranges
+    rule_id: adult-lab-ranges
+  - source: published clinical normal ranges
+    rule_id: vital-sign-bounds

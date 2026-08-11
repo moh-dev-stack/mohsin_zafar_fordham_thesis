@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum bicarbonate (LOINC 20565-8) of 22.52 mmol/L is within the normal physiological range (typically 22-26 mmol/L), but the value appears implausibly precise with two decimal places for a routine clinical measurement that is rarely reported to this level of precision.", "confidence": 0.45}

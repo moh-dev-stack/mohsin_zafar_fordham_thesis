@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -1.0 pg for what appears to be a laboratory measurement (likely a hormone or protein level given the picogram unit) is physiologically implausible, as measured quantities cannot be negative.", "confidence": 0.99}

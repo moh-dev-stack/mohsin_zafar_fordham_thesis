@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A BMI of 9999 kg/m\u00b2 is physiologically impossible; the highest recorded human BMI is approximately 188 kg/m\u00b2, and values above ~200 kg/m\u00b2 are incompatible with survival.", "confidence": 0.99}

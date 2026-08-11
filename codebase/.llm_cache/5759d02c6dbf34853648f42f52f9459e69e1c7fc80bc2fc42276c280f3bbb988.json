@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A PTT (partial thromboplastin time) value of 9999 seconds is physiologically implausible; normal PTT is 25-35 seconds and even severely prolonged values rarely exceed 120-150 seconds before causing fatal hemorrhage.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "White blood cell count (LOINC 6690-2) cannot be negative; a value of -1.0 \u00d7 10\u00b3/\u00b5L is physiologically impossible.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "LOINC 50864 is a thyroid-related test (TSH), and a value of 3.8 ng/mL falls within the normal reference range for TSH (typically 0.4-4.0 mIU/L or similar), making this physiologically plausible.", "confidence": 0.85}

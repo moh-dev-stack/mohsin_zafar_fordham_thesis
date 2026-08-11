@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A score value of 1 is physiologically plausible for LOINC code 55758-7 (Charlson Comorbidity Index), which typically ranges from 0 to 37+ with integer values representing cumulative comorbidity burden.", "confidence": 0.85}

@@ -1,0 +1,35 @@
+# Full-width (monolithic-baseline) timeliness manifest.
+agent_id: timeliness_agent_v1_full
+dimension: timeliness
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.id
+      - jsonpath_expression: $.effectiveDateTime
+      - jsonpath_expression: $.effectivePeriod.start
+      - jsonpath_expression: $.effectivePeriod.end
+      - jsonpath_expression: $.issued
+      - jsonpath_expression: $.meta.lastUpdated
+      - jsonpath_expression: $.encounter.reference
+      - jsonpath_expression: $.basedOn[*].reference
+  - fhir_resource_type: Encounter
+    allowed_fields:
+      - jsonpath_expression: $.id
+      - jsonpath_expression: $.period.start
+      - jsonpath_expression: $.period.end
+      - jsonpath_expression: $.meta.lastUpdated
+      - jsonpath_expression: $.statusHistory[*].period.start
+      - jsonpath_expression: $.statusHistory[*].period.end
+note_access:
+  enabled: false
+rule_references:
+  - source: project rules
+    rule_id: future-timestamp-invalid
+  - source: project rules
+    rule_id: result-after-order
+  - source: project rules
+    rule_id: vitals-charting-gap
+  - source: project rules
+    rule_id: issued-after-effective
+  - source: project rules
+    rule_id: full-width-timeliness-baseline

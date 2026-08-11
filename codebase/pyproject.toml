@@ -1,0 +1,34 @@
+[project]
+name = "dqa"
+version = "3.0.0"
+description = "Least-privilege multi-agent EHR data quality assurance (HINF 6497 course PoC)"
+requires-python = ">=3.12"
+# Floors, not pins. The exact versions every published number was computed
+# under are frozen in requirements-lock.txt, and .python-version records the
+# interpreter. Install from the lockfile to reproduce; install from these
+# floors only if you intend to test against newer releases.
+dependencies = [
+  "anthropic>=0.40",
+  "pydantic>=2.7",
+  "pyyaml>=6.0",
+  "jsonpath-ng>=1.6",
+  "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.4", "matplotlib>=3.8"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -1.0 seconds for prothrombin time (LOINC 51274) is physiologically implausible, as time measurements cannot be negative.", "confidence": 0.99}

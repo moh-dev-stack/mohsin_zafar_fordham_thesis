@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Hematocrit cannot be negative; physiologically valid values range from approximately 0% to 60%, making a value of -1.0% implausible.", "confidence": 0.99}

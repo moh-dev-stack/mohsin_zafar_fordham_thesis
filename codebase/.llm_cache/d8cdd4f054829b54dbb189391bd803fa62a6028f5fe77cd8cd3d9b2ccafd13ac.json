@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The period.start timestamp (2015-09-26T06:07:21+01:00) occurs after the period.end timestamp (2015-09-25T22:07:21+01:00), which is logically impossible.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative percentage value (-1.0%) is physiologically implausible for any valid clinical measurement, as percentages cannot be negative in biological contexts.", "confidence": 0.99}

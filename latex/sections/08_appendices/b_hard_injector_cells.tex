@@ -1,0 +1,98 @@
+% APA 7 (§2.14): see the note in Appendix A.
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Appendix B: All Twelve Cells, Legacy and Hard Injector}
+{\centering\normalfont\bfseries\large Appendix B\par}
+{\centering\normalfont\bfseries\large All Twelve Cells, Legacy and Hard Injector\par}
+\nopagebreak
+\setcounter{table}{0}
+\renewcommand{\thetable}{B\arabic{table}}
+
+Baseline and all three Confined widths return the same plausibility F1 in all twelve seed-by-cohort
+cells, so the largest absolute gap is $0.0000$ pp throughout. Table~\ref{tab:controlled} records
+that cell by cell. Section~\ref{sec:controlled} explains the identity.
+
+\begin{table}[!ht]
+\centering
+\setstretch{1.0}
+\caption{Plausibility F1 across twelve seed-by-cohort cells, capability-first allocator at rate
+$0.30$. $n$ is realised plausibility defects.
+Source: \texttt{results/controlled\_comparison.json}.}
+\label{tab:controlled}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{llccccc}
+\toprule
+Seed & Cohort & $n$ & Baseline & Conf.\ min & Conf.\ int & Conf.\ full \\
+\midrule
+42 & Synthea & 27 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+42 & MIMIC-IV Demo & 27 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+42 & eICU-CRD Demo & 29 & 0.9655 & 0.9655 & 0.9655 & 0.9655 \\
+43 & Synthea & 27 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+43 & MIMIC-IV Demo & 27 & 0.9811 & 0.9811 & 0.9811 & 0.9811 \\
+43 & eICU-CRD Demo & 29 & 0.9831 & 0.9831 & 0.9831 & 0.9831 \\
+44 & Synthea & 27 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+44 & MIMIC-IV Demo & 27 & 0.9811 & 0.9811 & 0.9811 & 0.9811 \\
+44 & eICU-CRD Demo & 29 & 0.9831 & 0.9831 & 0.9831 & 0.9831 \\
+45 & Synthea & 27 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+45 & MIMIC-IV Demo & 27 & 0.9615 & 0.9615 & 0.9615 & 0.9615 \\
+45 & eICU-CRD Demo & 29 & 0.9655 & 0.9655 & 0.9655 & 0.9655 \\
+\midrule
+\multicolumn{7}{l}{Largest absolute gap, all twelve cells, all three widths:
+$\mathbf{0.0000}$ pp} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:hardcells} gives the cells behind the hard-injector result of Section~\ref{sec:hard}.
+The gap column is $0.0000$ in every cell, as under the legacy injector. New here is the comparison
+between the two Baseline columns.
+
+\begin{table}[!ht]
+\centering
+\setstretch{1.0}
+\caption{Plausibility F1 under the hard injector, four seeds by three cohorts, rate 0.30. The
+\emph{legacy base} column is the same cell from Table~\ref{tab:controlled}. Sources:
+\texttt{results/controlled\_comparison\_hard.json} and \texttt{results/controlled\_comparison.json}.}
+\label{tab:hardcells}
+\begin{tabular}{llccccc}
+\toprule
+Seed & Cohort & $n$ & Legacy base & Hard base & Hard conf.\ min & Gap (pp) \\
+\midrule
+42 & Synthea  & 27 & 1.0000 & 1.0000 & 1.0000 & 0.0000 \\
+42 & MIMIC-IV & 27 & 1.0000 & 1.0000 & 1.0000 & 0.0000 \\
+42 & eICU-CRD & 29 & 0.9655 & 0.9831 & 0.9831 & 0.0000 \\
+43 & Synthea  & 27 & 1.0000 & 1.0000 & 1.0000 & 0.0000 \\
+43 & MIMIC-IV & 27 & 0.9811 & 1.0000 & 1.0000 & 0.0000 \\
+43 & eICU-CRD & 29 & 0.9831 & 0.9831 & 0.9831 & 0.0000 \\
+44 & Synthea  & 27 & 1.0000 & 1.0000 & 1.0000 & 0.0000 \\
+44 & MIMIC-IV & 27 & 0.9811 & 1.0000 & 1.0000 & 0.0000 \\
+44 & eICU-CRD & 29 & 0.9831 & 0.9831 & 0.9831 & 0.0000 \\
+45 & Synthea  & 27 & 1.0000 & 1.0000 & 1.0000 & 0.0000 \\
+45 & MIMIC-IV & 27 & $\mathbf{0.9615}$ & $\mathbf{1.0000}$ & 1.0000 & 0.0000 \\
+45 & eICU-CRD & 29 & 0.9655 & 0.9831 & 0.9831 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The harder task produces the higher score.} F1 rises in five cells and never falls. On
+MIMIC-IV at seed 45 it goes from $0.9615$ to $1.0000$. That looks backwards until the cause is named,
+and Section~\ref{sec:benchmark} names it.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{The legacy injector was manufacturing false ground truth.} It draws uniformly from four
+        constants, and when it draws $9999$ the analyte may be one whose own bound in the rule file
+        admits $9999$. The eICU aggregate code pools creatine
+        kinase with the transaminases and inherits the widest of their bounds, which admits $9999$.
+        The checker is right not to flag those, and the benchmark counts it as a miss.
+  \item \textbf{The hard injector cannot do this.} It reads the analyte's own bound and places the
+        value outside it, so every injected defect is a genuine defect by construction.
+  \item \textbf{The residual $0.9831$ on eICU-CRD is not an injection artefact.} It is the single real
+        corrupt record, the body temperature of $99.8^\circ$C discussed in
+        Section~\ref{sec:benchmark}, correctly flagged and scored as a false positive.
+\end{itemize}
+
+So the hard injector both makes the task hard enough to rank detectors and removes a source of false
+ground truth from the ground truth itself.
+
+% Keeps Tables B1 and B2 inside Appendix B.
+\FloatBarrier

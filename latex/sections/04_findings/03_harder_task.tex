@@ -1,0 +1,20 @@
+\subsection{Making the task harder, and re-running the ablation on it}
+\label{sec:hard}
+\label{sec:ablationhard}
+
+Under the legacy injector the two crude detectors outscore the careful one, scoring 1.0000 in 12 of
+12 cells against a twelve-cell mean of 0.9851 for the per-analyte file. The hard injector
+(Section~\ref{sec:injection}) removes that inversion: set-membership on the four legacy constants
+catches 0 of 83, the crude $[0, 9000]$ envelope 5 of 83. The per-analyte range check catches 83
+of 83 (Table~\ref{tab:detectors}, Appendix C). The gap remains $0.0000$ pp in all twelve cells
+(Table~\ref{tab:hardcells}, Appendix B), because difficulty changes which values get flagged, not
+which fields get read.
+
+Table~\ref{tab:ablation}'s legacy injector is saturated (Section~\ref{sec:limits}): withholding the
+analyte code there \emph{gained} 3.85 pp, because the default $[0, 9000]$ envelope catches all four
+legacy constants. Under the hard injector the envelope catches only 5 of 83, and the same arm
+\textbf{costs 100.00 pp}, mean Confined F1 0.0987. That reversal is an artefact of the saturated
+endpoint, not a property of privilege. The unit arm rises to 33.60 pp.
+
+\textbf{Both zero rows stay at zero.} The unmodified manifest and the released-but-unconsumed field
+still cost exactly 0.0000 pp, mean Confined F1 0.9944 (Table~\ref{tab:ablationhard}).

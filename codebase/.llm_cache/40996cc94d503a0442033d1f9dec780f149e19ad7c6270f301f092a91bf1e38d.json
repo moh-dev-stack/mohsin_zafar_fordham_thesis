@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Immunoglobulin E (LOINC 50878) cannot have a negative concentration; serum IgE values must be non-negative as they represent a measurable quantity of protein.", "confidence": 0.99}

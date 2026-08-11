@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A serum potassium level of 21.0 mEq/L is extremely elevated and would be life-threatening, but the question is whether this value is physiologically *recordable* in a FHIR resource, not whether it represents a survivable state; this is a plausible (though critical) laboratory result that could be legitimately documented.", "confidence": 0.75}

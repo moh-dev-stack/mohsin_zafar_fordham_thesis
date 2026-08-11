@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum sodium (LOINC 2947-0) cannot be negative; physiological sodium concentration ranges from approximately 135-145 mmol/L, making a value of -1.0 mmol/L impossible.", "confidence": 0.99}

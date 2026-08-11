@@ -1,0 +1,26 @@
+agent_id: completeness_agent_v1
+dimension: completeness
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.status
+        description: Required FHIR status
+      - jsonpath_expression: $.code.coding[*].code
+        description: Observation code only, no value
+      - jsonpath_expression: $.subject.reference
+        description: Patient reference identifier only
+      - jsonpath_expression: $.effectiveDateTime
+        description: For nullability check
+  - fhir_resource_type: Encounter
+    allowed_fields:
+      - jsonpath_expression: $.status
+      - jsonpath_expression: $.period.start
+      - jsonpath_expression: $.period.end
+      - jsonpath_expression: $.subject.reference
+note_access:
+  enabled: false
+rule_references:
+  - source: US Core IG
+    rule_id: must-support-observation
+  - source: MIMIC-IV FHIR docs
+    rule_id: required-encounter-fields

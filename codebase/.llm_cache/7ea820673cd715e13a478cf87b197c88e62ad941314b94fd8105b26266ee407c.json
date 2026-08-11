@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A white blood cell count of 9999 m/uL (9.999 \u00d7 10^6/uL) is physiologically implausible; normal WBC counts are 4.5-11.0 \u00d7 10^3/uL, and even severe leukemia rarely exceeds 500 \u00d7 10^3/uL, making this value approximately 20-2000 times higher than any survivable range.", "confidence": 0.98}

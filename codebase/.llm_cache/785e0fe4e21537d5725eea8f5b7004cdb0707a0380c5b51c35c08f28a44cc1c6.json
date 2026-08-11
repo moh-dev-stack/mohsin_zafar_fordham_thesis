@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Red blood cell distribution width (RDW) cannot be negative; physiologically valid values range from approximately 11-15% or 39-46 fL, making -9999.0 fL implausible and indicative of a data entry or system error.", "confidence": 0.99}

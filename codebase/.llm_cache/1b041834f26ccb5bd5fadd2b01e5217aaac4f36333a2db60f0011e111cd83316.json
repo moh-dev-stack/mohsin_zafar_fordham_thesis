@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Respiratory rate cannot be negative; the recorded value of -1.0 /min is physiologically impossible.", "confidence": 0.99}

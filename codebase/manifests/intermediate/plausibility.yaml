@@ -1,0 +1,28 @@
+# Intermediate-width plausibility manifest.
+agent_id: plausibility_agent_v1_intermediate
+dimension: plausibility
+resource_types:
+  - fhir_resource_type: Observation
+    allowed_fields:
+      - jsonpath_expression: $.code.coding[*].code
+      - jsonpath_expression: $.code.coding[*].system
+      - jsonpath_expression: $.valueQuantity.value
+      - jsonpath_expression: $.valueQuantity.unit
+      - jsonpath_expression: $.valueQuantity.code
+      - jsonpath_expression: $.referenceRange[*].low.value
+      - jsonpath_expression: $.referenceRange[*].high.value
+  - fhir_resource_type: Patient
+    allowed_fields:
+      - jsonpath_expression: $.gender
+      - jsonpath_expression: $.extension[?(@.url=='age-decade')].valueInteger
+      - jsonpath_expression: $.extension[?(@.url=='comorbidity-flag')].valueBoolean
+      - jsonpath_expression: $.maritalStatus.coding[*].code
+note_access:
+  enabled: false
+rule_references:
+  - source: MIMIC-IV reference ranges
+    rule_id: adult-lab-ranges
+  - source: published clinical normal ranges
+    rule_id: vital-sign-bounds
+  - source: project rules
+    rule_id: paediatric-adjusted-ranges

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum immunoglobulin E (LOINC 50861) value of 1,000,000,000 IU/L is physiologically implausible; typical normal ranges are <150 IU/L and even severe allergic conditions rarely exceed 10,000 IU/L.", "confidence": 0.98}

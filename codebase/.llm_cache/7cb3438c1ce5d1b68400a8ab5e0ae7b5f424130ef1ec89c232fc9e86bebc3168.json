@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "RDW (Red Cell Distribution Width) cannot be negative; normal physiological values range from 11-15%, making a value of -9999.0% biologically implausible and indicative of a data entry or system error.", "confidence": 0.99}

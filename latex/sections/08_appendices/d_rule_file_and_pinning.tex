@@ -1,0 +1,48 @@
+% APA 7 (§2.14): see the note in Appendix A. No table here, so no table counter.
+\FloatBarrier
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Appendix D: Rule File Corrections and Run Pinning}
+{\centering\normalfont\bfseries\large Appendix D\par}
+{\centering\normalfont\bfseries\large Rule File Corrections and Run Pinning\par}
+\nopagebreak
+
+Section~\ref{sec:fair} states that both systems read one rule file,
+\texttt{manifests/rules/loinc\_ranges.yaml}, and that the file was corrected where it had been fitted
+to these cohorts. It contains 322 sourced entries, 321 per-analyte bounds and one default
+\texttt{[0, 9000]} envelope. These are the corrections.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Twenty-eight bounds were corrected.} Twenty-seven record their prior value in a
+        source note. The twenty-eighth, the eICU temperature tightening below, was applied without
+        one.
+  \item \textbf{Two had been widened} to stop real records tripping the false-positive guard, and are
+        now restored: eICU FiO$_2$ from 10000 back to 100, and eICU body temperature from
+        \texttt{[0, 120]} back to \texttt{[10, 45]}.
+  \item \textbf{In their place is a \texttt{known\_corrupt\_values} allowlist} of \textbf{3 entries
+        covering 4 rows, all eICU}, and the guard now fails on any flagged real value not
+        allowlisted.
+\end{itemize}
+
+Section~\ref{sec:injection} states that no legacy constant collides with the evaluated selection.
+0 of 323 numeric \texttt{valueQuantity} readings in that selection match one of the four sentinel
+constants. Three MIMIC-IV base-excess readings of $-1.0$ mEq/L appear among the wider
+corpus's 55{,}624 values, outside that selection.
+
+Section~\ref{sec:reprodetail} states what does and does not reproduce. This is what everything else
+is pinned to, and \texttt{REPRODUCE.md} documents the procedure.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Contracts.} Every run writes a thirteen-key run contract. The decoding settings sit
+        in the cache contract that fixes a cached verdict's meaning: snapshot
+        \texttt{claude-haiku-4-5-20251001} at temperature \texttt{0.0}, under an output cap of 512
+        tokens and 1024 on retry.
+  \item \textbf{Cache.} \texttt{codebase/.llm\_cache/}, 2{,}005 verdicts plus the
+        \texttt{CACHE\_CONTRACT.json} the harness verifies before replay.
+  \item \textbf{Environment and cohorts.} Pinned to the versions every published number was computed
+        under, the cohorts by SHA-256 digest over each shipped file and over the \emph{ordered}
+        sequence the loader selects. Order matters because the injector draws against position.
+        Synthea supplies 100 patients as 123 Patient resources. The two PhysioNet cohorts
+        (Section~\ref{sec:data}) are distributed under the Open Data Commons Open Database Licence
+        v1.0.
+\end{itemize}

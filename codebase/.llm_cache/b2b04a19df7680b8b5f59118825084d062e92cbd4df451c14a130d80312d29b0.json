@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A hemoglobin concentration of 29.8 pg (picograms) is physiologically implausible; normal mean corpuscular hemoglobin is 27-33 pg, but this value appears to represent a single hemoglobin measurement rather than MCH, and the code '3' does not correspond to a standard LOINC code for hemoglobin or related measurements.", "confidence": 0.75}

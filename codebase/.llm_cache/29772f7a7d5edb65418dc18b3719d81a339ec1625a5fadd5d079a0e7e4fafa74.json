@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC 51221 is oxygen saturation; a value of 35.2% is below the minimum survivable range and indicates a critical measurement error or data entry mistake.", "confidence": 0.85}

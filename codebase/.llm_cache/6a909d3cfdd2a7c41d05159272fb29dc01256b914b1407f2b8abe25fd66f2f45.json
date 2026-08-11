@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The period end time (1991-07-06T01:07:21+01:00) occurs before the period start time (1991-07-06T06:07:21+01:00), which is a logical contradiction.", "confidence": 0.99}

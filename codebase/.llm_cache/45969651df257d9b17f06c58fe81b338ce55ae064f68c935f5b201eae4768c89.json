@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A serum sodium level of 152 mmol/L represents severe hypernatremia (normal range 135-145 mmol/L) that would cause severe neurological symptoms and is life-threatening; LOINC code '1' is also invalid and does not correspond to any real laboratory test.", "confidence": 0.95}

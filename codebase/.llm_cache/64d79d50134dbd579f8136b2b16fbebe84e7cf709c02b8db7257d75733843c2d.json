@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "BMI (Body Mass Index) cannot be negative; a value of -1.0 kg/m\u00b2 is physiologically impossible.", "confidence": 0.99}

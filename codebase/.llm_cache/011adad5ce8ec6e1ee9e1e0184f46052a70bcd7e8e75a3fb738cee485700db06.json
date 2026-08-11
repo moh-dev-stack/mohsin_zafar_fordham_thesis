@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A score value of 0 is physiologically plausible for a clinical assessment (LOINC 76504-0 is a clinical frailty scale or similar scoring instrument) where 0 represents the lowest/best possible score on the scale.", "confidence": 0.85}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "LOINC code 51094 represents prothrombin time (PT), which cannot have a negative value; PT is measured in seconds and must be a positive number.", "confidence": 0.95}

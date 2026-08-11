@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Red blood cell (RBC) count cannot be negative; physiologically valid RBC values range from approximately 4.5-5.9 M/mcL in adult males and 4.1-5.1 M/mcL in adult females.", "confidence": 0.99}

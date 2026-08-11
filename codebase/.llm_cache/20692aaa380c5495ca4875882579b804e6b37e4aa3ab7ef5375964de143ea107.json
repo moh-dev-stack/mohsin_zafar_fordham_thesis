@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A LOINC code 75626-2 (Suspected non-accidental trauma (SNAT) screening) should yield a binary or categorical result, not a numeric score of 1 billion, which is physiologically and clinically implausible.", "confidence": 0.95}

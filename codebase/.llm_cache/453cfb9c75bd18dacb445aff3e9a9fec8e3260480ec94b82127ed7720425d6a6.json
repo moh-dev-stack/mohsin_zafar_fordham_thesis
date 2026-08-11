@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -9999.0 ng/mL for a laboratory measurement is physiologically implausible; concentrations cannot be negative.", "confidence": 0.99}

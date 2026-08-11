@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Code value '1' is not a valid LOINC, SNOMED CT, or standard clinical coding system identifier; valid codes are typically alphanumeric strings with specific formatting (e.g., '2345-7' for LOINC or longer numeric/alphanumeric sequences for SNOMED CT).", "confidence": 0.95}

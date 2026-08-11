@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A hemoglobin A1c value of -1.0% is physiologically implausible, as percentage values cannot be negative and clinically meaningful A1c results range from approximately 4.0% to >14%.", "confidence": 0.99}

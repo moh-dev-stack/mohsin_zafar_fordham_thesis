@@ -1,0 +1,21 @@
+\subsection{Cohorts}
+\label{sec:data}
+
+Three public FHIR-shaped cohorts supply all the results.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Synthea} (Walonoski et al., 2018).
+  \item \textbf{MIMIC-IV Clinical Database Demo v2.2} (Johnson, Bulgarelli, Pollard, et al., 2023;
+        full release in Johnson, Bulgarelli, Shen, et al., 2023). All 100 subjects are converted.
+  \item \textbf{eICU Collaborative Research Database Demo v2.0.1} (Johnson et al., 2021; full release
+        in Pollard et al., 2018). From its 2{,}500-plus stays the study takes a
+        \textbf{100-stay subsample}, one Encounter per Patient.
+\end{itemize}
+
+A \textbf{cell} is one scored run at one seed, cohort and manifest-width setting. A seed-by-cohort
+table has twelve cells, a seed-pooled cohort-by-width table nine, and a table crossing all three has
+36. Every cell evaluates $N = 200$ resources, 66 of them Patient records.
+
+The artefact of record is the converted bundles, not the source CSVs, and the adapter ships, so both
+PhysioNet cohorts rebuild. Synthea cannot. No generator seed was recorded, leaving it verifiable
+only by digest.

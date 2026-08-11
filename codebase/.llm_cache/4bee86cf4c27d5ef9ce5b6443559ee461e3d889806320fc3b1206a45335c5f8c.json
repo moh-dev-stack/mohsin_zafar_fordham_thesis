@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A hemoglobin oxygen saturation (LOINC 3) of 37.8% is critically incompatible with survival, as normal SpO2 is 95-100% and values below 70% indicate severe hypoxemia requiring immediate intervention.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of 9999 mg/dL is physiologically implausible; severe hyperglycemia is typically fatal above 600-800 mg/dL, and this value exceeds survivable limits by over 10-fold.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative percentage value (-1.0%) for a laboratory result (likely a differential count given the '-polys' display) is physiologically implausible, as percentages cannot be negative.", "confidence": 0.95}

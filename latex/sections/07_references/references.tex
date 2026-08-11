@@ -1,0 +1,100 @@
+% APA 7 (§2.12): the reference list starts on a new page, heading centred and bold.
+\FloatBarrier
+\newpage
+% The heading is a centred box, not a \section, so it never reached the contents
+% page on its own. Register it by hand, after \newpage so the page number is right.
+\phantomsection
+\addcontentsline{toc}{section}{References}
+{\centering\normalfont\bfseries\large References\par}
+\nopagebreak
+
+\begingroup
+\sloppy
+\setlength{\parindent}{0pt}
+\everypar{\hangindent=0.5in\hangafter=1}
+
+El Emam, K., Jonker, E., Arbuckle, L., \& Malin, B. (2011). A systematic review of re-identification
+attacks on health data. \emph{PLoS ONE, 6}(12), e28071.
+\url{https://doi.org/10.1371/journal.pone.0028071}\par
+
+El Yagoubi, F., Badu-Marfo, G., \& Al Mallah, R. (2026). AgentLeak: A benchmark for internal-channel
+privacy leakage in multi-agent LLM systems. \emph{IEEE Access, 14}, 94960--94978.
+\url{https://doi.org/10.1109/ACCESS.2026.3704541}\par
+
+HL7 International. (2024). \emph{SMART App Launch implementation guide} (Version 2.2.0).
+\url{https://hl7.org/fhir/smart-app-launch/}\par
+
+Jacob, D., Alghamdi, E., Hu, Z., Alomair, B., \& Wagner, D. (2025). \emph{Preventing prompt injection
+with type-directed privilege separation} [Preprint]. arXiv.
+\url{https://doi.org/10.48550/arXiv.2509.25926}\par
+
+Johnson, A., Bulgarelli, L., Pollard, T., Horng, S., Celi, L. A., \& Mark, R. (2023). \emph{MIMIC-IV
+Clinical Database Demo} (Version 2.2) [Data set]. PhysioNet.
+\url{https://doi.org/10.13026/dp1f-ex47}\par
+
+Johnson, A., Pollard, T., Badawi, O., \& Raffa, J. (2021). \emph{eICU Collaborative Research Database
+Demo} (Version 2.0.1) [Data set]. PhysioNet. \url{https://doi.org/10.13026/4mxk-na84}\par
+
+% APA 7 (§9.47): "Johnson, A." and "Johnson, A. E. W." are different authors and are
+% ordered by their initials, so both "Johnson, A." entries precede this one. The
+% initials are faithful to each source and are deliberately not harmonised.
+Johnson, A. E. W., Bulgarelli, L., Shen, L., Gayles, A., Shammout, A., Horng, S., Pollard, T. J., Hao,
+S., Moody, B., Gow, B., Lehman, L. H., Celi, L. A., \& Mark, R. G. (2023). MIMIC-IV, a freely
+accessible electronic health record dataset. \emph{Scientific Data, 10}(1), Article 1.
+\url{https://doi.org/10.1038/s41597-022-01899-x}\par
+
+Juneja, G., Pasupulati, J. N. S., Albalak, A., Hua, W., \& Wang, W. Y. (2025). \emph{MAGPIE: A benchmark
+for multi-agent contextual privacy evaluation} [Preprint]. arXiv.
+\url{https://doi.org/10.48550/arXiv.2510.15186}\par
+
+Kahn, M. G., Callahan, T. J., Barnard, J., Bauck, A. E., Brown, J., Davidson, B. N., Estiri, H., Goerg,
+C., Holve, E., Johnson, S. G., Liaw, S.-T., Hamilton-Lopez, M., Meeker, D., Ong, T. C., Ryan, P.,
+Shang, N., Weiskopf, N. G., Weng, C., Zozus, M. N., \& Schilling, L. (2016). A harmonized data quality
+assessment terminology and framework for the secondary use of electronic health record data.
+\emph{eGEMs, 4}(1), 18. \url{https://doi.org/10.13063/2327-9214.1244}\par
+
+Mandel, J. C., Kreda, D. A., Mandl, K. D., Kohane, I. S., \& Ramoni, R. B. (2016). SMART on FHIR: A
+standards-based, interoperable apps platform for electronic health records. \emph{Journal of the
+American Medical Informatics Association, 23}(5), 899--908. \url{https://doi.org/10.1093/jamia/ocv189}\par
+
+Neupane, S., Mittal, S., \& Rahimi, S. (2025). \emph{Towards a HIPAA compliant agentic AI system in
+healthcare} [Preprint]. arXiv. \url{https://doi.org/10.48550/arXiv.2504.17669}\par
+
+Pollard, T. J., Johnson, A. E. W., Raffa, J. D., Celi, L. A., Mark, R. G., \& Badawi, O. (2018). The
+eICU Collaborative Research Database, a freely available multi-center database for critical care
+research. \emph{Scientific Data, 5}(1), Article 180178.
+\url{https://doi.org/10.1038/sdata.2018.178}\par
+
+Privacy of Individually Identifiable Health Information, 45 C.F.R. \S\S 164.502(b), 164.514(b), 164.514(c),
+164.514(d) (2013). \url{https://www.ecfr.gov/current/title-45/part-164/subpart-E}\par
+
+Saltzer, J. H., \& Schroeder, M. D. (1975). The protection of information in computer systems.
+\emph{Proceedings of the IEEE, 63}(9), 1278--1308. \url{https://doi.org/10.1109/PROC.1975.9939}\par
+
+Shi, T., He, J., Wang, Z., Li, H., Wu, L., Guo, W., \& Song, D. (2025). \emph{Progent: Securing AI agents
+with privilege control} [Preprint]. arXiv. \url{https://doi.org/10.48550/arXiv.2504.11703}\par
+
+Sweeney, L. (2000). \emph{Simple demographics often identify people uniquely} (Data Privacy Working
+Paper No. 3). Carnegie Mellon University.
+\url{https://dataprivacylab.org/projects/identifiability/paper1.pdf}\par
+
+U.S. Department of Health and Human Services, Office for Civil Rights. (2012). \emph{Guidance regarding
+methods for de-identification of protected health information in accordance with the Health Insurance
+Portability and Accountability Act (HIPAA) Privacy Rule}.
+\url{https://www.hhs.gov/hipaa/for-professionals/special-topics/de-identification/index.html}\par
+
+Walonoski, J., Kramer, M., Nichols, J., Quina, A., Moesel, C., Hall, D., Duffett, C., Dube, K.,
+Gallagher, T., \& McLachlan, S. (2018). Synthea: An approach, method, and software mechanism for
+generating synthetic patients and the synthetic electronic health care record. \emph{Journal of the
+American Medical Informatics Association, 25}(3), 230--238.
+\url{https://doi.org/10.1093/jamia/ocx079}\par
+
+Wells, B. J., Chagin, K. M., Nowacki, A. S., \& Kattan, M. W. (2013). Strategies for handling missing
+data in electronic health record derived data. \emph{eGEMs, 1}(3), 1035.
+\url{https://doi.org/10.13063/2327-9214.1035}\par
+
+Weiskopf, N. G., \& Weng, C. (2013). Methods and dimensions of electronic health record data quality
+assessment: Enabling reuse for clinical research. \emph{Journal of the American Medical Informatics
+Association, 20}(1), 144--151. \url{https://doi.org/10.1136/amiajnl-2011-000681}\par
+
+\endgroup

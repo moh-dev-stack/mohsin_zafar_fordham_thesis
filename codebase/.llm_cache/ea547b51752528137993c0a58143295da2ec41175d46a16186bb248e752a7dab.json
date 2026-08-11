@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 1,000,000,000% is physiologically implausible; LOINC code 4544-3 represents hemoglobin, which should be measured in g/dL with typical adult ranges of 12-17.5 g/dL, not percentages in the billions.", "confidence": 0.99}

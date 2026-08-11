@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "An IU/L value of 19.0 is physiologically plausible for most laboratory measurements; LOINC code 50861 corresponds to a coagulation test (typically prothrombin time ratio), and this value falls within normal reference ranges for such assays.", "confidence": 0.85}

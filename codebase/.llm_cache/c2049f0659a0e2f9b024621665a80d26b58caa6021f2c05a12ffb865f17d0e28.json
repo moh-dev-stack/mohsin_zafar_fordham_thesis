@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -1.0 seconds for a time measurement (code 51274 represents prothrombin time) is physiologically implausible as time cannot be negative.", "confidence": 0.99}

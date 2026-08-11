@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of -9999 mg/dL is physiologically impossible; blood glucose cannot be negative and this appears to be a sentinel/error code rather than a valid measurement.", "confidence": 0.99}

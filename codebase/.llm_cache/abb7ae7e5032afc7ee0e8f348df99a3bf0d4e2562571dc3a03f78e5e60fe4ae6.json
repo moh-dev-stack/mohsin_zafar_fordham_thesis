@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "The period start date (2110-04-11) occurs before the period end date (2110-04-14), which is logically consistent.", "confidence": 0.99}

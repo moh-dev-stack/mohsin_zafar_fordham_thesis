@@ -1,0 +1,27 @@
+\subsection{The four quality dimensions, and least privilege}
+
+The four failures that open this paper come from two published taxonomies: completeness and
+plausibility from Kahn et al.\ (2016), consistency and timeliness from Weiskopf and Weng's (2013)
+concordance and currency. Consistency is raised to top level for cross-record checks. Conformance
+is skipped, staying within one lineage since Weiskopf and Weng are among Kahn's co-authors.
+Completeness carries the word both taxonomies leave implicit, missingness: Wells et al.\ (2013) find
+that missing values in EHR-derived data are seldom missing at random. An absent field is itself
+information, and the strategy chosen for handling it can change what the data support. None of this
+says what a checker must \emph{see}: a plausibility check needs code, value and unit, hence
+whole-record access by default.
+
+Saltzer and Schroeder (1975) ask the opposite, minimal privilege for every program and user, a
+concern with error as much as malice (Section~\ref{sec:threat}). Three mechanisms grant it, each in a
+unit larger than the field.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.15em]
+  \item \textbf{Saltzer and Schroeder's own principle.} The unit is the principal.
+  \item \textbf{The HIPAA minimum necessary standard.} The unit is the class of worker.
+  \item \textbf{SMART on FHIR scopes.} The unit is the resource type, as in
+        \texttt{patient/Observation.read} (Mandel et al., 2016; HL7 International, 2024).
+\end{itemize}
+
+None
+governs what one component hands another inside a pipeline, so a perimeter-compliant service can
+still hand every field to the checks behind it, as the full-access \textbf{Baseline} of
+Section~\ref{sec:designs} does.

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The period.start (2193-08-05T11:45:00+00:00) occurs after period.end (2193-08-04T23:45:00+00:00), which is a logical contradiction.", "confidence": 0.99}

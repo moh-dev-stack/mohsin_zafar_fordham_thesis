@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Urine creatinine of 43 mg/dL is physiologically implausible; normal urine creatinine ranges from 20-300 mg/dL with typical values around 100-200 mg/dL, and 43 mg/dL is at the extreme low end but the unit mg/dL is incorrect for urine creatinine which should be reported in mg/24hr or mg/g creatinine.", "confidence": 0.85}

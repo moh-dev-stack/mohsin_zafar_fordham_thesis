@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit 'K/uL' (thousands per microliter) is implausible for the LOINC code 51301 (Potassium [Moles/volume] in Serum or Plasma), which should be reported in mmol/L or mEq/L, not as a cell count unit.", "confidence": 0.95}

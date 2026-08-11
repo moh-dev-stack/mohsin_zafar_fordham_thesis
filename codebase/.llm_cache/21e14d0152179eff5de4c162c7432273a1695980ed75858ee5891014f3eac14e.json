@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "A value of 12.9% is physiologically plausible for most percentage-based clinical measurements (e.g., hemoglobin A1c, hematocrit, or other lab values), though the LOINC code '3' is non-standard and cannot be verified.", "confidence": 0.72}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A blood oxygen saturation (LOINC 51249) value of 1,000,000,000% is physiologically impossible; normal SpO2 ranges from 95-100% and values above 100% are not biologically achievable.", "confidence": 0.99}

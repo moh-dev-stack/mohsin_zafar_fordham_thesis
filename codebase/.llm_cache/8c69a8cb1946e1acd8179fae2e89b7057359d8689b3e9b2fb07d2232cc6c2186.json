@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "An 11.5% value with a LOINC code system and percentage unit is physiologically plausible for common laboratory measurements such as hemoglobin A1c or hematocrit, both of which fall within survivable ranges.", "confidence": 0.85}

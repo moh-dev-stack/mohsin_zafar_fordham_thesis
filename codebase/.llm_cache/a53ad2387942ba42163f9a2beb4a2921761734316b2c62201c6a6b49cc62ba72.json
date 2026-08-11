@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "White blood cell count cannot be negative; a value of -1.0 \u00d7 10\u00b3/uL is physiologically impossible.", "confidence": 0.99}

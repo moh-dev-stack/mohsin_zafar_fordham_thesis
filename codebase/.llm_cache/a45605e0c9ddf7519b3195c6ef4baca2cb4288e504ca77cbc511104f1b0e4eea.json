@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "The unit 'm/uL' (millimeters per microliter) is not a valid unit for any standard laboratory measurement; the value 3.27 m/uL is physiologically implausible and the unit itself appears to be a typographical error or malformed UCUM code.", "confidence": 0.95}

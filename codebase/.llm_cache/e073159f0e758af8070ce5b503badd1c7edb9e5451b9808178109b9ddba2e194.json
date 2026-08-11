@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A negative value of -9999.0 IU/L for a laboratory measurement (LOINC 50878 is typically a coagulation or enzyme assay) is physiologically implausible, as quantitative laboratory values cannot be negative.", "confidence": 0.99}

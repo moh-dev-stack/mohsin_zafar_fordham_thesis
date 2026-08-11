@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A glucose value of -1.0 mg/dL is physiologically implausible as blood glucose cannot be negative; normal fasting glucose ranges from 70-100 mg/dL and survivable ranges are approximately 20-600 mg/dL.", "confidence": 0.99}

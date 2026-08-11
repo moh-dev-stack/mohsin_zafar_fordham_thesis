@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "Serum sodium concentration cannot be negative; normal physiological range is 135-145 mmol/L, and any negative value is physically impossible.", "confidence": 0.99}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A ratio value of 1 billion (1000000000.0) is physiologically implausible for any standard clinical measurement; typical physiological ratios (e.g., albumin/globulin, A/a gradient, etc.) range from 0.1 to 10.", "confidence": 0.95}

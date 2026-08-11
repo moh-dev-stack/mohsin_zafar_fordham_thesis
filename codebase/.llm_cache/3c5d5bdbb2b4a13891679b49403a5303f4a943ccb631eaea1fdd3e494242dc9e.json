@@ -1,0 +1,1 @@
+{"verdict": "pass", "justification": "The encounter has a valid period with start date (2133-02-19) before end date (2160-04-18), status is 'finished' which is appropriate for a completed encounter, and class code 'IMP' (inpatient) is valid.", "confidence": 0.95}

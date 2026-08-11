@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A value of 37% for LOINC code 3 (which represents fetal heart rate) is physiologically implausible; normal fetal heart rate ranges from 110-160 bpm, and this appears to be recorded as a percentage rather than beats per minute.", "confidence": 0.85}

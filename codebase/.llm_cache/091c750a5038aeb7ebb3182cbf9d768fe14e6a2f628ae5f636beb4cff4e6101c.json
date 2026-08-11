@@ -1,0 +1,1 @@
+{"verdict": "fail", "justification": "A 24-hour urine protein excretion (LOINC 51067) cannot be negative; physiologically, excretion values must be zero or positive.", "confidence": 0.99}
